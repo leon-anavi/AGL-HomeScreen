@@ -22,7 +22,8 @@ TEMPLATE = app
 
 SOURCES += \
     src/main.cpp \
-    src/mainwindow.cpp \
+    src/mainwindow.cpp
+GENERATED_SOURCES += \
     $$OUT_PWD/daynightmode_adapter.cpp \        #generated dbus adapter
     $$OUT_PWD/daynightmode_proxy.cpp \             #generated dbus proxy
     $$OUT_PWD/popup_adapter.cpp \        #generated dbus adapter

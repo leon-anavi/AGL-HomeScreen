@@ -5,7 +5,6 @@
 #-------------------------------------------------
 
 QT       += core dbus
-
 QT       -= gui
 
 TARGET = SampleAppTimeDate
@@ -16,15 +15,16 @@ TEMPLATE = app
 
 
 SOURCES += src/main.cpp \
-    $$OUT_PWD/statusbar_proxy.cpp \             #generated dbus proxy
     src/timedateprovider.cpp
+GENERATED_SOURCES += \
+    $$OUT_PWD/statusbar_proxy.cpp             #generated dbus proxy
 
 HEADERS += \
     $$OUT_PWD/statusbar_proxy.h \           #generated dbus proxy
     src/timedateprovider.h
 
 OTHER_FILES += \
-    interfaces/statusbar.xml \
+    ../interfaces/statusbar.xml \
     README.md
 
 # remove generated files

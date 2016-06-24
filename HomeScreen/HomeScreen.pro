@@ -25,31 +25,32 @@ TEMPLATE = app
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
+    src/settingswidget.cpp \
+    src/popupwidget.cpp \
+    src/controlbarwidget.cpp \
+    src/statusbarwidget.cpp
+GENERATED_SOURCES += \
     $$OUT_PWD/daynightmode_adapter.cpp \        #generated dbus adapter
     $$OUT_PWD/daynightmode_proxy.cpp \             #generated dbus proxy
     $$OUT_PWD/popup_adapter.cpp \        #generated dbus adapter
     $$OUT_PWD/popup_proxy.cpp \             #generated dbus proxy
     $$OUT_PWD/statusbar_adapter.cpp \        #generated dbus adapter
-    $$OUT_PWD/statusbar_proxy.cpp \             #generated dbus proxy
-    src/settingswidget.cpp \
-    src/popupwidget.cpp \
-    src/controlbarwidget.cpp \
-    src/statusbarwidget.cpp
+    $$OUT_PWD/statusbar_proxy.cpp             #generated dbus proxy
 
 HEADERS  += \
     ../interfaces/daynightmode.h \
     ../interfaces/popup.h \
     src/mainwindow.h \
+    src/settingswidget.h \
+    src/popupwidget.h \
+    src/controlbarwidget.h \
+    src/statusbarwidget.h \
     $$OUT_PWD/daynightmode_adapter.h \      #generated dbus adapter
     $$OUT_PWD/daynightmode_proxy.h \           #generated dbus proxy
     $$OUT_PWD/popup_adapter.h \      #generated dbus adapter
     $$OUT_PWD/popup_proxy.h \           #generated dbus proxy
     $$OUT_PWD/statusbar_adapter.h \      #generated dbus adapter
-    $$OUT_PWD/statusbar_proxy.h \           #generated dbus proxy
-    src/settingswidget.h \
-    src/popupwidget.h \
-    src/controlbarwidget.h \
-    src/statusbarwidget.h
+    $$OUT_PWD/statusbar_proxy.h           #generated dbus proxy
 
 FORMS    += \
     resources/mainwindow.ui \

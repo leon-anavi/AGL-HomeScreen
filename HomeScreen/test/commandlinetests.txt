@@ -1,0 +1,36 @@
+Command line tests
+
+Preconditions:
+- HomeScreen app is running
+
+[Test] Popup Interface
+[Command Line] dbus-send --session --type=method_call --dest=org.agl.homescreen /Popup org.agl.popup.showPopup int32:1 string:"TEST"
+[Expected Behavior] A popup is shown with the text "TEST" and an "OK" button
+---------------------------------------------------------------------------------------------------------------------
+[Test] Status Bar Interface
+[Command Line] dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.getAvailablePlaceholders
+[Expected Behavior] The list of available placeholders is returned:
+   array [
+      int32 1
+      int32 2
+      int32 3
+      int32 4
+      int32 5
+   ]
+
+[Command Line] dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.setStatusIcon int32:1 string:"/home/...PUT_YOUR_TEST_PNG_HERE....png"
+The value range for the int32 is 1 to 5.
+[Expected Behavior] The picture is shown in the status bar in the placeholder 1 (to 5)
+
+[Command Line] dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.getStatusIcon int32:1 
+The value range for the int32 is 1 to 5.
+[Expected Behavior] The picture URI of placeholder 1 (to 5)
+
+[Command Line] dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.setStatusText int32:1 string:"hello"
+The value range for the int32 is 1 to 5.
+[Expected Behavior] The text "hello" is shown in the status bar in the placeholder 1 (to 5)
+
+[Command Line] dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.getStatusText int32:1 
+The value range for the int32 is 1 to 5.
+[Expected Behavior] The text of placeholder 1 (to 5)
+

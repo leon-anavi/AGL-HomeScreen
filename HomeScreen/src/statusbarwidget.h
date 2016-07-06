@@ -18,9 +18,6 @@
 #define STATUSBARWIDGET_H
 
 #include <QWidget>
-#include "../interfaces/daynightmode.h"
-#include "daynightmode_proxy.h"
-
 #include "statusbar_adapter.h"
 
 namespace Ui {
@@ -34,10 +31,8 @@ class StatusBarWidget : public QWidget
 public:
     explicit StatusBarWidget(QWidget *parent = 0);
     ~StatusBarWidget();
-
-// day/night mode
-public Q_SLOTS:
-    void dayNightModeSlot(int mode);
+public slots:
+    void updateColorScheme();
 
 // from statusbar_adapter.h
 public Q_SLOTS: // METHODS
@@ -50,8 +45,6 @@ public Q_SLOTS: // METHODS
 private:
     Ui::StatusBarWidget *mp_ui;
 
-    SystemDayNight::eDayNightMode m_dayNightMode;
-    org::agl::daynightmode *mp_dayNightModeProxy;
     StatusbarAdaptor *mp_statusbarAdaptor;
 
     QMap<int, QString> *mp_statusbarIconURIs;

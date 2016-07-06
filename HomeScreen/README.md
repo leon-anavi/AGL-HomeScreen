@@ -1,9 +1,23 @@
 AGL Home Screen reference implementation
 
 
+Build with QtCreator 3.0.1
+
 AGL repo for source code:
 https://gerrit.automotivelinux.org/gerrit/#/admin/projects/staging/HomeScreen
 
+AGL repo for bitbake recipe:
+https://gerrit.automotivelinux.org/gerrit/#/admin/projects/AGL/meta-agl-demo/recipes-demo-hmi/HomeScreen/HomeScreen_?.bb
+
+v0.1.1
+07/06/2016
+
+#changes
+- reworked D-Bus day/night mode handling
+
+#new features
+- color schemes implemented
+-- 3 color schemes as example added
 
 v0.1.0
 06/24/2016

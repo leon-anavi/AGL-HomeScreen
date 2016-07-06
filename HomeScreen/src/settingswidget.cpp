@@ -17,20 +17,15 @@
 #include "settingswidget.h"
 #include "ui_settingswidget.h"
 #include <QSettings>
+#include "../interfaces/daynightmode.h"
 
 SettingsWidget::SettingsWidget(QWidget *parent) :
     QWidget(parent),
     mp_ui(new Ui::SettingsWidget),
-    m_dayNightMode(SystemDayNight::DAYNIGHTMODE_DAY), // TODO: read from system
-    mp_dayNightModeProxy(0),
     mp_translator(0)
 {
-    // this has to be adopted to the system setup
-    mp_dayNightModeProxy = new org::agl::daynightmode("org.agl.homescreen.simulator", //"org.agl.systeminfoprovider"
-                                                      "/",
-                                                      QDBusConnection::sessionBus(),
-                                                      0);
-    QObject::connect(mp_dayNightModeProxy, SIGNAL(dayNightMode(int)), this, SLOT(dayNightModeSlot(int)));
+    // no window decoration
+    setWindowFlags(Qt::FramelessWindowHint);
 
     // multi-language support
     mp_translator = new QTranslator();
@@ -39,75 +34,40 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
 
     mp_ui->setupUi(this);
 
-    mp_ui->comboBoxLanguage->addItem(QString("English"), QVariant("homescreen_en_US.qm")); // TODO: make this configurable?
+    mp_ui->comboBoxLanguage->addItem(QString("English"), QVariant("homescreen_en_US.qm")); // TODO: make this configurable
     mp_ui->comboBoxLanguage->addItem(QString("Deutsch"), QVariant("homescreen_de_DE.qm"));
     mp_ui->comboBoxLanguage->addItem(QString("日本語"), QVariant("homescreen_ja_JP.qm"));
 
+    mp_ui->comboBoxColorScheme->addItem(QString("Default"), QVariant("default")); // TODO: make this configurable
+    mp_ui->comboBoxColorScheme->addItem(QString("Demo 1"), QVariant("demo1"));
+    mp_ui->comboBoxColorScheme->addItem(QString("Demo 2"), QVariant("demo2"));
+
     QSettings settings;
     mp_ui->comboBoxLanguage->setCurrentIndex(settings.value("systemsettings/language", 0).toInt());
+    mp_ui->comboBoxColorScheme->setCurrentIndex(settings.value("systemsettings/colorschemeindex", 0).toInt());
 }
 
 SettingsWidget::~SettingsWidget()
 {
     delete mp_translator;
-    delete mp_dayNightModeProxy;
-
-    QSettings settings;
-    settings.setValue("systemsettings/language", mp_ui->comboBoxLanguage->currentIndex());
     delete mp_ui;
 }
 
-void SettingsWidget::dayNightModeSlot(int mode)
+void SettingsWidget::updateColorScheme()
 {
-    switch (mode)
-    {
-    case SystemDayNight::DAYNIGHTMODE_DAY:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_DAY;
-        mp_ui->widget_Background->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_blue_day.png);"));
-        mp_ui->comboBoxLanguage->setStyleSheet(QString("QComboBox { \
-            border: 1px solid #D3D3D3; \
-            border-radius: 8px; \
-            background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(242, 242, 249, 255), stop:1 rgba(255, 255, 255, 255)); \
-            color: #333; \
-            padding: 0px; \
-            } \
-            QComboBox:on { \
-            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #D5D5D5, stop: 1 #EEEEEE); \
-            } \
-            QComboBox::drop-down { \
-            border: 0px solid; \
-            border-radius: 0px; \
-            } \
-            QComboBox::down-arrow:on { \
-            }"));
-        // settings icon
-        mp_ui->widget_Settings_Icon->setStyleSheet(QString("border-image: url(:/icons/settings_day.png) 0 0 0 0 stretch stretch;"));
-        break;
-    case SystemDayNight::DAYNIGHTMODE_NIGHT:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_NIGHT;
-        mp_ui->widget_Background->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_blue_night.png);"));
-        mp_ui->comboBoxLanguage->setStyleSheet(QString("QComboBox { \
-            border: 1px solid #D3D3D3; \
-            border-radius: 8px; \
-            background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(147, 147, 151, 255), stop:1 rgba(255, 255, 255, 255)); \
-            color: #333; \
-            padding: 0px; \
-            } \
-            QComboBox:on { \
-            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #D5D5D5, stop: 1 #EEEEEE); \
-            } \
-            QComboBox::drop-down { \
-            border: 0px solid; \
-            border-radius: 0px; \
-            } \
-            QComboBox::down-arrow:on { \
-            }"));
-        // settings icon
-        mp_ui->widget_Settings_Icon->setStyleSheet(QString("border-image: url(:/icons/settings_night.png) 0 0 0 0 stretch stretch;"));
-        break;
-    default:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_UNDEFINED;
-    }
+    QSettings settings;
+    QSettings settings_cs(QApplication::applicationDirPath() +
+                          "/colorschemes/" +
+                          settings.value("systemsettings/colorscheme", "default").toString() +
+                          "/" +
+                          QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
+                          ".ini",
+                          QSettings::IniFormat);
+
+    mp_ui->widget_Background->setStyleSheet(settings_cs.value("SettingsWidget/widget_Background").toString());
+    mp_ui->comboBoxLanguage->setStyleSheet(settings_cs.value("SettingsWidget/comboBoxLanguage").toString());
+    mp_ui->comboBoxColorScheme->setStyleSheet(settings_cs.value("SettingsWidget/comboBoxColorScheme").toString());
+    mp_ui->widget_Settings_Icon->setStyleSheet(settings_cs.value("SettingsWidget/widget_Settings_Icon").toString());
 }
 
 void SettingsWidget::changeEvent(QEvent* event)
@@ -124,4 +84,18 @@ void SettingsWidget::on_comboBoxLanguage_currentIndexChanged(const QString &)
 {
     if (0 != mp_translator)
         mp_translator->load(mp_ui->comboBoxLanguage->currentData().toString(), ":/translations");
+
+    QSettings settings;
+    settings.setValue("systemsettings/language", mp_ui->comboBoxLanguage->currentIndex());
+}
+
+void SettingsWidget::on_comboBoxColorScheme_currentIndexChanged(const QString &)
+{
+    QSettings settings;
+    settings.setValue("systemsettings/colorscheme", mp_ui->comboBoxColorScheme->currentData().toString());
+    settings.setValue("systemsettings/colorschemeindex", mp_ui->comboBoxColorScheme->currentIndex());
+    // make sure that everything is written to the settings file before continuing
+    settings.sync();
+
+    emit colorSchemeChanged();
 }

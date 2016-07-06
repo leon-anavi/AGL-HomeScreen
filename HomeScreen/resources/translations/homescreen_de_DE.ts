@@ -37,7 +37,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../settingswidget.ui" line="96"/>
+        <location filename="../settingswidget.ui" line="95"/>
+        <source>Color Scheme</source>
+        <translation type="unfinished">Farbschema</translation>
+    </message>
+    <message>
+        <location filename="../settingswidget.ui" line="113"/>
         <source>Language</source>
         <translation type="unfinished">Sprache</translation>
     </message>

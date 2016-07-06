@@ -20,9 +20,9 @@
 namespace SystemDayNight {
     typedef enum DayNightMode
     {
-        DAYNIGHTMODE_UNDEFINED,
-        DAYNIGHTMODE_DAY,
-        DAYNIGHTMODE_NIGHT
+        DAYNIGHTMODE_UNDEFINED = -1,
+        DAYNIGHTMODE_DAY = 0,
+        DAYNIGHTMODE_NIGHT = 1
     } eDayNightMode;
 }
 

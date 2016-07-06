@@ -16,21 +16,13 @@
 
 #include "popupwidget.h"
 #include "ui_popupwidget.h"
+#include "../interfaces/daynightmode.h"
 
 PopupWidget::PopupWidget(QWidget *parent) :
     QWidget(parent),
     mp_ui(new Ui::PopupWidget),
-    m_dayNightMode(SystemDayNight::DAYNIGHTMODE_DAY), // TODO: read from system
-    mp_dayNightModeProxy(0),
     mp_popupAdaptor(0)
 {
-    // this has to be adopted to the system setup
-    mp_dayNightModeProxy = new org::agl::daynightmode("org.agl.homescreen.simulator", //"org.agl.systeminfoprovider"
-                                                      "/",
-                                                      QDBusConnection::sessionBus(),
-                                                      0);
-    QObject::connect(mp_dayNightModeProxy, SIGNAL(dayNightMode(int)), this, SLOT(dayNightModeSlot(int)));
-
     // publish dbus popup interface
     mp_popupAdaptor = new PopupAdaptor((QObject*)this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -43,57 +35,29 @@ PopupWidget::PopupWidget(QWidget *parent) :
 
 PopupWidget::~PopupWidget()
 {
-    delete mp_dayNightModeProxy;
     delete mp_popupAdaptor;
     delete mp_ui;
 }
 
-void PopupWidget::dayNightModeSlot(int mode)
+void PopupWidget::updateColorScheme()
 {
-    switch (mode)
-    {
-    case SystemDayNight::DAYNIGHTMODE_DAY:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_DAY;
-        mp_ui->widget_Popup->setStyleSheet(QString("QWidget { \
-                                                   border: 1px solid #D3D3D3; \
-                                                   border-radius: 8px; \
-                                                   background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(242, 242, 249, 255), stop:1 rgba(255, 255, 255, 255)); \
-                                                   color: #333; \
-                                                   padding: 0px; \
-                                                   }  \
-                                                   QWidget:on { \
-                                                   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #D5D5D5, stop: 1 #EEEEEE); \
-                                                   }"));
-        mp_ui->label_Text->setStyleSheet(QString("background-color: rgba(109, 109, 109, 0); \
-                                                 background-image: url(:/images/transparency.png); \
-                                                 border-image: url(:/images/transparency.png);"));
-        break;
-    case SystemDayNight::DAYNIGHTMODE_NIGHT:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_NIGHT;
-        mp_ui->widget_Popup->setStyleSheet(QString("QWidget { \
-                                                   border: 1px solid #D3D3D3; \
-                                                   border-radius: 8px; \
-                                                   background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(147, 147, 151, 255), stop:1 rgba(255, 255, 255, 255)); \
-                                                   color: #333; \
-                                                   padding: 0px; \
-                                                   }  \
-                                                   QWidget:on { \
-                                                   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #D5D5D5, stop: 1 #EEEEEE); \
-                                                   }"));
-        mp_ui->label_Text->setStyleSheet(QString("background-color: rgba(109, 109, 109, 0); \
-                                                 background-image: url(:/images/transparency.png); \
-                                                 border-image: url(:/images/transparency.png);"));
-        break;
-    default:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_UNDEFINED;
-    }
+    QSettings settings;
+    QSettings settings_cs(QApplication::applicationDirPath() +
+                          "/colorschemes/" +
+                          settings.value("systemsettings/colorscheme", "default").toString() +
+                          "/" +
+                          QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
+                          ".ini",
+                          QSettings::IniFormat);
+
+    mp_ui->widget_Popup->setStyleSheet(settings_cs.value(QString("PopupWidget/widget_Popup")).toString());
+    mp_ui->label_Text->setStyleSheet(settings_cs.value(QString("PopupWidget/label_Text")).toString());
 }
 
-void PopupWidget::showPopup(int type, const QString &text)
+void PopupWidget::showPopup(int /*type*/, const QString &text)
 {
     this->show();
     this->raise();
-    qDebug("PopupWidget::showPopup: type %d, text %s", type, text.toStdString().c_str());
     mp_ui->label_Text->setText(text);
 }
 

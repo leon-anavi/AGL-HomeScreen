@@ -1,14 +1,17 @@
-This project contains:
+AGL Home Screen reference implementation
+This lib provides the needed D-Bus interfaces
 
-HomeScreen: AGL Home Screen reference implementation
-HomeScreenSimulator: AGL Home Screen Simulator for development
-interfaces: library with the D-Bus interfaces
-SampleAppTimeDate: AGL Sample Application for Home Screen Statusbar
-
+Build with QtCreator 3.0.1
 
 AGL repo for source code:
 https://gerrit.automotivelinux.org/gerrit/#/admin/projects/staging/HomeScreen
 
 AGL repo for bitbake recipe:
 https://gerrit.automotivelinux.org/gerrit/#/admin/projects/AGL/meta-agl-demo/recipes-demo-hmi/HomeScreen/HomeScreen_?.bb
+
+v0.1.1
+07/06/2016
+
+#new features
+- initial version
 

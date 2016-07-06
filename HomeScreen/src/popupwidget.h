@@ -20,9 +20,6 @@
 #include <QWidget>
 #include "../interfaces/popup.h"
 #include "popup_adapter.h"
-#include "../interfaces/daynightmode.h"
-#include "daynightmode_proxy.h"
-
 
 namespace Ui {
 class PopupWidget;
@@ -35,14 +32,12 @@ class PopupWidget : public QWidget
 public:
     explicit PopupWidget(QWidget *parent = 0);
     ~PopupWidget();
-
-// day/night mode
-public Q_SLOTS:
-    void dayNightModeSlot(int mode);
+public slots:
+    void updateColorScheme();
 
     // from popup_adapter.h
 public Q_SLOTS: // METHODS
-    void showPopup(int type, const QString &text);
+    void showPopup(int /*type*/, const QString &text);
 
 private slots:
     void on_pushButton_OK_clicked();
@@ -50,8 +45,6 @@ private slots:
 private:
     Ui::PopupWidget *mp_ui;
 
-    SystemDayNight::eDayNightMode m_dayNightMode;
-    org::agl::daynightmode *mp_dayNightModeProxy;
     PopupAdaptor *mp_popupAdaptor;
 };
 

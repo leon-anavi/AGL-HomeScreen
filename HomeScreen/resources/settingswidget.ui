@@ -77,24 +77,85 @@ QComboBox::down-arrow:on {
 </string>
     </property>
    </widget>
-  </widget>
-  <widget class="QLabel" name="labelLanguage">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>300</width>
-     <height>60</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>22</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>Language</string>
-   </property>
+   <widget class="QLabel" name="labelColorScheme">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>120</y>
+      <width>300</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>22</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Color Scheme</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelLanguage">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>300</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>22</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Language</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBoxColorScheme">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>120</y>
+      <width>400</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>22</pointsize>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QComboBox {
+border: 1px solid #D3D3D3;
+border-radius: 8px;
+background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(242, 242, 249, 255), stop:1 rgba(255, 255, 255, 255));
+color: #333;
+padding: 0px;
+} 
+QComboBox:on {
+background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #D5D5D5, stop: 1 #EEEEEE);
+} 
+QComboBox::drop-down {
+border: 0px solid;
+border-radius: 0px;
+}
+QComboBox::down-arrow:on {
+}
+</string>
+    </property>
+   </widget>
+   <zorder>comboBoxLanguage</zorder>
+   <zorder>widget_Settings_Icon</zorder>
+   <zorder>labelLanguage</zorder>
+   <zorder>labelColorScheme</zorder>
+   <zorder>labelLanguage</zorder>
+   <zorder>comboBoxColorScheme</zorder>
   </widget>
  </widget>
  <resources/>

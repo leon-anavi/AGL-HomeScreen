@@ -16,77 +16,47 @@
 
 #include "controlbarwidget.h"
 #include "ui_controlbarwidget.h"
+#include "../interfaces/daynightmode.h"
+#include <QSettings>
 
 ControlBarWidget::ControlBarWidget(QWidget *parent) :
     QWidget(parent),
-    mp_ui(new Ui::ControlBarWidget),
-    mp_settingsWidget(0),
-    m_dayNightMode(SystemDayNight::DAYNIGHTMODE_DAY), // TODO: read from system
-    mp_dayNightModeProxy(0)
+    mp_ui(new Ui::ControlBarWidget)
 {
-    // this has to be adopted to the system setup
-    mp_dayNightModeProxy = new org::agl::daynightmode("org.agl.homescreen.simulator", //"org.agl.systeminfoprovider"
-                                                      "/",
-                                                      QDBusConnection::sessionBus(),
-                                                      0);
-    QObject::connect(mp_dayNightModeProxy, SIGNAL(dayNightMode(int)), this, SLOT(dayNightModeSlot(int)));
-
     mp_ui->setupUi(this);
 }
 
 ControlBarWidget::~ControlBarWidget()
 {
-    delete mp_dayNightModeProxy;
-    if (0 != mp_settingsWidget)
-    {
-        delete mp_settingsWidget;
-    }
     delete mp_ui;
 }
 
-void ControlBarWidget::dayNightModeSlot(int mode)
+void ControlBarWidget::updateColorScheme()
 {
+    QSettings settings;
+    QSettings settings_cs(QApplication::applicationDirPath() +
+                          "/colorschemes/" +
+                          settings.value("systemsettings/colorscheme", "default").toString() +
+                          "/" +
+                          QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
+                          ".ini",
+                          QSettings::IniFormat);
+
     QIcon icon;
-    switch (mode)
-    {
-    case SystemDayNight::DAYNIGHTMODE_DAY:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_DAY;
-        mp_ui->widget_Background->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_green_day.png)"));
+    mp_ui->widget_Background->setStyleSheet(settings_cs.value(QString("ControlBarWidget/widget_Background")).toString());
 
-        icon.addFile(QStringLiteral(":/icons/home_day.png"), QSize(), QIcon::Normal, QIcon::Off);
-        mp_ui->pushButton_Home->setIcon(icon);
-        icon.addFile(QStringLiteral(":/icons/settings_day.png"), QSize(), QIcon::Normal, QIcon::Off);
-        mp_ui->pushButton_Settings->setIcon(icon);
-        break;
-    case SystemDayNight::DAYNIGHTMODE_NIGHT:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_NIGHT;
-        mp_ui->widget_Background->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_green_night.png)"));
-
-        icon.addFile(QStringLiteral(":/icons/home_night.png"), QSize(), QIcon::Normal, QIcon::Off);
-        mp_ui->pushButton_Home->setIcon(icon);
-        icon.addFile(QStringLiteral(":/icons/settings_night.png"), QSize(), QIcon::Normal, QIcon::Off);
-        mp_ui->pushButton_Settings->setIcon(icon);
-        break;
-    default:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_UNDEFINED;
-    }
+    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_Home")).toString(), QSize(), QIcon::Normal, QIcon::Off);
+    mp_ui->pushButton_Home->setIcon(icon);
+    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_Settings")).toString(), QSize(), QIcon::Normal, QIcon::Off);
+    mp_ui->pushButton_Settings->setIcon(icon);
 }
 
 void ControlBarWidget::on_pushButton_Settings_clicked()
 {
-    if (0 == mp_settingsWidget)
-    {
-        mp_settingsWidget = new SettingsWidget((QWidget*)parent());
-    }
-
-    mp_settingsWidget->move(0, 60);
-    mp_settingsWidget->show();
+    emit settingsButtonPressed();
 }
 
 void ControlBarWidget::on_pushButton_Home_clicked()
 {
-    if (0 != mp_settingsWidget)
-    {
-        mp_settingsWidget->hide();
-    }
+    emit homeButtonPressed();
 }

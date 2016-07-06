@@ -19,9 +19,6 @@
 
 #include <QWidget>
 #include <QTranslator>
-#include "../interfaces/daynightmode.h"
-#include "daynightmode_proxy.h"
-
 
 namespace Ui {
 class SettingsWidget;
@@ -34,10 +31,8 @@ class SettingsWidget : public QWidget
 public:
     explicit SettingsWidget(QWidget *parent = 0);
     ~SettingsWidget();
-
-// day/night mode
-public Q_SLOTS:
-    void dayNightModeSlot(int mode);
+public slots:
+    void updateColorScheme();
 
 protected:
     // called when the translator loaded a new language set
@@ -45,13 +40,13 @@ protected:
 
 private slots:
     void on_comboBoxLanguage_currentIndexChanged(const QString &);
+    void on_comboBoxColorScheme_currentIndexChanged(const QString &);
+
+signals:
+    void colorSchemeChanged(void);
 
 private:
     Ui::SettingsWidget *mp_ui;
-
-    SystemDayNight::eDayNightMode m_dayNightMode;
-    org::agl::daynightmode *mp_dayNightModeProxy;
-
     QTranslator *mp_translator;
 };
 

@@ -22,9 +22,6 @@
      <height>60</height>
     </rect>
    </property>
-   <property name="styleSheet">
-    <string notr="true">background-image: url(:/images/backgrounds/bg_green_day.png);</string>
-   </property>
    <widget class="QPushButton" name="pushButton_Home">
     <property name="geometry">
      <rect>

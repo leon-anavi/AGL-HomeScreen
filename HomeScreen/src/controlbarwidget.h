@@ -18,9 +18,6 @@
 #define CONTROLBARWIDGET_H
 
 #include <QWidget>
-#include "../interfaces/daynightmode.h"
-#include "daynightmode_proxy.h"
-#include "settingswidget.h"
 
 namespace Ui {
 class ControlBarWidget;
@@ -33,24 +30,18 @@ class ControlBarWidget : public QWidget
 public:
     explicit ControlBarWidget(QWidget *parent = 0);
     ~ControlBarWidget();
-
-// day/night mode
-public Q_SLOTS:
-    void dayNightModeSlot(int mode);
+public slots:
+    void updateColorScheme();
+signals:
+    void settingsButtonPressed();
+    void homeButtonPressed();
 
 private slots:
     void on_pushButton_Settings_clicked();
-
     void on_pushButton_Home_clicked();
 
 private:
     Ui::ControlBarWidget *mp_ui;
-    SettingsWidget *mp_settingsWidget;
-    org::agl::daynightmode *mp_dBusDayNightMode_SettingsWidget;
-
-    // D-Bus day/night
-    SystemDayNight::eDayNightMode m_dayNightMode;
-    org::agl::daynightmode *mp_dayNightModeProxy;
 };
 
 #endif // CONTROLBARWIDGET_H

@@ -16,15 +16,16 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "../interfaces/daynightmode.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     mp_ui(new Ui::MainWindow),
     mp_statusBarWidget(0),
     mp_controlBarWidget(0),
-    m_dayNightMode(SystemDayNight::DAYNIGHTMODE_DAY), // TODO: read from system
-    mp_dayNightModeProxy(0),
-    mp_popupWidget(0)
+    mp_settingsWidget(0),
+    mp_popupWidget(0),
+    mp_dayNightModeProxy(0)
 {
     // this has to be adopted to the system setup
     mp_dayNightModeProxy = new org::agl::daynightmode("org.agl.homescreen.simulator", //"org.agl.systeminfoprovider"
@@ -53,43 +54,74 @@ MainWindow::MainWindow(QWidget *parent) :
     // apply layout
     mp_controlBarWidget->move(0, 1920-60);
 
+    mp_settingsWidget = new SettingsWidget(this);
+    mp_settingsWidget->raise();
+    // apply layout
+    mp_settingsWidget->move(0, 60);
+    mp_settingsWidget->hide();
+
     mp_popupWidget = new PopupWidget(this);
     mp_controlBarWidget->raise();
     // apply layout
     mp_popupWidget->move(0, 0);
+
+    QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), this, SLOT(updateColorScheme()));
+    QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_statusBarWidget, SLOT(updateColorScheme()));
+    QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_controlBarWidget, SLOT(updateColorScheme()));
+    QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_settingsWidget, SLOT(updateColorScheme()));
+    QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_popupWidget, SLOT(updateColorScheme()));
+
+    QObject::connect(mp_controlBarWidget, SIGNAL(settingsButtonPressed()), mp_settingsWidget, SLOT(show()));
+    QObject::connect(mp_controlBarWidget, SIGNAL(homeButtonPressed()), mp_settingsWidget, SLOT(hide()));
+
+    // apply color scheme
+    updateColorScheme();
+    mp_statusBarWidget->updateColorScheme();
+    mp_controlBarWidget->updateColorScheme();
+    mp_settingsWidget->updateColorScheme();
+    mp_popupWidget->updateColorScheme();
 
     setWindowIcon(QIcon(":/icons/home_day.png"));
 }
 
 MainWindow::~MainWindow()
 {
-    delete mp_popupWidget;
     delete mp_dayNightModeProxy;
+    delete mp_popupWidget;
+    delete mp_settingsWidget;
+    delete mp_controlBarWidget;
     delete mp_statusBarWidget;
     delete mp_ui;
 }
 
 void MainWindow::dayNightModeSlot(int mode)
 {
-    switch (mode)
-    {
-    case SystemDayNight::DAYNIGHTMODE_DAY:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_DAY;
-        mp_ui->widget_Background->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_blue_day.png)"));
-        // home icon
-        mp_ui->widget_Home_Icon->setStyleSheet(QString("border-image: url(:/icons/home_day.png) 0 0 0 0 stretch stretch;"));
+    QSettings settings;
+    settings.setValue("systemsettings/daynightmode", mode);
+    // make sure that everything is written to the settings file before continuing
+    settings.sync();
 
-        break;
-    case SystemDayNight::DAYNIGHTMODE_NIGHT:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_NIGHT;
-        mp_ui->widget_Background->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_blue_night.png)"));
-        // home icon
-        mp_ui->widget_Home_Icon->setStyleSheet(QString("border-image: url(:/icons/home_night.png) 0 0 0 0 stretch stretch;"));
+    updateColorScheme();
 
-        break;
-    default:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_UNDEFINED;
-    }
+    mp_statusBarWidget->updateColorScheme();
+    mp_controlBarWidget->updateColorScheme();
+    mp_settingsWidget->updateColorScheme();
+    mp_popupWidget->updateColorScheme();
+}
+
+void MainWindow::updateColorScheme()
+{
+    QSettings settings;
+    QSettings settings_cs(QApplication::applicationDirPath() +
+                          "/colorschemes/" +
+                          settings.value("systemsettings/colorscheme", "default").toString() +
+                          "/" +
+                          QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
+                          ".ini",
+                          QSettings::IniFormat);
+
+    mp_ui->widget_Background->setStyleSheet(settings_cs.value("MainWindow/widget_Background").toString());
+    mp_ui->widget_Home_Icon->setStyleSheet(settings_cs.value("MainWindow/widget_Home_Icon").toString());
 }
 
 void MainWindow::changeEvent(QEvent* event)
@@ -101,4 +133,3 @@ void MainWindow::changeEvent(QEvent* event)
 
     QMainWindow::changeEvent(event);
 }
-

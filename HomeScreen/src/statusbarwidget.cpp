@@ -16,26 +16,18 @@
 
 #include "statusbarwidget.h"
 #include "ui_statusbarwidget.h"
+#include "../interfaces/daynightmode.h"
 
 StatusBarWidget::StatusBarWidget(QWidget *parent) :
     QWidget(parent),
     mp_ui(new Ui::StatusBarWidget),
-    m_dayNightMode(SystemDayNight::DAYNIGHTMODE_DAY), // TODO: read from system
-    mp_dayNightModeProxy(0),
     mp_statusbarAdaptor(0),
     mp_statusbarIconURIs(new QMap<int, QString>)
 {
-    // this has to be adopted to the system setup
-    mp_dayNightModeProxy = new org::agl::daynightmode("org.agl.homescreen.simulator", //"org.agl.systeminfoprovider"
-                                                      "/",
-                                                      QDBusConnection::sessionBus(),
-                                                      0);
-    QObject::connect(mp_dayNightModeProxy, SIGNAL(dayNightMode(int)), this, SLOT(dayNightModeSlot(int)));
-
     // publish statusbar interface
     mp_statusbarAdaptor = new StatusbarAdaptor((QObject*)this);
 
-  QDBusConnection dbus = QDBusConnection::sessionBus();
+    QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/StatusBar", this);
     dbus.registerService("org.agl.homescreen");
 
@@ -45,35 +37,37 @@ StatusBarWidget::StatusBarWidget(QWidget *parent) :
 StatusBarWidget::~StatusBarWidget()
 {
     delete mp_statusbarAdaptor;
-    delete mp_dayNightModeProxy;
     delete mp_ui;
 }
 
-void StatusBarWidget::dayNightModeSlot(int mode)
+void StatusBarWidget::updateColorScheme()
 {
-    switch (mode)
-    {
-    case SystemDayNight::DAYNIGHTMODE_DAY:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_DAY;
-        mp_ui->widget->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_stripes_day.png)"));
-        mp_ui->label_1->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(1) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_2->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(2) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_3->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(3) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_4->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(4) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_5->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(5) + QString("); background-repeat: no-repeat;"));
-        break;
-    case SystemDayNight::DAYNIGHTMODE_NIGHT:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_NIGHT;
-        mp_ui->widget->setStyleSheet(QString("background-image: url(:/images/backgrounds/bg_stripes_night.png)"));
-        mp_ui->label_1->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(1) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_2->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(2) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_3->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(3) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_4->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(4) + QString("); background-repeat: no-repeat;"));
-        mp_ui->label_5->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(5) + QString("); background-repeat: no-repeat;"));
-        break;
-    default:
-        m_dayNightMode = SystemDayNight::DAYNIGHTMODE_UNDEFINED;
-    }
+    QSettings settings;
+    QSettings settings_cs(QApplication::applicationDirPath() +
+                          "/colorschemes/" +
+                          settings.value("systemsettings/colorscheme", "default").toString() +
+                          "/" +
+                          QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
+                          ".ini",
+                          QSettings::IniFormat);
+
+    mp_ui->widget->setStyleSheet(settings_cs.value(QString("StatusBarWidget/widget")).toString());
+    mp_ui->label_1->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_1")).toString());
+    mp_ui->label_2->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_2")).toString());
+    mp_ui->label_3->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_3")).toString());
+    mp_ui->label_4->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_4")).toString());
+    mp_ui->label_5->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_5")).toString());
+
+    mp_ui->label_1_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_1_icon")).toString()
+                                       + QString(" border-image: url(") + mp_statusbarIconURIs->value(1) + QString(") 0 0 0 0 stretch stretch;"));
+    mp_ui->label_2_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_2_icon")).toString()
+                                       + QString(" border-image: url(") + mp_statusbarIconURIs->value(2) + QString(") 0 0 0 0 stretch stretch;"));
+    mp_ui->label_3_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_3_icon")).toString()
+                                       + QString(" border-image: url(") + mp_statusbarIconURIs->value(3) + QString(") 0 0 0 0 stretch stretch;"));
+    mp_ui->label_4_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_4_icon")).toString()
+                                       + QString(" border-image: url(") + mp_statusbarIconURIs->value(4) + QString(") 0 0 0 0 stretch stretch;"));
+    mp_ui->label_5_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_5_icon")).toString()
+                                       + QString(" border-image: url(") + mp_statusbarIconURIs->value(5) + QString(") 0 0 0 0 stretch stretch;"));
 }
 
 QList<int> StatusBarWidget::getAvailablePlaceholders()
@@ -127,55 +121,7 @@ void StatusBarWidget::setStatusIcon(int placeholderIndex, const QString &iconURI
 {
     mp_statusbarIconURIs->insert(placeholderIndex, iconURI);
 
-    switch (m_dayNightMode)
-    {
-    case SystemDayNight::DAYNIGHTMODE_DAY:
-        switch (placeholderIndex)
-        {
-        case 1:
-            mp_ui->label_1->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 2:
-            mp_ui->label_2->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 3:
-            mp_ui->label_3->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 4:
-            mp_ui->label_4->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 5:
-            mp_ui->label_5->setStyleSheet(QString("color: rgb(238, 238, 238); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        default:
-            break;
-        }
-        break;
-    case SystemDayNight::DAYNIGHTMODE_NIGHT:
-        switch (placeholderIndex)
-        {
-        case 1:
-            mp_ui->label_1->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 2:
-            mp_ui->label_2->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 3:
-            mp_ui->label_3->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 4:
-            mp_ui->label_4->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        case 5:
-            mp_ui->label_5->setStyleSheet(QString("color: rgb(177, 177, 177); background-image: url(") + mp_statusbarIconURIs->value(placeholderIndex) + QString("); background-repeat: no-repeat;"));
-            break;
-        default:
-            break;
-        }
-        break;
-    default:
-        break;
-    }
+    updateColorScheme();
 }
 
 void StatusBarWidget::setStatusText(int placeholderIndex, const QString &text)
@@ -201,5 +147,3 @@ void StatusBarWidget::setStatusText(int placeholderIndex, const QString &text)
         break;
     }
 }
-
-

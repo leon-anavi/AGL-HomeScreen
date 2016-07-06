@@ -18,13 +18,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "../interfaces/daynightmode.h"
 #include "daynightmode_proxy.h"
-
-#include "popupwidget.h"
 
 #include "statusbarwidget.h"
 #include "controlbarwidget.h"
+#include "settingswidget.h"
+#include "popupwidget.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -42,6 +42,9 @@ public:
 public Q_SLOTS:
     void dayNightModeSlot(int mode);
 
+public slots:
+    void updateColorScheme();
+
 protected:
     // called when the translator loaded a new language set
     void changeEvent(QEvent* event);
@@ -53,11 +56,10 @@ private:
     org::agl::daynightmode *mp_dBusDayNightMode_StatusBarWidget;
     ControlBarWidget *mp_controlBarWidget;
     org::agl::daynightmode *mp_dBusDayNightMode_ControlBarWidget;
-
-    SystemDayNight::eDayNightMode m_dayNightMode;
-    org::agl::daynightmode *mp_dayNightModeProxy;
-
+    SettingsWidget *mp_settingsWidget;
     PopupWidget *mp_popupWidget;
+
+    org::agl::daynightmode *mp_dayNightModeProxy;
 };
 
 #endif // MAINWINDOW_H

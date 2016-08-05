@@ -16,7 +16,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "../interfaces/daynightmode.h"
+#include <include/daynightmode.hpp>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,15 +24,17 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_statusBarWidget(0),
     mp_controlBarWidget(0),
     mp_settingsWidget(0),
+    mp_applauncherwidget(0),
     mp_popupWidget(0),
-    mp_dayNightModeProxy(0)
+    mp_dBusDayNightModeProxy(0),
+    mp_homeScreenControlInterface(0)
 {
     // this has to be adopted to the system setup
-    mp_dayNightModeProxy = new org::agl::daynightmode("org.agl.homescreen.simulator", //"org.agl.systeminfoprovider"
+    mp_dBusDayNightModeProxy = new org::agl::daynightmode("org.agl.homescreen.simulator", //"org.agl.systeminfoprovider"
                                                       "/",
                                                       QDBusConnection::sessionBus(),
                                                       0);
-    QObject::connect(mp_dayNightModeProxy, SIGNAL(dayNightMode(int)), this, SLOT(dayNightModeSlot(int)));
+    QObject::connect(mp_dBusDayNightModeProxy, SIGNAL(dayNightMode(int)), this, SLOT(dayNightModeSlot(int)));
 
     // dbus setup
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -42,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // no window decoration
     setWindowFlags(Qt::FramelessWindowHint);
+
     mp_ui->setupUi(this);
 
     mp_statusBarWidget = new StatusBarWidget(this);
@@ -58,12 +61,18 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_settingsWidget->raise();
     // apply layout
     mp_settingsWidget->move(0, 60);
-    mp_settingsWidget->hide();
+    //mp_settingsWidget->hide();
 
-    mp_popupWidget = new PopupWidget(this);
+    mp_applauncherwidget = new AppLauncherWidget(this);
+    mp_applauncherwidget->raise();
+    // apply layout
+    mp_applauncherwidget->move(0, 60);
+
+    mp_popupWidget = new PopupWidget();
     mp_controlBarWidget->raise();
     // apply layout
     mp_popupWidget->move(0, 0);
+
 
     QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), this, SLOT(updateColorScheme()));
     QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_statusBarWidget, SLOT(updateColorScheme()));
@@ -71,23 +80,30 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_settingsWidget, SLOT(updateColorScheme()));
     QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_popupWidget, SLOT(updateColorScheme()));
 
-    QObject::connect(mp_controlBarWidget, SIGNAL(settingsButtonPressed()), mp_settingsWidget, SLOT(show()));
-    QObject::connect(mp_controlBarWidget, SIGNAL(homeButtonPressed()), mp_settingsWidget, SLOT(hide()));
+    QObject::connect(mp_controlBarWidget, SIGNAL(settingsButtonPressed()), mp_settingsWidget, SLOT(raise()));
+    QObject::connect(mp_controlBarWidget, SIGNAL(homeButtonPressed()), mp_applauncherwidget, SLOT(raise()));
 
     // apply color scheme
     updateColorScheme();
     mp_statusBarWidget->updateColorScheme();
     mp_controlBarWidget->updateColorScheme();
     mp_settingsWidget->updateColorScheme();
+    mp_applauncherwidget->updateColorScheme();
     mp_popupWidget->updateColorScheme();
 
+    // this is only useful during development and will be removed later
     setWindowIcon(QIcon(":/icons/home_day.png"));
+
+    mp_homeScreenControlInterface = new HomeScreenControlInterface(this);
 }
 
 MainWindow::~MainWindow()
 {
-    delete mp_dayNightModeProxy;
+    delete mp_homeScreenControlInterface;
+
+    delete mp_dBusDayNightModeProxy;
     delete mp_popupWidget;
+    delete mp_applauncherwidget;
     delete mp_settingsWidget;
     delete mp_controlBarWidget;
     delete mp_statusBarWidget;
@@ -106,6 +122,7 @@ void MainWindow::dayNightModeSlot(int mode)
     mp_statusBarWidget->updateColorScheme();
     mp_controlBarWidget->updateColorScheme();
     mp_settingsWidget->updateColorScheme();
+    mp_applauncherwidget->updateColorScheme();
     mp_popupWidget->updateColorScheme();
 }
 
@@ -132,4 +149,13 @@ void MainWindow::changeEvent(QEvent* event)
     }
 
     QMainWindow::changeEvent(event);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    // start app
+    QProcess process;
+        QString file = "vlc";
+        process.startDetached(file);
+    // manage ivi shell
 }

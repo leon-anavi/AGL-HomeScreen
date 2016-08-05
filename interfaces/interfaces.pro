@@ -12,21 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT += core gui dbus
+QT  += core dbus
+QT  -= gui
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = lib
 CONFIG += staticlib
 TARGET = interfaces
 
+HEADERS += include/appframework.hpp
+SOURCES += src/appframework.cpp
+
 XMLSOURCES = \
+    appframework.xml \
     daynightmode.xml \
+    homescreen.xml \
+    inputevent.xml \
     popup.xml \
     statusbar.xml
 
 gen_adapter_cpp.input = XMLSOURCES
 gen_adapter_cpp.commands = \
-    qdbusxml2cpp -m -a ${QMAKE_FILE_IN_BASE}_adapter ${QMAKE_FILE_IN}; \
+    qdbusxml2cpp -i include/${QMAKE_FILE_IN_BASE}.hpp -m -a ${QMAKE_FILE_IN_BASE}_adapter ${QMAKE_FILE_IN}; \
     moc $$OUT_PWD/${QMAKE_FILE_IN_BASE}_adapter.h -o $$OUT_PWD/${QMAKE_FILE_IN_BASE}_adapter.moc
 gen_adapter_cpp.output = ${QMAKE_FILE_IN_BASE}_adapter.cpp
 gen_adapter_cpp.variable_out = SOURCES
@@ -34,7 +42,7 @@ gen_adapter_cpp.clean = ${QMAKE_FILE_IN_BASE}_adapter.cpp
 
 gen_proxy_cpp.input = XMLSOURCES
 gen_proxy_cpp.commands = \
-    qdbusxml2cpp -m -p ${QMAKE_FILE_IN_BASE}_proxy ${QMAKE_FILE_IN}; \
+    qdbusxml2cpp -i include/${QMAKE_FILE_IN_BASE}.hpp -m -p ${QMAKE_FILE_IN_BASE}_proxy ${QMAKE_FILE_IN}; \
     moc $$OUT_PWD/${QMAKE_FILE_IN_BASE}_proxy.h -o $$OUT_PWD/${QMAKE_FILE_IN_BASE}_proxy.moc
 gen_proxy_cpp.output = ${QMAKE_FILE_IN_BASE}_proxy.cpp
 gen_proxy_cpp.variable_out = SOURCES
@@ -43,7 +51,7 @@ gen_proxy_cpp.clean = ${QMAKE_FILE_IN_BASE}_proxy.cpp
 gen_adapter_h.input = XMLSOURCES
 gen_adapter_h.commands = @echo Fake making the header for ${QMAKE_FILE_IN}
 gen_adapter_h.depends = ${QMAKE_FILE_IN_BASE}_adapter.cpp
-en_adapter_h.output = ${QMAKE_FILE_IN_BASE}_adapter.h
+gen_adapter_h.output = ${QMAKE_FILE_IN_BASE}_adapter.h
 gen_adapter_h.clean = ${QMAKE_FILE_IN_BASE}_adapter.h
 
 gen_proxy_h.input = XMLSOURCES

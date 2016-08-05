@@ -18,7 +18,7 @@
 #define POPUPWIDGET_H
 
 #include <QWidget>
-#include "../interfaces/popup.h"
+#include <include/popup.hpp>
 #include "popup_adapter.h"
 
 namespace Ui {
@@ -46,6 +46,8 @@ private:
     Ui::PopupWidget *mp_ui;
 
     PopupAdaptor *mp_popupAdaptor;
+    // for showPupupFor LayoutSelection
+    //QList<QPushButton> m_pushButtons;
 };
 
 #endif // POPUPWIDGET_H

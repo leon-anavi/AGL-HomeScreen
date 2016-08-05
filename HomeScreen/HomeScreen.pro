@@ -19,31 +19,31 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = HomeScreen
 TEMPLATE = app
 
-
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/settingswidget.cpp \
     src/popupwidget.cpp \
     src/controlbarwidget.cpp \
-    src/statusbarwidget.cpp
+    src/statusbarwidget.cpp \
+    src/applauncherwidget.cpp \
+    src/homescreencontrolinterface.cpp
 
 HEADERS  += \
+    ../interfaces/appframework.h \
     ../interfaces/daynightmode.h \
     ../interfaces/popup.h \
+    ../interfaces/statusbar.h \
     src/mainwindow.h \
     src/settingswidget.h \
     src/popupwidget.h \
     src/controlbarwidget.h \
     src/statusbarwidget.h \
-    $$OUT_PWD/../interfaces/daynightmode_adapter.h \      #generated dbus adapter
-    $$OUT_PWD/../interfaces/daynightmode_proxy.h \        #generated dbus proxy
-    $$OUT_PWD/../interfaces/popup_adapter.h \             #generated dbus adapter
-    $$OUT_PWD/../interfaces/popup_proxy.h \               #generated dbus proxy
-    $$OUT_PWD/../interfaces/statusbar_adapter.h \         #generated dbus adapter
-    $$OUT_PWD/../interfaces/statusbar_proxy.h             #generated dbus proxy
+    src/applauncherwidget.h \
+    src/homescreencontrolinterface.h
 
 INCLUDEPATH += $$OUT_PWD/../interfaces
+INCLUDEPATH += ../interfaces/
 
 LIBS += -L$$OUT_PWD/../interfaces -linterfaces
 
@@ -53,7 +53,8 @@ FORMS    += \
     resources/settingswidget.ui \
     resources/popupwidget.ui \
     resources/controlbarwidget.ui \
-    resources/statusbarwidget.ui
+    resources/statusbarwidget.ui \
+    resources/applauncherwidget.ui
 
 TRANSLATIONS = \
     resources/translations/homescreen_en_US.ts \
@@ -74,5 +75,6 @@ QMAKE_EXTRA_TARGETS += HomeScreen copydata
 
 # remove generated files
 QMAKE_CLEAN += -r \
+    $$OUT_PWD/colorschemes \
     $$OUT_PWD/HomeScreen \
     $$OUT_PWD/Makefile

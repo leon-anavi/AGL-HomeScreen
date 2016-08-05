@@ -16,18 +16,27 @@
 
 #include "controlbarwidget.h"
 #include "ui_controlbarwidget.h"
-#include "../interfaces/daynightmode.h"
+#include <include/daynightmode.hpp>
+#include <include/inputevent.hpp>
 #include <QSettings>
 
 ControlBarWidget::ControlBarWidget(QWidget *parent) :
     QWidget(parent),
-    mp_ui(new Ui::ControlBarWidget)
+    mp_ui(new Ui::ControlBarWidget),
+    mp_dBusInputEventProxy()
 {
     mp_ui->setupUi(this);
+
+    qDebug("D-Bus: connect to org.agl.homescreenappframeworkbindertizen /AppFramework");
+    mp_dBusInputEventProxy = new org::agl::inputevent("org.agl.inputeventmanager",
+                                              "/InputEvent",
+                                              QDBusConnection::sessionBus(),
+                                              0);
 }
 
 ControlBarWidget::~ControlBarWidget()
 {
+    delete mp_dBusInputEventProxy;
     delete mp_ui;
 }
 
@@ -49,6 +58,8 @@ void ControlBarWidget::updateColorScheme()
     mp_ui->pushButton_Home->setIcon(icon);
     icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_Settings")).toString(), QSize(), QIcon::Normal, QIcon::Off);
     mp_ui->pushButton_Settings->setIcon(icon);
+    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_Nav")).toString(), QSize(), QIcon::Normal, QIcon::Off);
+    mp_ui->pushButton_Nav->setIcon(icon);
 }
 
 void ControlBarWidget::on_pushButton_Settings_clicked()
@@ -59,4 +70,9 @@ void ControlBarWidget::on_pushButton_Settings_clicked()
 void ControlBarWidget::on_pushButton_Home_clicked()
 {
     emit homeButtonPressed();
+}
+
+void ControlBarWidget::on_pushButton_Nav_clicked()
+{
+    mp_dBusInputEventProxy->hardKeyPressed(InputEvent::HARDKEY_NAV);
 }

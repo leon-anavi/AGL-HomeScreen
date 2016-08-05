@@ -26,10 +26,10 @@ SOURCES += src/main.cpp \
     src/timedateprovider.cpp
 
 HEADERS += \
-    $$OUT_PWD/../interfaces/statusbar_proxy.h \          #generated dbus proxy
-    src/timedateprovider.h
+    src/timedateprovider.hpp
 
-INCLUDEPATH +=  $$OUT_PWD/../interfaces
+INCLUDEPATH += $$OUT_PWD/../interfaces
+INCLUDEPATH += ../interfaces
 
 LIBS += -L$$OUT_PWD/../interfaces -linterfaces
 

@@ -36,15 +36,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("HomeScreenSimulator");
-    QCoreApplication::setApplicationVersion("0.1.1");
+    QCoreApplication::setApplicationVersion("0.2.0");
 
     MainWindow w;
     w.show();
-
-    // TODO: input handling not defined right now...
-    /*InputEventDistributor *mp_inputEventDistributor;
-    mp_inputEventDistributor = new InputEventDistributor();*/
-
 
     // start input and system settings simulator on developer PCs
 #ifdef __arm__

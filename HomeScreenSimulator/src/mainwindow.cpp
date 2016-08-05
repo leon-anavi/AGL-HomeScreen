@@ -144,3 +144,8 @@ void MainWindow::on_pushButton_IconExample_clicked()
     // Home Screen app resources...
     mp_ui->tableWidget_Status->setItem(0, 2, new QTableWidgetItem(":/icons/home_day.png"));
 }
+
+void MainWindow::on_pushButton_PopupExample_clicked()
+{
+    mp_dBusPopupProxy->showPopup(0, "Hello Popup!\nNice to see you!");
+}

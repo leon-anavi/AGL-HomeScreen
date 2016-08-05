@@ -16,7 +16,7 @@
 
 #include "statusbarwidget.h"
 #include "ui_statusbarwidget.h"
-#include "../interfaces/daynightmode.h"
+#include <include/daynightmode.hpp>
 
 StatusBarWidget::StatusBarWidget(QWidget *parent) :
     QWidget(parent),

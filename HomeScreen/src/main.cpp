@@ -36,12 +36,16 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("HomeScreen");
-    QCoreApplication::setApplicationVersion("0.1.1");
+    QCoreApplication::setApplicationVersion("0.2.0");
 
-    // maybe trigger the wayland compositor to position the surface correctly
     MainWindow w;
-    w.move(0, 0);
     w.show();
+#ifdef __arm__
+    // trigger wayland compositor to position the surface correctly
+#endif
+#ifdef __i386__
+    w.move(0, 0);
+#endif
 
 
 #ifdef __arm__

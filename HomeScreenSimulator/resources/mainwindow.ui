@@ -41,7 +41,7 @@
        <rect>
         <x>20</x>
         <y>380</y>
-        <width>221</width>
+        <width>211</width>
         <height>27</height>
        </rect>
       </property>
@@ -52,7 +52,7 @@
      <widget class="QTableWidget" name="tableWidget_Status">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>30</x>
         <y>20</y>
         <width>681</width>
         <height>341</height>
@@ -98,6 +98,19 @@
         <width>681</width>
         <height>361</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_PopupExample">
+      <property name="geometry">
+       <rect>
+        <x>428</x>
+        <y>380</y>
+        <width>171</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&quot;Hello World&quot; Example</string>
       </property>
      </widget>
     </widget>

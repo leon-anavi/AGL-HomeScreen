@@ -1,4 +1,4 @@
-#include "timedateprovider.h"
+#include "timedateprovider.hpp"
 #include <QTimerEvent>
 
 TimeDateProvider::TimeDateProvider(QObject *parent) :
@@ -15,7 +15,7 @@ TimeDateProvider::TimeDateProvider(QObject *parent) :
     dbus.registerService("org.agl.sampleapptimedate");
 
 
-    qDebug("D-Bus: connect to org.agl.mainwindow /StatusBar");
+    qDebug("D-Bus: connect to org.agl.homescreen /StatusBar");
     mp_dBusStatusBarProxy = new org::agl::statusbar("org.agl.homescreen",
                                               "/StatusBar",
                                               QDBusConnection::sessionBus(),
@@ -28,7 +28,6 @@ TimeDateProvider::~TimeDateProvider()
 
     if (0 != mp_dBusStatusBarProxy)
     {
-        qDebug("x");
         mp_dBusStatusBarProxy->setStatusText(1, "");
         delete mp_dBusStatusBarProxy;
     }

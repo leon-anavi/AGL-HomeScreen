@@ -18,7 +18,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "../interfaces/daynightmode.h"
+#include <include/daynightmode.hpp>
 #include "daynightmode_adapter.h"
 
 #include "statusbar_proxy.h"
@@ -54,6 +54,8 @@ private slots:
     void on_pushButton_Send_clicked();
 
     void on_pushButton_IconExample_clicked();
+
+    void on_pushButton_PopupExample_clicked();
 
 private:
     Ui::MainWindow *mp_ui;

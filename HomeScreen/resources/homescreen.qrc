@@ -11,6 +11,8 @@
         <file alias="icons/home_night.png">images/icons/Black/01.Home.png</file>
         <file alias="icons/settings_day.png">images/icons/White/45.Settings.png</file>
         <file alias="icons/settings_night.png">images/icons/Black/45.Settings.png</file>
+        <file alias="icons/explore_day.png">images/icons/White/47.Explore.png</file>
+        <file alias="icons/explore_night.png">images/icons/Black/47.Explore.png</file>
         <file>translations/homescreen_de_DE.qm</file>
         <file>translations/homescreen_en_US.qm</file>
         <file>translations/homescreen_ja_JP.qm</file>

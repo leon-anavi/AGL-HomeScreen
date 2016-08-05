@@ -17,7 +17,7 @@
 #include "settingswidget.h"
 #include "ui_settingswidget.h"
 #include <QSettings>
-#include "../interfaces/daynightmode.h"
+#include <include/daynightmode.hpp>
 
 SettingsWidget::SettingsWidget(QWidget *parent) :
     QWidget(parent),

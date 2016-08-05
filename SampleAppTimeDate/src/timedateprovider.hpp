@@ -1,5 +1,5 @@
-#ifndef TIMEDATEPROVIDER_H
-#define TIMEDATEPROVIDER_H
+#ifndef TIMEDATEPROVIDER_HPP
+#define TIMEDATEPROVIDER_HPP
 
 #include <QObject>
 #include "statusbar_proxy.h"
@@ -24,4 +24,4 @@ public slots:
 
 };
 
-#endif // TIMEDATEPROVIDER_H
+#endif // TIMEDATEPROVIDER_HPP

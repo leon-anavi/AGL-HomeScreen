@@ -27,15 +27,10 @@ SOURCES += \
 HEADERS  += \
     ../interfaces/daynightmode.h \
     ../interfaces/popup.h \
-    src/mainwindow.h \
-    $$OUT_PWD/../interfaces/daynightmode_adapter.h \      #generated dbus adapter
-    $$OUT_PWD/../interfaces/daynightmode_proxy.h \        #generated dbus proxy
-    $$OUT_PWD/../interfaces/popup_adapter.h \             #generated dbus adapter
-    $$OUT_PWD/../interfaces/popup_proxy.h \               #generated dbus proxy
-    $$OUT_PWD/../interfaces/statusbar_adapter.h \         #generated dbus adapter
-    $$OUT_PWD/../interfaces/statusbar_proxy.h             #generated dbus proxy
+    src/mainwindow.h
 
 INCLUDEPATH += $$OUT_PWD/../interfaces
+INCLUDEPATH += ../interfaces
 
 LIBS += -L$$OUT_PWD/../interfaces -linterfaces
 

@@ -16,7 +16,7 @@
 
 #include "popupwidget.h"
 #include "ui_popupwidget.h"
-#include "../interfaces/daynightmode.h"
+#include <include/daynightmode.hpp>
 
 PopupWidget::PopupWidget(QWidget *parent) :
     QWidget(parent),
@@ -29,7 +29,11 @@ PopupWidget::PopupWidget(QWidget *parent) :
     dbus.registerObject("/Popup", this);
     dbus.registerService("org.agl.homescreen");
 
+    // no window decoration
+    setWindowFlags(Qt::FramelessWindowHint);
+
     mp_ui->setupUi(this);
+
     this->close();
 }
 

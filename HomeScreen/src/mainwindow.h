@@ -20,9 +20,12 @@
 #include <QMainWindow>
 #include "daynightmode_proxy.h"
 
+#include "homescreencontrolinterface.h"
+
 #include "statusbarwidget.h"
 #include "controlbarwidget.h"
 #include "settingswidget.h"
+#include "applauncherwidget.h"
 #include "popupwidget.h"
 
 
@@ -42,12 +45,16 @@ public:
 public Q_SLOTS:
     void dayNightModeSlot(int mode);
 
+
 public slots:
     void updateColorScheme();
 
 protected:
     // called when the translator loaded a new language set
     void changeEvent(QEvent* event);
+
+private slots:
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *mp_ui;
@@ -57,9 +64,12 @@ private:
     ControlBarWidget *mp_controlBarWidget;
     org::agl::daynightmode *mp_dBusDayNightMode_ControlBarWidget;
     SettingsWidget *mp_settingsWidget;
+    AppLauncherWidget *mp_applauncherwidget;
     PopupWidget *mp_popupWidget;
 
-    org::agl::daynightmode *mp_dayNightModeProxy;
+    org::agl::daynightmode *mp_dBusDayNightModeProxy;
+
+    HomeScreenControlInterface *mp_homeScreenControlInterface;
 };
 
 #endif // MAINWINDOW_H

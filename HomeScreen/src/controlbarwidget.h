@@ -18,6 +18,7 @@
 #define CONTROLBARWIDGET_H
 
 #include <QWidget>
+#include "inputevent_proxy.h"
 
 namespace Ui {
 class ControlBarWidget;
@@ -39,9 +40,11 @@ signals:
 private slots:
     void on_pushButton_Settings_clicked();
     void on_pushButton_Home_clicked();
+    void on_pushButton_Nav_clicked();
 
 private:
     Ui::ControlBarWidget *mp_ui;
+    org::agl::inputevent *mp_dBusInputEventProxy;
 };
 
 #endif // CONTROLBARWIDGET_H

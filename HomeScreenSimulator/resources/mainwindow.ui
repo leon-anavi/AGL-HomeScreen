@@ -113,6 +113,19 @@
        <string>&quot;Hello World&quot; Example</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="pushButton_comboBoxExample">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>380</y>
+        <width>191</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>ComboBox Example</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_DayNightMode">
      <attribute name="title">

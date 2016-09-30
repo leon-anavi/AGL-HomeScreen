@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_settingsWidget(0),
     mp_applauncherwidget(0),
     mp_popupWidget(0),
+    mp_layoutHandler(new LayoutHandler()),
     mp_dBusDayNightModeProxy(0),
     mp_homeScreenControlInterface(0)
 {
@@ -68,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // apply layout
     mp_applauncherwidget->move(0, 60);
 
+
     mp_popupWidget = new PopupWidget();
     mp_controlBarWidget->raise();
     // apply layout
@@ -83,6 +85,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(mp_controlBarWidget, SIGNAL(settingsButtonPressed()), mp_settingsWidget, SLOT(raise()));
     QObject::connect(mp_controlBarWidget, SIGNAL(homeButtonPressed()), mp_applauncherwidget, SLOT(raise()));
 
+    QObject::connect(mp_applauncherwidget, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
+
     // apply color scheme
     updateColorScheme();
     mp_statusBarWidget->updateColorScheme();
@@ -94,7 +98,13 @@ MainWindow::MainWindow(QWidget *parent) :
     // this is only useful during development and will be removed later
     setWindowIcon(QIcon(":/icons/home_day.png"));
 
+    mp_applauncherwidget->populateAppList();
+    mp_layoutHandler->setUpLayers();
+
     mp_homeScreenControlInterface = new HomeScreenControlInterface(this);
+    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
+
+    QObject::connect(mp_popupWidget, SIGNAL(comboBoxResult(QString)), mp_layoutHandler, SLOT(setLayoutByName(QString)));
 }
 
 MainWindow::~MainWindow()
@@ -102,6 +112,9 @@ MainWindow::~MainWindow()
     delete mp_homeScreenControlInterface;
 
     delete mp_dBusDayNightModeProxy;
+
+    delete mp_layoutHandler;
+
     delete mp_popupWidget;
     delete mp_applauncherwidget;
     delete mp_settingsWidget;
@@ -151,11 +164,3 @@ void MainWindow::changeEvent(QEvent* event)
     QMainWindow::changeEvent(event);
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    // start app
-    QProcess process;
-        QString file = "vlc";
-        process.startDetached(file);
-    // manage ivi shell
-}

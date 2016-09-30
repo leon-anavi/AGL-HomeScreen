@@ -16,11 +16,13 @@ public:
 
 signals:
 
-public slots:
+signals:
+    void newRequestsToBeVisibleApp(int pid);
 
 //from homescreen_adapter.h
 public Q_SLOTS: // METHODS
     void hardKeyPressed(int key);
+    void setToFullscreen(int pid);
 
 private:
     HomescreenAdaptor *mp_homeScreenAdaptor;

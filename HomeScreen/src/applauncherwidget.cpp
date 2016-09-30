@@ -18,6 +18,9 @@
 #include "ui_applauncherwidget.h"
 #include <include/daynightmode.hpp>
 #include <QSettings>
+#ifdef __i386__
+    #include <QProcess>
+#endif
 
 #define APP_LIST_COLUMN_COUNT 5
 
@@ -42,8 +45,6 @@ AppLauncherWidget::AppLauncherWidget(QWidget *parent) :
                                               "/AppFramework",
                                               QDBusConnection::sessionBus(),
                                               0);
-
-    populateAppList();
 }
 
 AppLauncherWidget::~AppLauncherWidget()
@@ -99,7 +100,13 @@ void AppLauncherWidget::populateAppList()
 
     int i;
 
+#ifdef __arm__
     QStringList apps = mp_dBusAppFrameworkProxy->getAvailableAppNames();
+#endif
+#ifdef __i386__
+    QStringList apps;
+    apps.append(QString("/usr/bin/gnome-terminal"));
+#endif
     mp_appList->clear();
 
     mp_appTable->setRowCount((apps.size() + (APP_LIST_COLUMN_COUNT - 1)) / APP_LIST_COLUMN_COUNT);
@@ -138,16 +145,24 @@ void AppLauncherWidget::populateAppList()
        mp_appTable->item(i / APP_LIST_COLUMN_COUNT,
                          i % APP_LIST_COLUMN_COUNT)->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     }
-
-
 }
 
 void AppLauncherWidget::on_tableView_clicked(int row, int col)
 {
     if (mp_appList->size() > row * APP_LIST_COLUMN_COUNT + col)
     {
+#ifdef __arm__
         int pid = mp_dBusAppFrameworkProxy->launchApp(mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName());
+#endif
+#ifdef __i386__
+        QProcess *myProcess = new QProcess();
+        myProcess->start(mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName(), NULL);
+        int pid = myProcess->pid();
+#endif
         qDebug("%d, %d: start app %s", row, col, mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName().toStdString().c_str());
         qDebug("pid: %d", pid);
+
+        // the new app wants to be visible by default
+        newRequestsToBeVisibleApp(pid);
     }
 }

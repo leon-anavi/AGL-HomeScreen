@@ -18,7 +18,17 @@
 #define WINDOWMANAGER_HPP
 
 #include <QObject>
+#include <QList>
+#include <QMap>
 
+#include "windowmanager_adapter.h"
+
+
+typedef struct
+{
+    int pid;
+    QString processName;
+} SurfaceInfo;
 
 #ifdef __arm__
 extern "C" {
@@ -26,19 +36,37 @@ extern "C" {
 }
 #endif
 
-
 class WindowManager : public QObject
 {
     Q_OBJECT
+
 public:
     explicit WindowManager(QObject *parent = 0);
+    QMutex callbackMutex;
+
     ~WindowManager();
 private:
-
-
-public:
+    WindowmanagerAdaptor *mp_windowManagerAdaptor;
+    QMap<int, QList<SimpleRect> > m_layouts;
+    QMap<int, QString> m_layoutNames;
+    int m_currentLayout;
+    void dumpScene();
 
 #ifdef __arm__
+    void createNewLayer(int layerId);
+    void addSurfaceToLayer(int surfaceId, int layerId);
+
+    QMap<t_ilm_uint, SurfaceInfo> *mp_surfaces;
+    /* one layer per pid is created
+    where the surfaces are added that are created by the process */
+    QList<int> *mp_processLayers;
+#endif
+
+public:
+    static void* myThis;
+
+#ifdef __arm__
+    // for general notifications
     void notificationFunc_non_static(ilmObjectType object,
                                         t_ilm_uint id,
                                         t_ilm_bool created);
@@ -46,9 +74,32 @@ public:
                                         t_ilm_uint id,
                                         t_ilm_bool created,
                                         void* user_data);
+
+
+    // for surface notifications
+    void surfaceCallbackFunction_non_static(t_ilm_surface surface,
+                                        struct ilmSurfaceProperties* surfaceProperties,
+                                        t_ilm_notification_mask mask);
+    static void surfaceCallbackFunction_static(t_ilm_surface surface,
+                                        struct ilmSurfaceProperties* surfaceProperties,
+                                        t_ilm_notification_mask mask);
+
 #endif
 public slots:
 
+
+// from windowmanager_adapter.h
+public Q_SLOTS: // METHODS
+    int addLayout(int layoutId, const QString &layoutName, const QList<SimpleRect> &surfaceAreas);
+    QList<int> getAvailableLayouts(int numberOfAppSurfaces);
+    QList<SimplePoint> getAvailableSurfaces();
+    int getLayout();
+    QString getLayoutName(int layoutId);
+    void setLayoutById(int layoutId);
+    void setLayoutByName(const QString &layoutName);
+    void setSurfaceToLayoutArea(int surfaceId, int layoutAreaId);
+
 };
+
 
 #endif // WINDOWMANAGER_HPP

@@ -34,9 +34,15 @@ void HomeScreenControlInterface::hardKeyPressed(int key)
         qDebug("hardKeyPressed NAV key pressed!");
         pid = mp_dBusAppFrameworkProxy->launchApp("demoapp");
         qDebug("pid: %d", pid);
+        newRequestsToBeVisibleApp(pid);
         break;
     default:
         qDebug("hardKeyPressed %d", key);
         break;
     }
+}
+
+void HomeScreenControlInterface::setToFullscreen(int pid)
+{
+    qDebug("setToFullscreen %d", pid);
 }

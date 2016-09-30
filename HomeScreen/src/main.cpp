@@ -17,7 +17,8 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QSysInfo>
-#include <QSharedMemory>
+//#include <QSharedMemory>
+#include <QSurfaceFormat>
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +37,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("HomeScreen");
-    QCoreApplication::setApplicationVersion("0.2.0");
+    QCoreApplication::setApplicationVersion("0.3.0");
+
+    QSurfaceFormat format;
+    format.setDepthBufferSize(16);
+    format.setStencilBufferSize(8);
 
     MainWindow w;
     w.show();

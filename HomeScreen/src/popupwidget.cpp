@@ -21,7 +21,8 @@
 PopupWidget::PopupWidget(QWidget *parent) :
     QWidget(parent),
     mp_ui(new Ui::PopupWidget),
-    mp_popupAdaptor(0)
+    mp_popupAdaptor(0),
+    m_sendComboBoxChoice(false)
 {
     // publish dbus popup interface
     mp_popupAdaptor = new PopupAdaptor((QObject*)this);
@@ -60,6 +61,18 @@ void PopupWidget::updateColorScheme()
 
 void PopupWidget::showPopup(int /*type*/, const QString &text)
 {
+    m_sendComboBoxChoice = false;
+    mp_ui->comboBox->hide();
+    this->show();
+    this->raise();
+    mp_ui->label_Text->setText(text);
+}
+
+void PopupWidget::showPopupComboBox(const QString &text, const QStringList &choices)
+{
+    m_sendComboBoxChoice = true;
+    mp_ui->comboBox->addItems(choices);
+    mp_ui->comboBox->show();
     this->show();
     this->raise();
     mp_ui->label_Text->setText(text);
@@ -67,5 +80,10 @@ void PopupWidget::showPopup(int /*type*/, const QString &text)
 
 void PopupWidget::on_pushButton_OK_clicked()
 {
+    if (m_sendComboBoxChoice)
+    {
+        comboBoxResult(mp_ui->comboBox->currentText());
+        m_sendComboBoxChoice = false;
+    }
     this->close();
 }

@@ -25,9 +25,21 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("WindowManager");
-    QCoreApplication::setApplicationVersion("0.2.0");
+    QCoreApplication::setApplicationVersion("0.3.0");
+
+    qDBusRegisterMetaType<SimplePoint>();
+    qDBusRegisterMetaType<QList<SimplePoint> >();
+    qDBusRegisterMetaType<SimpleRect>();
+    qDBusRegisterMetaType<QList<SimpleRect> >();
 
     WindowManager *windowManager = new WindowManager();
+
+#ifdef __arm__
+    qDebug("Running on ARM architecture");
+#endif
+#ifdef __i386__
+    qDebug("Running on x86 architecture");
+#endif
 
     return a.exec();
 }

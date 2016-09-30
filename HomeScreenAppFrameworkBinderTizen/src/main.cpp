@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("HomeScreenAppFrameworkBinderTizen");
-    QCoreApplication::setApplicationVersion("0.2.0");
+    QCoreApplication::setApplicationVersion("0.3.0");
 
     HomeScreenAppFrameworkBinderTizen *tdp = new HomeScreenAppFrameworkBinderTizen();
 

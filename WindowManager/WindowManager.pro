@@ -19,8 +19,6 @@ TARGET = WindowManager
 CONFIG   += console
 CONFIG   -= app_bundle
 
-TEMPLATE = app
-
 
 SOURCES += src/main.cpp \
     src/windowmanager.cpp
@@ -31,15 +29,12 @@ HEADERS += \
 INCLUDEPATH += $$OUT_PWD/../interfaces
 INCLUDEPATH += ../interfaces/
 
-#LIBS += -L$$OUT_PWD/../interfaces -linterfaces
+LIBS += -L$$OUT_PWD/../interfaces -linterfaces
 contains(QT_ARCH, arm.*) {
     LIBS += -lilmControl -lilmCommon
 }
 
-#contains(QT_ARCH, arm.*) {
-#    LIBS += -lpkgmgr-info
-#    LIBS += -laul
-#}
+FORMS +=
 
 OTHER_FILES += \
     README.md
@@ -48,3 +43,4 @@ OTHER_FILES += \
 QMAKE_CLEAN += -r \
     $$OUT_PWD/WindowManager \
     $$OUT_PWD/Makefile
+

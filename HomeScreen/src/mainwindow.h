@@ -28,6 +28,8 @@
 #include "applauncherwidget.h"
 #include "popupwidget.h"
 
+#include "layouthandler.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -53,8 +55,6 @@ protected:
     // called when the translator loaded a new language set
     void changeEvent(QEvent* event);
 
-private slots:
-    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *mp_ui;
@@ -66,6 +66,8 @@ private:
     SettingsWidget *mp_settingsWidget;
     AppLauncherWidget *mp_applauncherwidget;
     PopupWidget *mp_popupWidget;
+
+    LayoutHandler *mp_layoutHandler;
 
     org::agl::daynightmode *mp_dBusDayNightModeProxy;
 

@@ -18,5 +18,9 @@
       <arg name="type" type="i" direction="in"/>
       <arg name="text" type="s" direction="in"/>
     </method>
+    <method name="showPopupComboBox">
+      <arg name="text" type="s" direction="in"/>
+      <arg name="choices" type="as" direction="in"/>
+    </method>
   </interface>
 </node>

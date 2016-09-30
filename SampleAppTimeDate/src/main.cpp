@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("SampleAppTimeDate");
-    QCoreApplication::setApplicationVersion("0.2.0");
+    QCoreApplication::setApplicationVersion("0.3.0");
 
     TimeDateProvider *tdp = new TimeDateProvider();
     tdp->start();

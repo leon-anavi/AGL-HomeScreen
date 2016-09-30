@@ -38,14 +38,19 @@ public slots:
     // from popup_adapter.h
 public Q_SLOTS: // METHODS
     void showPopup(int /*type*/, const QString &text);
+    void showPopupComboBox(const QString &text, const QStringList &choices);
 
 private slots:
     void on_pushButton_OK_clicked();
+
+signals:
+    void comboBoxResult(QString choice);
 
 private:
     Ui::PopupWidget *mp_ui;
 
     PopupAdaptor *mp_popupAdaptor;
+    bool m_sendComboBoxChoice;
     // for showPupupFor LayoutSelection
     //QList<QPushButton> m_pushButtons;
 };

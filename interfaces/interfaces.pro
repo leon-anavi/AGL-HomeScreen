@@ -21,8 +21,12 @@ TEMPLATE = lib
 CONFIG += staticlib
 TARGET = interfaces
 
-HEADERS += include/appframework.hpp
-SOURCES += src/appframework.cpp
+HEADERS += \
+    include/appframework.hpp \
+    include/windowmanager.hpp
+
+SOURCES += src/appframework.cpp \
+    src/windowmanager.cpp
 
 XMLSOURCES = \
     appframework.xml \
@@ -30,7 +34,8 @@ XMLSOURCES = \
     homescreen.xml \
     inputevent.xml \
     popup.xml \
-    statusbar.xml
+    statusbar.xml \
+    windowmanager.xml
 
 gen_adapter_cpp.input = XMLSOURCES
 gen_adapter_cpp.commands = \

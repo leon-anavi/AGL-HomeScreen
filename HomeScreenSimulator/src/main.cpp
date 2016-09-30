@@ -36,12 +36,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("HomeScreenSimulator");
-    QCoreApplication::setApplicationVersion("0.2.0");
+    QCoreApplication::setApplicationVersion("0.3.0");
 
     MainWindow w;
     w.show();
 
-    // start input and system settings simulator on developer PCs
 #ifdef __arm__
     qDebug("Running on ARM architecture");
 #endif

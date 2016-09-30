@@ -34,18 +34,23 @@ class AppLauncherWidget : public QWidget
 public:
     explicit AppLauncherWidget(QWidget *parent = 0);
     ~AppLauncherWidget();
+
+    void populateAppList();
+
 public slots:
     void updateColorScheme();
 
 private slots:
     void on_tableView_clicked(int row, int col);
 
+signals:
+    void newRequestsToBeVisibleApp(int pid);
+
 private:
     Ui::AppLauncherWidget *mp_ui;
     QList<AppInfo> *mp_appList;
     QTableWidget *mp_appTable;
     org::agl::appframework *mp_dBusAppFrameworkProxy;
-    void populateAppList();
 };
 
 #endif // APPLAUNCHERWIDGET_H

@@ -84,6 +84,16 @@ border-image: url(:/images/transparency.png);</string>
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>90</y>
+      <width>211</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

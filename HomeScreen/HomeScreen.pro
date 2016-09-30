@@ -27,7 +27,8 @@ SOURCES += \
     src/controlbarwidget.cpp \
     src/statusbarwidget.cpp \
     src/applauncherwidget.cpp \
-    src/homescreencontrolinterface.cpp
+    src/homescreencontrolinterface.cpp \
+    src/layouthandler.cpp
 
 HEADERS  += \
     ../interfaces/appframework.h \
@@ -40,7 +41,8 @@ HEADERS  += \
     src/controlbarwidget.h \
     src/statusbarwidget.h \
     src/applauncherwidget.h \
-    src/homescreencontrolinterface.h
+    src/homescreencontrolinterface.h \
+    src/layouthandler.h
 
 INCLUDEPATH += $$OUT_PWD/../interfaces
 INCLUDEPATH += ../interfaces/

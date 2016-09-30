@@ -149,3 +149,13 @@ void MainWindow::on_pushButton_PopupExample_clicked()
 {
     mp_dBusPopupProxy->showPopup(0, "Hello Popup!\nNice to see you!");
 }
+
+void MainWindow::on_pushButton_comboBoxExample_clicked()
+{
+    QStringList choices;
+    choices.append("Item1");
+    choices.append("Item2");
+    choices.append("Item3");
+    choices.append("Item4");
+    mp_dBusPopupProxy->showPopupComboBox("Make your choice!", choices);
+}

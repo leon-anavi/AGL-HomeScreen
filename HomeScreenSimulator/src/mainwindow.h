@@ -57,6 +57,8 @@ private slots:
 
     void on_pushButton_PopupExample_clicked();
 
+    void on_pushButton_comboBoxExample_clicked();
+
 private:
     Ui::MainWindow *mp_ui;
     DaynightmodeAdaptor *mp_dBusDayNightModeAdapter;

@@ -9,6 +9,19 @@ https://gerrit.automotivelinux.org/gerrit/#/admin/projects/staging/HomeScreen
 AGL repo for bitbake recipe:
 https://gerrit.automotivelinux.org/gerrit/#/admin/projects/AGL/meta-agl-demo/recipes-demo-hmi/HomeScreen/HomeScreen_?.bb
 
+v0.3.0
+09/30/2016
+
+#new features
+- app launcher improved
+- added first popup combobox selection feature
+-- used for selecting layouts
+- implemented 3 layouts
+-- one app
+-- top on bottom
+-- side by side
+- first interaction with WindowManager
+
 v0.2.0
 08/05/2016
 
@@ -67,13 +80,16 @@ v0.0.1
 - define and implement control bar D-Bus-interface
 - many settings have to be read from the system somewhere during app startup. This is not available right now
 - interaction with application manager
+-- done for TIZEN
 - interaction with wayland compositor
+-- first version of WindowManager implemented
 - define and implement input device event handler
 - replace my HMI design with the official AGL design (graphics/icons...)
 - implement example HMI layouts
+-- three layouts implemented
 - fix font issues on target
 - more documentation ;)
-- add animations
+- add animations (?)
 - much more...
 
 Thanks to Umar Irshad for his free iconset available here:

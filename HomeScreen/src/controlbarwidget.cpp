@@ -64,12 +64,12 @@ void ControlBarWidget::updateColorScheme()
 
 void ControlBarWidget::on_pushButton_Settings_clicked()
 {
-    emit settingsButtonPressed();
+    settingsButtonPressed();
 }
 
 void ControlBarWidget::on_pushButton_Home_clicked()
 {
-    emit homeButtonPressed();
+    homeButtonPressed();
 }
 
 void ControlBarWidget::on_pushButton_Nav_clicked()

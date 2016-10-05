@@ -28,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_popupWidget(0),
     mp_layoutHandler(new LayoutHandler()),
     mp_dBusDayNightModeProxy(0),
+    mp_proximityAdaptor(0),
     mp_homeScreenControlInterface(0)
 {
     // this has to be adopted to the system setup
@@ -37,10 +38,11 @@ MainWindow::MainWindow(QWidget *parent) :
                                                       0);
     QObject::connect(mp_dBusDayNightModeProxy, SIGNAL(dayNightMode(int)), this, SLOT(dayNightModeSlot(int)));
 
+    mp_proximityAdaptor = new ProximityAdaptor((QObject*)this);
+
     // dbus setup
     QDBusConnection dbus = QDBusConnection::sessionBus();
-
-    dbus.registerObject("/MainWindow", this);
+    dbus.registerObject("/Proximity", this);
     dbus.registerService("org.agl.homescreen");
 
     // no window decoration
@@ -89,17 +91,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // apply color scheme
     updateColorScheme();
-    mp_statusBarWidget->updateColorScheme();
-    mp_controlBarWidget->updateColorScheme();
-    mp_settingsWidget->updateColorScheme();
-    mp_applauncherwidget->updateColorScheme();
-    mp_popupWidget->updateColorScheme();
 
     // this is only useful during development and will be removed later
     setWindowIcon(QIcon(":/icons/home_day.png"));
 
     mp_applauncherwidget->populateAppList();
-    mp_layoutHandler->setUpLayers();
+    mp_layoutHandler->setUpLayouts();
 
     mp_homeScreenControlInterface = new HomeScreenControlInterface(this);
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
@@ -120,6 +117,7 @@ MainWindow::~MainWindow()
     delete mp_settingsWidget;
     delete mp_controlBarWidget;
     delete mp_statusBarWidget;
+    delete mp_proximityAdaptor;
     delete mp_ui;
 }
 
@@ -131,12 +129,17 @@ void MainWindow::dayNightModeSlot(int mode)
     settings.sync();
 
     updateColorScheme();
+}
 
-    mp_statusBarWidget->updateColorScheme();
-    mp_controlBarWidget->updateColorScheme();
-    mp_settingsWidget->updateColorScheme();
-    mp_applauncherwidget->updateColorScheme();
-    mp_popupWidget->updateColorScheme();
+void MainWindow::setObjectDetected(bool detected)
+{
+    qDebug("setObjectDetected %s", detected ? "true" : "false");
+    QSettings settings;
+    settings.setValue("systemsettings/proximityobjectdetected", detected);
+    // make sure that everything is written to the settings file before continuing
+    settings.sync();
+
+    updateColorScheme();
 }
 
 void MainWindow::updateColorScheme()
@@ -146,12 +149,21 @@ void MainWindow::updateColorScheme()
                           "/colorschemes/" +
                           settings.value("systemsettings/colorscheme", "default").toString() +
                           "/" +
+                          QString::number(settings.value("systemsettings/proximityobjectdetected", false).toBool()) +
+                          "/" +
                           QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
                           ".ini",
                           QSettings::IniFormat);
 
-    mp_ui->widget_Background->setStyleSheet(settings_cs.value("MainWindow/widget_Background").toString());
-    mp_ui->widget_Home_Icon->setStyleSheet(settings_cs.value("MainWindow/widget_Home_Icon").toString());
+    mp_ui->widget_background->setStyleSheet(settings_cs.value("MainWindow/widget_background_css").toString());
+    mp_ui->widget_homeIcon->setStyleSheet(settings_cs.value("MainWindow/widget_homeIcon_css").toString());
+
+    // update children
+    mp_statusBarWidget->updateColorScheme();
+    mp_controlBarWidget->updateColorScheme();
+    mp_settingsWidget->updateColorScheme();
+    mp_applauncherwidget->updateColorScheme();
+    mp_popupWidget->updateColorScheme();
 }
 
 void MainWindow::changeEvent(QEvent* event)

@@ -39,8 +39,8 @@ protected:
     void changeEvent(QEvent* event);
 
 private slots:
-    void on_comboBoxLanguage_currentIndexChanged(const QString &);
-    void on_comboBoxColorScheme_currentIndexChanged(const QString &);
+    void on_comboBox_language_currentIndexChanged(const QString &);
+    void on_comboBox_colorScheme_currentIndexChanged(const QString &);
 
 signals:
     void colorSchemeChanged(void);

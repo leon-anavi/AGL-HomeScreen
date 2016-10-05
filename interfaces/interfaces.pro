@@ -34,6 +34,7 @@ XMLSOURCES = \
     homescreen.xml \
     inputevent.xml \
     popup.xml \
+    proximity.xml \
     statusbar.xml \
     windowmanager.xml
 

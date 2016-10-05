@@ -19,6 +19,7 @@
 
 #include <QMainWindow>
 #include "daynightmode_proxy.h"
+#include "proximity_adapter.h"
 
 #include "homescreencontrolinterface.h"
 
@@ -47,6 +48,9 @@ public:
 public Q_SLOTS:
     void dayNightModeSlot(int mode);
 
+// from proximity_adapter.h
+public Q_SLOTS:
+    void setObjectDetected(bool detected);
 
 public slots:
     void updateColorScheme();
@@ -70,6 +74,8 @@ private:
     LayoutHandler *mp_layoutHandler;
 
     org::agl::daynightmode *mp_dBusDayNightModeProxy;
+
+    ProximityAdaptor *mp_proximityAdaptor;
 
     HomeScreenControlInterface *mp_homeScreenControlInterface;
 };

@@ -51,38 +51,40 @@ void PopupWidget::updateColorScheme()
                           "/colorschemes/" +
                           settings.value("systemsettings/colorscheme", "default").toString() +
                           "/" +
+                          QString::number(settings.value("systemsettings/proximityobjectdetected", false).toBool()) +
+                          "/" +
                           QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
                           ".ini",
                           QSettings::IniFormat);
 
-    mp_ui->widget_Popup->setStyleSheet(settings_cs.value(QString("PopupWidget/widget_Popup")).toString());
-    mp_ui->label_Text->setStyleSheet(settings_cs.value(QString("PopupWidget/label_Text")).toString());
+    mp_ui->widget_popup->setStyleSheet(settings_cs.value(QString("PopupWidget/widget_popup_css")).toString());
+    mp_ui->label_text->setStyleSheet(settings_cs.value(QString("PopupWidget/label_text_css")).toString());
 }
 
 void PopupWidget::showPopup(int /*type*/, const QString &text)
 {
     m_sendComboBoxChoice = false;
-    mp_ui->comboBox->hide();
+    mp_ui->comboBox_choice->hide();
     this->show();
     this->raise();
-    mp_ui->label_Text->setText(text);
+    mp_ui->label_text->setText(text);
 }
 
 void PopupWidget::showPopupComboBox(const QString &text, const QStringList &choices)
 {
     m_sendComboBoxChoice = true;
-    mp_ui->comboBox->addItems(choices);
-    mp_ui->comboBox->show();
+    mp_ui->comboBox_choice->addItems(choices);
+    mp_ui->comboBox_choice->show();
     this->show();
     this->raise();
-    mp_ui->label_Text->setText(text);
+    mp_ui->label_text->setText(text);
 }
 
 void PopupWidget::on_pushButton_OK_clicked()
 {
     if (m_sendComboBoxChoice)
     {
-        comboBoxResult(mp_ui->comboBox->currentText());
+        comboBoxResult(mp_ui->comboBox_choice->currentText());
         m_sendComboBoxChoice = false;
     }
     this->close();

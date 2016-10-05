@@ -1,11 +1,7 @@
-This project contains:
+AGL Home Screen reference implementation
 
-HomeScreen: AGL Home Screen reference implementation
-HomeScreenSimulator: AGL Home Screen Simulator for development
-InputEventManager: AGL Input event manager
-interfaces: library with the D-Bus interfaces
-SampleAppTimeDate: AGL Sample Application for Home Screen Statusbar
-HomeScreenAppFrameworkBinderTizen: Binder for the TIZEN application framework
+
+Build with QtCreator 3.0.1
 
 AGL repo for source code:
 https://gerrit.automotivelinux.org/gerrit/#/admin/projects/staging/HomeScreen
@@ -13,96 +9,96 @@ https://gerrit.automotivelinux.org/gerrit/#/admin/projects/staging/HomeScreen
 AGL repo for bitbake recipe:
 https://gerrit.automotivelinux.org/gerrit/#/admin/projects/AGL/meta-agl-demo/recipes-demo-hmi/HomeScreen/HomeScreen_?.bb
 
+v0.3.1
+10/05/2016
 
-Instructions for running on porter board
-----------------------------------------
+#new features
+- implemented proximity
 
-Add "HomeScreen" to your image recipe.
-Right now, HomeScreen depends on the TIZEN application manager, because the HomeScreenAppFrameworkBinderTizen makes use of it.
-So also add this to your image recipe:
-"
-    tizen-platform-wrapper \
-    tizen-platform-config \
-    xdgmime \
-    libdlog \
-    dlogutil \
-    libiri \
-    \
-    smack \
-    libprivilege-control \
-    libslp-db-util \
-    \
-    vconf \
-    capi-base-common \
-    ail \
-    \
-    sensor \
-    libsf-common \
-    \
-    iniparser \
-    app-svc \
-    heynoti \
-    notification \
-    app-core-efl \
-    app-core-common \
-    capi-system-info \
-    \
-    pkgmgr-info \
-    librua \
-    bundle \
-    app-checker \
-    \
-    libcom-core \
-    privacy-manager-server \
-    pkgmgr \
-    pkgmgr-info \
-    pkgmgr-info-parser \
-    aul \
-    aul-test \
-    \
-    dlt-daemon \
-    dlt-daemon-systemd \
-    \
-    amhelloworld \
-    pkgmgr-first-setup-service \
-"
+v0.3.0
+09/30/2016
 
+#new features
+- app launcher improved
+- added first popup combobox selection feature
+-- used for selecting layouts
+- implemented 3 layouts
+-- one app
+-- top on bottom
+-- side by side
+- first interaction with WindowManager
 
-All "HomeScreen" applications can be found in /opt/AGL/HomeScreen.
+v0.2.0
+08/05/2016
 
-Make sure, weston is using the IVI shell extension:
+#new features
+- app launcher implemented
+- input event manager used for new control bar "nav" button
 
-/etc/xdg/weston/weston.ini:
+v0.1.1
+07/06/2016
 
-[core]
-shell=ivi-shell.so
+#changes
+- reworked D-Bus day/night mode handling
 
-[ivi-shell]
-ivi-module=ivi-controller.so
-ivi-shell-user-interface=/usr/lib/weston/weston-ivi-shell-user-interface
+#new features
+- color schemes implemented
+-- 3 color schemes as example added
 
-[output]
-name=HDMI-A-1
-transform=270
+v0.1.0
+06/24/2016
 
+#changes
+- reworked status bar
+- reviewed D-Bus interfaces, now using signals instead of methods for day/night mode
+- created new home screen simulator app
+- license changed to Apache 2.0
+- put D-Bus introspections in one central place
+- disabled "only one instance allowed" for development
 
+v0.0.2
+06/13/2016
 
-If you want to use the TIZEN application manager to launch apps, you need to execute HomeScreen app with the user "aglglobalapp":
+#changes
+- created layout 1. Changed home screen app size to 1080x1920
 
-Therefore you need to change the owner of the weston socket:
+v0.0.1
+06/01/2016
 
-chown aglglobalapp:aglglobalapp /tmp/wayland-0
+#new features
+- initial version
+- first implementation of home screen
+- fix HMI layout (will be configurable in the future)
+- dBus as IPC (may change in the future)
+- no interaction with application manager so far
+- multi-lanuage support
+- day/night mode support
+- initial status bar implementation (interface will be enhanced in the future)
+- initial control bar implementation
+- MPLv2.0 license
+- input device simulator for developer build (not functional right now)
+- system settings simulator for developer build (day/night mode switch functional right now)
+- using QSettings for local app setting storage (may change in the future)
+- first popup implementation (single popup support for now; multiple popup not defined; interface will change)
+- only one instance of the app allowed
 
-P.S.: the path may also something likle /run/user/0, depending on the XDG_RUNTIME_DIR.
+#TODOs
+- define and implement control bar D-Bus-interface
+- many settings have to be read from the system somewhere during app startup. This is not available right now
+- interaction with application manager
+-- done for TIZEN
+- interaction with wayland compositor
+-- first version of WindowManager implemented
+- define and implement input device event handler
+- replace my HMI design with the official AGL design (graphics/icons...)
+- implement example HMI layouts
+-- three layouts implemented
+- fix font issues on target
+- more documentation ;)
+- add animations (?)
+- much more...
 
-If not already stared, launch D-Bus:
-export `dbus-launch`
-
-Now you can start the HomeScreen apps:
-cd /opt/AGL/HomeScreen
-./WindowManager &
-./InputEventManager &
-./HomeScreenAppFrameworkBinderTizen &
-./HomeScreen &
+Thanks to Umar Irshad for his free iconset available here:
+https://dribbble.com/shots/1569128-Freebie-48-Bubbles-Iconset
 
 

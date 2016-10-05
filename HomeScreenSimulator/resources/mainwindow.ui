@@ -180,6 +180,40 @@
       </widget>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_Proximity">
+     <attribute name="title">
+      <string>Proximity</string>
+     </attribute>
+     <widget class="QLabel" name="label_explanation">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>301</width>
+        <height>231</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wikipedia:&lt;/p&gt;&lt;p&gt;A proximity sensor is a sensor able to detect the presence of nearby objects without any physical contact.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This info can be used to detect the hand of the user that wants to use the touch screen. So the HMI can change its look to provide for example larger push buttons.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_ObjectDetected">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>300</y>
+        <width>151</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>object detected</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab_FutureFeatures">
      <attribute name="title">
       <string>Future features</string>

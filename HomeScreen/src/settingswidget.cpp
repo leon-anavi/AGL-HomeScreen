@@ -34,17 +34,17 @@ SettingsWidget::SettingsWidget(QWidget *parent) :
 
     mp_ui->setupUi(this);
 
-    mp_ui->comboBoxLanguage->addItem(QString("English"), QVariant("homescreen_en_US.qm")); // TODO: make this configurable
-    mp_ui->comboBoxLanguage->addItem(QString("Deutsch"), QVariant("homescreen_de_DE.qm"));
-    mp_ui->comboBoxLanguage->addItem(QString("日本語"), QVariant("homescreen_ja_JP.qm"));
+    mp_ui->comboBox_language->addItem(QString("English"), QVariant("homescreen_en_US.qm")); // TODO: make this configurable
+    mp_ui->comboBox_language->addItem(QString("Deutsch"), QVariant("homescreen_de_DE.qm"));
+    mp_ui->comboBox_language->addItem(QString("日本語"), QVariant("homescreen_ja_JP.qm"));
 
-    mp_ui->comboBoxColorScheme->addItem(QString("Default"), QVariant("default")); // TODO: make this configurable
-    mp_ui->comboBoxColorScheme->addItem(QString("Demo 1"), QVariant("demo1"));
-    mp_ui->comboBoxColorScheme->addItem(QString("Demo 2"), QVariant("demo2"));
+    mp_ui->comboBox_colorScheme->addItem(QString("Default"), QVariant("default")); // TODO: make this configurable
+    mp_ui->comboBox_colorScheme->addItem(QString("Demo 1"), QVariant("demo1"));
+    mp_ui->comboBox_colorScheme->addItem(QString("Demo 2"), QVariant("demo2"));
 
     QSettings settings;
-    mp_ui->comboBoxLanguage->setCurrentIndex(settings.value("systemsettings/language", 0).toInt());
-    mp_ui->comboBoxColorScheme->setCurrentIndex(settings.value("systemsettings/colorschemeindex", 0).toInt());
+    mp_ui->comboBox_language->setCurrentIndex(settings.value("systemsettings/language", 0).toInt());
+    mp_ui->comboBox_colorScheme->setCurrentIndex(settings.value("systemsettings/colorschemeindex", 0).toInt());
 }
 
 SettingsWidget::~SettingsWidget()
@@ -60,14 +60,16 @@ void SettingsWidget::updateColorScheme()
                           "/colorschemes/" +
                           settings.value("systemsettings/colorscheme", "default").toString() +
                           "/" +
+                          QString::number(settings.value("systemsettings/proximityobjectdetected", false).toBool()) +
+                          "/" +
                           QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
                           ".ini",
                           QSettings::IniFormat);
 
-    mp_ui->widget_Background->setStyleSheet(settings_cs.value("SettingsWidget/widget_Background").toString());
-    mp_ui->comboBoxLanguage->setStyleSheet(settings_cs.value("SettingsWidget/comboBoxLanguage").toString());
-    mp_ui->comboBoxColorScheme->setStyleSheet(settings_cs.value("SettingsWidget/comboBoxColorScheme").toString());
-    mp_ui->widget_Settings_Icon->setStyleSheet(settings_cs.value("SettingsWidget/widget_Settings_Icon").toString());
+    mp_ui->widget_background->setStyleSheet(settings_cs.value("SettingsWidget/widget_background_css").toString());
+    mp_ui->comboBox_language->setStyleSheet(settings_cs.value("SettingsWidget/comboBox_language_css").toString());
+    mp_ui->comboBox_colorScheme->setStyleSheet(settings_cs.value("SettingsWidget/comboBox_colorScheme_css").toString());
+    mp_ui->widget_settingsIcon->setStyleSheet(settings_cs.value("SettingsWidget/widget_settingsIcon_css").toString());
 }
 
 void SettingsWidget::changeEvent(QEvent* event)
@@ -80,20 +82,20 @@ void SettingsWidget::changeEvent(QEvent* event)
     QWidget::changeEvent(event);
 }
 
-void SettingsWidget::on_comboBoxLanguage_currentIndexChanged(const QString &)
+void SettingsWidget::on_comboBox_language_currentIndexChanged(const QString &)
 {
     if (0 != mp_translator)
-        mp_translator->load(mp_ui->comboBoxLanguage->currentData().toString(), ":/translations");
+        mp_translator->load(mp_ui->comboBox_language->currentData().toString(), ":/translations");
 
     QSettings settings;
-    settings.setValue("systemsettings/language", mp_ui->comboBoxLanguage->currentIndex());
+    settings.setValue("systemsettings/language", mp_ui->comboBox_language->currentIndex());
 }
 
-void SettingsWidget::on_comboBoxColorScheme_currentIndexChanged(const QString &)
+void SettingsWidget::on_comboBox_colorScheme_currentIndexChanged(const QString &)
 {
     QSettings settings;
-    settings.setValue("systemsettings/colorscheme", mp_ui->comboBoxColorScheme->currentData().toString());
-    settings.setValue("systemsettings/colorschemeindex", mp_ui->comboBoxColorScheme->currentIndex());
+    settings.setValue("systemsettings/colorscheme", mp_ui->comboBox_colorScheme->currentData().toString());
+    settings.setValue("systemsettings/colorschemeindex", mp_ui->comboBox_colorScheme->currentIndex());
     // make sure that everything is written to the settings file before continuing
     settings.sync();
 

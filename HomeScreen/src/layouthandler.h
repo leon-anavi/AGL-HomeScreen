@@ -12,7 +12,7 @@ public:
     explicit LayoutHandler(QObject *parent = 0);
     ~LayoutHandler();
 
-    void setUpLayers();
+    void setUpLayouts();
 
 signals:
 

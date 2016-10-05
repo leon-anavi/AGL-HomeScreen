@@ -31,9 +31,9 @@ LayoutHandler::~LayoutHandler()
     delete mp_dBusWindowManagerProxy;
 }
 
-void LayoutHandler::setUpLayers()
+void LayoutHandler::setUpLayouts()
 {
-    qDebug("setUpLayers");
+    qDebug("setUpLayouts");
     QList<SimpleRect> surfaceAreas;
     SimpleRect surfaceArea;
 

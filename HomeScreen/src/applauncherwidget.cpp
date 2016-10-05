@@ -65,23 +65,24 @@ void AppLauncherWidget::updateColorScheme()
                           "/colorschemes/" +
                           settings.value("systemsettings/colorscheme", "default").toString() +
                           "/" +
+                          QString::number(settings.value("systemsettings/proximityobjectdetected", false).toBool()) +
+                          "/" +
                           QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
                           ".ini",
                           QSettings::IniFormat);
 
-    mp_ui->widget_Background->setStyleSheet(settings_cs.value("AppLauncherWidget/widget_Background").toString());
-    mp_ui->widget_Home_Icon->setStyleSheet(settings_cs.value("AppLauncherWidget/widget_Home_Icon").toString());
+    mp_ui->widget_background->setStyleSheet(settings_cs.value("AppLauncherWidget/widget_Background").toString());
+    mp_ui->widget_homeIcon->setStyleSheet(settings_cs.value("AppLauncherWidget/widget_Home_Icon").toString());
+
+    setStyleSheet(settings_cs.value("AppLauncherWidget/common_css").toString());
 }
 
 void AppLauncherWidget::populateAppList()
 {
-    setStyleSheet("QTableWidget {background-color: transparent;}"
-                  "QTableCornerButton::section {background-color: transparent;}");
-
     if (0 == mp_appTable)
     {
         mp_appTable = new QTableWidget(this);
-        QObject::connect(mp_appTable, SIGNAL(cellClicked(int, int)), this, SLOT(on_tableView_clicked(int, int)));
+        QObject::connect(mp_appTable, SIGNAL(cellClicked(int,int)), this, SLOT(on_tableView_clicked(int,int)));
     }
     else
     {

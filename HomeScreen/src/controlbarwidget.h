@@ -38,9 +38,9 @@ signals:
     void homeButtonPressed();
 
 private slots:
-    void on_pushButton_Settings_clicked();
-    void on_pushButton_Home_clicked();
-    void on_pushButton_Nav_clicked();
+    void on_pushButton_home_clicked();
+    void on_pushButton_settings_clicked();
+    void on_pushButton_nav_clicked();
 
 private:
     Ui::ControlBarWidget *mp_ui;

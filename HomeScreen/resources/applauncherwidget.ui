@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form_AppLauncher</string>
   </property>
-  <widget class="QWidget" name="widget_Background" native="true">
+  <widget class="QWidget" name="widget_background" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -22,7 +22,7 @@
      <height>1800</height>
     </rect>
    </property>
-   <widget class="QWidget" name="widget_Home_Icon" native="true">
+   <widget class="QWidget" name="widget_homeIcon" native="true">
     <property name="geometry">
      <rect>
       <x>-40</x>

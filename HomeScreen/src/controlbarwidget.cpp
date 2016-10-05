@@ -47,32 +47,37 @@ void ControlBarWidget::updateColorScheme()
                           "/colorschemes/" +
                           settings.value("systemsettings/colorscheme", "default").toString() +
                           "/" +
+                          QString::number(settings.value("systemsettings/proximityobjectdetected", false).toBool()) +
+                          "/" +
                           QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
                           ".ini",
                           QSettings::IniFormat);
 
     QIcon icon;
-    mp_ui->widget_Background->setStyleSheet(settings_cs.value(QString("ControlBarWidget/widget_Background")).toString());
+    mp_ui->widget_background->setStyleSheet(settings_cs.value(QString("ControlBarWidget/widget_background_css")).toString());
 
-    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_Home")).toString(), QSize(), QIcon::Normal, QIcon::Off);
-    mp_ui->pushButton_Home->setIcon(icon);
-    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_Settings")).toString(), QSize(), QIcon::Normal, QIcon::Off);
-    mp_ui->pushButton_Settings->setIcon(icon);
-    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_Nav")).toString(), QSize(), QIcon::Normal, QIcon::Off);
-    mp_ui->pushButton_Nav->setIcon(icon);
+    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_homeIcon_icon")).toString(), QSize(), QIcon::Normal, QIcon::Off);
+    mp_ui->pushButton_home->setIcon(icon);
+    mp_ui->pushButton_home->setStyleSheet(settings_cs.value(QString("ControlBarWidget/pushButton_homeIcon_css")).toString());
+    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_settingsIcon_icon")).toString(), QSize(), QIcon::Normal, QIcon::Off);
+    mp_ui->pushButton_settings->setIcon(icon);
+    mp_ui->pushButton_settings->setStyleSheet(settings_cs.value(QString("ControlBarWidget/pushButton_settingsIcon_css")).toString());
+    icon.addFile(settings_cs.value(QString("ControlBarWidget/pushButton_navIcon_icon")).toString(), QSize(), QIcon::Normal, QIcon::Off);
+    mp_ui->pushButton_nav->setIcon(icon);
+    mp_ui->pushButton_nav->setStyleSheet(settings_cs.value(QString("ControlBarWidget/pushButton_navIcon_css")).toString());
 }
 
-void ControlBarWidget::on_pushButton_Settings_clicked()
-{
-    settingsButtonPressed();
-}
-
-void ControlBarWidget::on_pushButton_Home_clicked()
+void ControlBarWidget::on_pushButton_home_clicked()
 {
     homeButtonPressed();
 }
 
-void ControlBarWidget::on_pushButton_Nav_clicked()
+void ControlBarWidget::on_pushButton_settings_clicked()
+{
+    settingsButtonPressed();
+}
+
+void ControlBarWidget::on_pushButton_nav_clicked()
 {
     mp_dBusInputEventProxy->hardKeyPressed(InputEvent::HARDKEY_NAV);
 }

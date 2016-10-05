@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="widget_Background" native="true">
+  <widget class="QWidget" name="widget_background" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -22,7 +22,7 @@
      <height>60</height>
     </rect>
    </property>
-   <widget class="QPushButton" name="pushButton_Home">
+   <widget class="QPushButton" name="pushButton_home">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -52,7 +52,7 @@ border-image: url(:/images/transparency.png);</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Settings">
+   <widget class="QPushButton" name="pushButton_settings">
     <property name="geometry">
      <rect>
       <x>60</x>
@@ -82,7 +82,7 @@ border-image: url(:/images/transparency.png);</string>
      </size>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_Nav">
+   <widget class="QPushButton" name="pushButton_nav">
     <property name="geometry">
      <rect>
       <x>110</x>

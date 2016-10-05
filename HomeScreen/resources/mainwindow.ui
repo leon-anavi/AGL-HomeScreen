@@ -20,7 +20,7 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="widget_Background" native="true">
+   <widget class="QWidget" name="widget_background" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -36,7 +36,7 @@
      <string notr="true">background-image: url(:/images/backgrounds/bg_blue_day.png)
 </string>
     </property>
-    <widget class="QWidget" name="widget_Home_Icon" native="true">
+    <widget class="QWidget" name="widget_homeIcon" native="true">
      <property name="geometry">
       <rect>
        <x>-40</x>

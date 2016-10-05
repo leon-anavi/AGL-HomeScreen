@@ -47,26 +47,28 @@ void StatusBarWidget::updateColorScheme()
                           "/colorschemes/" +
                           settings.value("systemsettings/colorscheme", "default").toString() +
                           "/" +
+                          QString::number(settings.value("systemsettings/proximityobjectdetected", false).toBool()) +
+                          "/" +
                           QString::number(settings.value("systemsettings/daynightmode", SystemDayNight::DAYNIGHTMODE_DAY).toInt()) +
                           ".ini",
                           QSettings::IniFormat);
 
-    mp_ui->widget->setStyleSheet(settings_cs.value(QString("StatusBarWidget/widget")).toString());
-    mp_ui->label_1->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_1")).toString());
-    mp_ui->label_2->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_2")).toString());
-    mp_ui->label_3->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_3")).toString());
-    mp_ui->label_4->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_4")).toString());
-    mp_ui->label_5->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_5")).toString());
+    mp_ui->widget_background->setStyleSheet(settings_cs.value(QString("StatusBarWidget/widget_background_css")).toString());
+    mp_ui->label_1->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_1_css")).toString());
+    mp_ui->label_2->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_2_css")).toString());
+    mp_ui->label_3->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_3_css")).toString());
+    mp_ui->label_4->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_4_css")).toString());
+    mp_ui->label_5->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_5_css")).toString());
 
-    mp_ui->label_1_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_1_icon")).toString()
+    mp_ui->label_1_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_1_icon_css")).toString()
                                        + QString(" border-image: url(") + mp_statusbarIconURIs->value(1) + QString(") 0 0 0 0 stretch stretch;"));
-    mp_ui->label_2_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_2_icon")).toString()
+    mp_ui->label_2_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_2_icon_css")).toString()
                                        + QString(" border-image: url(") + mp_statusbarIconURIs->value(2) + QString(") 0 0 0 0 stretch stretch;"));
-    mp_ui->label_3_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_3_icon")).toString()
+    mp_ui->label_3_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_3_icon_css")).toString()
                                        + QString(" border-image: url(") + mp_statusbarIconURIs->value(3) + QString(") 0 0 0 0 stretch stretch;"));
-    mp_ui->label_4_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_4_icon")).toString()
+    mp_ui->label_4_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_4_icon_css")).toString()
                                        + QString(" border-image: url(") + mp_statusbarIconURIs->value(4) + QString(") 0 0 0 0 stretch stretch;"));
-    mp_ui->label_5_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_5_icon")).toString()
+    mp_ui->label_5_icon->setStyleSheet(settings_cs.value(QString("StatusBarWidget/label_5_icon_css")).toString()
                                        + QString(" border-image: url(") + mp_statusbarIconURIs->value(5) + QString(") 0 0 0 0 stretch stretch;"));
 }
 

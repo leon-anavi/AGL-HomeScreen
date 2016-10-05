@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="widget_Background" native="true">
+  <widget class="QWidget" name="widget_background" native="true">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -26,7 +26,7 @@
     <string notr="true">background-image: url(:/images/backgrounds/bg_blue_day.png);
 </string>
    </property>
-   <widget class="QComboBox" name="comboBoxLanguage">
+   <widget class="QComboBox" name="comboBox_language">
     <property name="geometry">
      <rect>
       <x>660</x>
@@ -63,7 +63,7 @@ QComboBox::down-arrow:on {
 </string>
     </property>
    </widget>
-   <widget class="QWidget" name="widget_Settings_Icon" native="true">
+   <widget class="QWidget" name="widget_settingsIcon" native="true">
     <property name="geometry">
      <rect>
       <x>-40</x>
@@ -77,7 +77,7 @@ QComboBox::down-arrow:on {
 </string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelColorScheme">
+   <widget class="QLabel" name="label_colorScheme">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -95,7 +95,7 @@ QComboBox::down-arrow:on {
      <string>Color Scheme</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelLanguage">
+   <widget class="QLabel" name="label_language">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -113,7 +113,7 @@ QComboBox::down-arrow:on {
      <string>Language</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBoxColorScheme">
+   <widget class="QComboBox" name="comboBox_colorScheme">
     <property name="geometry">
      <rect>
       <x>660</x>
@@ -150,12 +150,6 @@ QComboBox::down-arrow:on {
 </string>
     </property>
    </widget>
-   <zorder>comboBoxLanguage</zorder>
-   <zorder>widget_Settings_Icon</zorder>
-   <zorder>labelLanguage</zorder>
-   <zorder>labelColorScheme</zorder>
-   <zorder>labelLanguage</zorder>
-   <zorder>comboBoxColorScheme</zorder>
   </widget>
  </widget>
  <resources/>

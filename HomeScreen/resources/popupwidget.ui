@@ -16,7 +16,7 @@
   <property name="windowTitle">
    <string>Form_Popup</string>
   </property>
-  <widget class="QWidget" name="widget_Popup" native="true">
+  <widget class="QWidget" name="widget_popup" native="true">
    <property name="geometry">
     <rect>
      <x>350</x>
@@ -60,7 +60,7 @@ background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #D5D5D5, stop: 1 
      <string>OK</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_Text">
+   <widget class="QLabel" name="label_text">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -84,7 +84,7 @@ border-image: url(:/images/transparency.png);</string>
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="comboBox_choice">
     <property name="geometry">
      <rect>
       <x>90</x>

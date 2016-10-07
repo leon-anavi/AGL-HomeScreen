@@ -1,0 +1,301 @@
+Command line tests
+
+Precondition for all test is, that the D-Bus session is launched:
+$export `dbus-launch`
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.appframework
+
+Method:
+      <method name="getAvailableAppNames">
+        <arg name="names" type="as" direction="out"/>
+      </method>
+
+Preconditions:
+- HomeScreenAppFrameworkBinderTizen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreenappframeworkbindertizen /AppFramework org.agl.appframework.getAvailableAppNames
+
+Method:
+      <method name="launchApp">
+        <arg name="name" type="s" direction="in"/>
+        <arg name="pid" type="i" direction="out"/>
+      </method>
+
+Preconditions:
+- HomeScreenAppFrameworkBinderTizen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreenappframeworkbindertizen /AppFramework org.agl.appframework.launchApp string:"org.tizen.amhelloworld"
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.daynightmode
+
+Signal:
+    <signal name="dayNightMode">
+      <arg name="mode" type="i" direction="out"/>
+    </signal>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+no command line test available right now
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.homescreen
+
+Method:
+    <method name="hardKeyPressed">
+      <arg name="key" type="i" direction="in"/> <!-- using the inputevent.hpp InputEvent::HardKey type -->
+    </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /HomeScreen org.agl.homescreen.hardKeyPressed int32:0
+
+Method:
+    <method name="setToFullscreen">
+      <arg name="pid" type="i" direction="in"/>
+    </method>
+
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /HomeScreen org.agl.homescreen.setToFullscreen int32:0
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.inputevent
+
+Method:
+    <method name="hardKeyPressed">
+      <arg name="key" type="i" direction="in"/>
+    </method>
+
+Preconditions:
+- HomeScreen app is running
+- InputEventManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.inputeventmanager /InputEvent org.agl.inputevent.hardKeyPressed int32:0
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.popup
+
+Method:
+    <method name="showPopup">
+      <arg name="type" type="i" direction="in"/>
+      <arg name="text" type="s" direction="in"/>
+    </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --dest=org.agl.homescreen /Popup org.agl.popup.showPopup int32:1 string:"TEST"
+
+Method:
+    <method name="showPopupComboBox">
+      <arg name="text" type="s" direction="in"/>
+      <arg name="choices" type="as" direction="in"/>
+    </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --dest=org.agl.homescreen /Popup org.agl.popup.showPopupComboBox string:"TEST" array:string:"test1","test2"
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.proximity
+
+Method:
+    <method name="setObjectDetected">
+      <arg name="detected" type="b" direction="in"/>
+    </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --dest=org.agl.homescreen /Proximity org.agl.proximity.setObjectDetected boolean:true
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.statusbar
+
+Method:
+      <method name="getAvailablePlaceholders">
+        <arg name="placeholderIndexes" type="ai" direction="out"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.getAvailablePlaceholders
+
+Method:
+      <method name="getStatusText">
+        <arg name="placeholderIndex" type="i" direction="in"/>
+        <arg name="text" type="s" direction="out"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.getStatusText int32:1
+
+Method:
+      <method name="getStatusIcon">
+        <arg name="placeholderIndex" type="i" direction="in"/>
+        <arg name="iconURI" type="s" direction="out"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.getStatusIcon int32:1
+
+Method:
+      <method name="setStatusText">
+        <arg name="placeholderIndex" type="i" direction="in"/>
+        <arg name="text" type="s" direction="in"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.setStatusText int32:1 string:"Test1"
+
+Method:
+      <method name="setStatusIcon">
+        <arg name="placeholderIndex" type="i" direction="in"/>
+        <arg name="iconURI" type="s" direction="in"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen /StatusBar org.agl.statusbar.setStatusIcon int32:1 string:"<path to png file here>"
+
+---------------------------------------------------------------------------------------------------------------------
+Interface:
+org.agl.windowmanager
+
+Method:
+      <method name="addLayout">
+        <arg name="layoutId" type="i" direction="in"/>
+        <arg name="layoutName" type="s" direction="in"/>
+        <arg name="surfaceAreas" type="a(iiii)" direction="in"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="QList&lt;SimpleRect&gt;"/>
+        <arg name="error" type="i" direction="out"/>
+      </method>
+
+Preconditions:
+- WindowManager app is running
+
+Test:
+it is not possible to send isa(iiii) via the dbus-send tool.
+
+Method:
+      <method name="getAvailableLayouts">
+        <arg name="numberOfAppSurfaces" type="i" direction="in"/>
+        <arg name="layoutIds" type="ai" direction="out"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+- WindowManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.getAvailableLayouts int32:1
+
+
+
+Method:
+      <method name="setLayoutById">
+        <arg name="layoutId" type="i" direction="in"/>
+      </method>
+Preconditions:
+- HomeScreen app is running
+- WindowManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.getAvailableLayouts int32:1
+
+Method:
+      <method name="setLayoutByName">
+        <arg name="layoutName" type="s" direction="in"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+- WindowManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.setLayoutByName string:"name"
+
+Method:
+      <method name="getLayout">
+        <arg name="layoutId" type="i" direction="out"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+- WindowManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.getLayout
+
+Method:
+      <method name="setSurfaceToLayoutArea">
+        <arg name="surfaceId" type="i" direction="in"/>
+        <arg name="layoutAreaId" type="i" direction="in"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+- WindowManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.setSurfaceToLayoutArea int32:1123 int32:1
+
+Method:
+      <method name="getAvailableSurfaces">
+        <arg name="surfacesAndPids" type="a(ii)" direction="out"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;SimplePoint&gt;"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+- WindowManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.getAvailableSurfaces
+
+Method:
+      <method name="getLayoutName">
+        <arg name="layoutId" type="i" direction="in"/>
+        <arg name="layoutName" type="s" direction="out"/>
+      </method>
+
+Preconditions:
+- HomeScreen app is running
+- WindowManager app is running
+
+Test:
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.getLayoutName int32:1
+

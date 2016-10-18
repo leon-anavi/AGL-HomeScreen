@@ -38,7 +38,7 @@ void LayoutHandler::setUpLayouts()
     SimpleRect surfaceArea;
 
     const int SCREEN_WIDTH = 1080;
-    const int SCREEN_HEIGHT = 1080;
+    const int SCREEN_HEIGHT = 1920;
 
     const int STATUSBAR_HEIGHT = 60;
     const int STATUSBAR_WIDTH = SCREEN_WIDTH;
@@ -77,7 +77,7 @@ void LayoutHandler::setUpLayouts()
 
     // bottom surface
     surfaceArea.x = 0;
-    surfaceArea.y = STATUSBAR_HEIGHT / 2;
+    surfaceArea.y = SCREEN_HEIGHT / 2;
     surfaceArea.width = SCREEN_WIDTH;
     surfaceArea.height = (SCREEN_HEIGHT - STATUSBAR_HEIGHT - CONTROLBAR_HEIGHT) / 2;
 
@@ -133,7 +133,7 @@ void LayoutHandler::makeMeVisible(int pid)
 
         for (int i = 0; i < m_visibleApps.size(); ++i)
         {
-            mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(i, i);
+            mp_dBusWindowManagerProxy->setPidToLayoutArea(i, i);
         }
     }
     if (1 == availableLayouts.size())
@@ -146,7 +146,7 @@ void LayoutHandler::makeMeVisible(int pid)
         mp_dBusWindowManagerProxy->setLayoutById(availableLayouts.at(0));
         for (int i = 0; i < m_visibleApps.size(); ++i)
         {
-            mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(i, i);
+            mp_dBusWindowManagerProxy->setPidToLayoutArea(i, i);
         }
     }
     if (1 < availableLayouts.size())
@@ -175,6 +175,6 @@ void LayoutHandler::setLayoutByName(QString layoutName)
     mp_dBusWindowManagerProxy->setLayoutByName(layoutName);
     for (int i = 0; i < m_visibleApps.size(); ++i)
     {
-        mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(i, i);
+        mp_dBusWindowManagerProxy->setPidToLayoutArea(i, i);
     }
 }

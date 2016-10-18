@@ -72,6 +72,7 @@ void PopupWidget::showPopup(int /*type*/, const QString &text)
 
 void PopupWidget::showPopupComboBox(const QString &text, const QStringList &choices)
 {
+    mp_ui->comboBox_choice->clear();
     m_sendComboBoxChoice = true;
     mp_ui->comboBox_choice->addItems(choices);
     mp_ui->comboBox_choice->show();

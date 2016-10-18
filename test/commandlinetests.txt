@@ -234,7 +234,7 @@ Preconditions:
 - WindowManager app is running
 
 Test:
-$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.getAvailableLayouts int32:1
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.setLayoutById int32:1
 
 Method:
       <method name="setLayoutByName">
@@ -261,8 +261,8 @@ Test:
 $dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.getLayout
 
 Method:
-      <method name="setSurfaceToLayoutArea">
-        <arg name="surfaceId" type="i" direction="in"/>
+      <method name="setPidToLayoutArea">
+        <arg name="pid" type="i" direction="in"/>
         <arg name="layoutAreaId" type="i" direction="in"/>
       </method>
 
@@ -271,7 +271,7 @@ Preconditions:
 - WindowManager app is running
 
 Test:
-$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.setSurfaceToLayoutArea int32:1123 int32:1
+$dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.agl.windowmanager.setPidToLayoutArea int32:1123 int32:1
 
 Method:
       <method name="getAvailableSurfaces">

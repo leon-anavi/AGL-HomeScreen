@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     qDBusRegisterMetaType<QList<SimpleRect> >();
 
     WindowManager *windowManager = new WindowManager();
+    windowManager->start();
 
 #ifdef __arm__
     qDebug("Running on ARM architecture");

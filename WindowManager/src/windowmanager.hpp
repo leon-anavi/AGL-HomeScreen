@@ -42,25 +42,30 @@ class WindowManager : public QObject
 
 public:
     explicit WindowManager(QObject *parent = 0);
-    QMutex callbackMutex;
-
     ~WindowManager();
+
+    void start();
 private:
     WindowmanagerAdaptor *mp_windowManagerAdaptor;
     QMap<int, QList<SimpleRect> > m_layouts;
     QMap<int, QString> m_layoutNames;
     int m_currentLayout;
     void dumpScene();
+    int m_homeScreenPid;
 
 #ifdef __arm__
     void createNewLayer(int layerId);
     void addSurfaceToLayer(int surfaceId, int layerId);
+    void updateScreen();
+
 
     QMap<t_ilm_uint, SurfaceInfo> *mp_surfaces;
     /* one layer per pid is created
     where the surfaces are added that are created by the process */
     QList<int> *mp_processLayers;
 #endif
+
+    QMap<int, unsigned int> *mp_layoutAreaToPidAssignment;
 
 public:
     static void* myThis;
@@ -97,7 +102,7 @@ public Q_SLOTS: // METHODS
     QString getLayoutName(int layoutId);
     void setLayoutById(int layoutId);
     void setLayoutByName(const QString &layoutName);
-    void setSurfaceToLayoutArea(int surfaceId, int layoutAreaId);
+    void setPidToLayoutArea(int pid, int layoutAreaId);
 
 };
 

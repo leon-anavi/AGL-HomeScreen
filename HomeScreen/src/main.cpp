@@ -18,7 +18,6 @@
 #include <QApplication>
 #include <QSysInfo>
 //#include <QSharedMemory>
-#include <QSurfaceFormat>
 
 int main(int argc, char *argv[])
 {
@@ -39,14 +38,10 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("HomeScreen");
     QCoreApplication::setApplicationVersion("0.3.3");
 
-    QSurfaceFormat format;
-    format.setDepthBufferSize(16);
-    format.setStencilBufferSize(8);
-
     MainWindow w;
     w.show();
 #ifdef __arm__
-    // trigger wayland compositor to position the surface correctly
+    // the WindowManager positions the surface correctly
 #endif
 #ifdef __i386__
     w.move(0, 0);

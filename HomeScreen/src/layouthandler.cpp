@@ -131,6 +131,9 @@ void LayoutHandler::makeMeVisible(int pid)
         m_invisibleApps.append(m_visibleApps.last());
         m_visibleApps.removeLast();
 
+        m_visibleApps.append(m_requestsToBeVisibleApps);
+        m_requestsToBeVisibleApps.clear();
+
         for (int i = 0; i < m_visibleApps.size(); ++i)
         {
             mp_dBusWindowManagerProxy->setPidToLayoutArea(i, i);

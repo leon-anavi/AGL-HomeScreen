@@ -40,8 +40,8 @@ AppLauncherWidget::AppLauncherWidget(QWidget *parent) :
         mp_appList->append(ai);
     }
 
-    qDebug("D-Bus: connect to org.agl.homescreenappframeworkbindertizen /AppFramework");
-    mp_dBusAppFrameworkProxy = new org::agl::appframework("org.agl.homescreenappframeworkbindertizen",
+    qDebug("D-Bus: connect to org.agl.homescreenappframeworkbinder /AppFramework");
+    mp_dBusAppFrameworkProxy = new org::agl::appframework("org.agl.homescreenappframeworkbinder",
                                               "/AppFramework",
                                               QDBusConnection::sessionBus(),
                                               0);
@@ -101,13 +101,7 @@ void AppLauncherWidget::populateAppList()
 
     int i;
 
-#ifdef __arm__
     QStringList apps = mp_dBusAppFrameworkProxy->getAvailableAppNames();
-#endif
-#ifdef __i386__
-    QStringList apps;
-    apps.append(QString("/usr/bin/gnome-terminal"));
-#endif
     mp_appList->clear();
 
     mp_appTable->setRowCount((apps.size() + (APP_LIST_COLUMN_COUNT - 1)) / APP_LIST_COLUMN_COUNT);
@@ -152,14 +146,7 @@ void AppLauncherWidget::on_tableView_clicked(int row, int col)
 {
     if (mp_appList->size() > row * APP_LIST_COLUMN_COUNT + col)
     {
-#ifdef __arm__
         int pid = mp_dBusAppFrameworkProxy->launchApp(mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName());
-#endif
-#ifdef __i386__
-        QProcess *myProcess = new QProcess();
-        myProcess->start(mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName(), NULL);
-        int pid = myProcess->pid();
-#endif
         qDebug("%d, %d: start app %s", row, col, mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName().toStdString().c_str());
         qDebug("pid: %d", pid);
 

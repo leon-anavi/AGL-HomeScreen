@@ -21,7 +21,7 @@ HomeScreenAppFrameworkBinderTizen::HomeScreenAppFrameworkBinderTizen(QObject *pa
     QObject(parent),
     mp_appframeworkAdaptor(0)
 {
-    qDebug("D-Bus: register as org.agl.homescreenappframeworkbindertizen");
+    qDebug("D-Bus: register as org.agl.homescreenappframeworkbinder");
 
     m_apps.clear();
 
@@ -29,7 +29,7 @@ HomeScreenAppFrameworkBinderTizen::HomeScreenAppFrameworkBinderTizen(QObject *pa
     mp_appframeworkAdaptor = new AppframeworkAdaptor((QObject*)this);
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/AppFramework", this);
-    dbus.registerService("org.agl.homescreenappframeworkbindertizen");
+    dbus.registerService("org.agl.homescreenappframeworkbinder");
 
 #ifdef __arm__
     pkgmgrinfo_pkginfo_get_list(HomeScreenAppFrameworkBinderTizen::pkg_list_cb_static, this);
@@ -74,6 +74,7 @@ int HomeScreenAppFrameworkBinderTizen::launchApp(const QString &name)
 #endif
 #ifdef __i386__
     qDebug("launchApp name: %s", name.toStdString().c_str());
+    pid = qrand();
 #endif
 
     return pid;

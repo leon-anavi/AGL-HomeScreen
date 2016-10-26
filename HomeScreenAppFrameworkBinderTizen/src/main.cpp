@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("HomeScreenAppFrameworkBinderTizen");
     QCoreApplication::setApplicationVersion("0.3.0");
 
+    qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
+
     HomeScreenAppFrameworkBinderTizen *tdp = new HomeScreenAppFrameworkBinderTizen();
 
     return a.exec();

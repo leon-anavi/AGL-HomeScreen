@@ -27,6 +27,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("WindowManager");
     QCoreApplication::setApplicationVersion("0.3.0");
 
+    qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
+
     qDBusRegisterMetaType<SimplePoint>();
     qDBusRegisterMetaType<QList<SimplePoint> >();
     qDBusRegisterMetaType<SimpleRect>();

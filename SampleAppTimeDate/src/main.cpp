@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("SampleAppTimeDate");
     QCoreApplication::setApplicationVersion("0.3.0");
 
+    qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
+
     TimeDateProvider *tdp = new TimeDateProvider();
     tdp->start();
 

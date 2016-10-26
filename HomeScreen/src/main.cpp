@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("HomeScreen");
     QCoreApplication::setApplicationVersion("0.3.3");
 
+    qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
+
     MainWindow w;
     w.show();
 #ifdef __arm__

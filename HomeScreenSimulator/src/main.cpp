@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("HomeScreenSimulator");
     QCoreApplication::setApplicationVersion("0.3.1");
 
+    qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
+
     MainWindow w;
     w.show();
 

@@ -18,6 +18,7 @@ signals:
 
 public slots:
     void makeMeVisible(int pid);
+    void toggleFullscreen();
     void setLayoutByName(QString layoutName);
 
 private:

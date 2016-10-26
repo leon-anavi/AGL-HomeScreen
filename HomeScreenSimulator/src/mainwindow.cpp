@@ -23,7 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_dBusDayNightModeAdapter(0),
     mp_dBusStatusBarProxy(0),
     mp_dBusPopupProxy(0),
-    mp_dBusProximityProxy(0)
+    mp_dBusProximityProxy(0),
+    mp_dBusHomeScreenProxy(0)
 {
     mp_ui->setupUi(this);
 
@@ -48,6 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
                                               "/Proximity",
                                               QDBusConnection::sessionBus(),
                                               0);
+    mp_dBusHomeScreenProxy = new org::agl::homescreen("org.agl.homescreen",
+                                                     "/HomeScreen",
+                                                     QDBusConnection::sessionBus(),
+                                                     0);
+
     QSettings settings;
     this->move(settings.value("homescreensimulator/pos").toPoint());
     mp_ui->radioButton_DayMode->setChecked(settings.value("homescreensimulator/daymode", true).toBool()); // if nothing is stored, use "true"
@@ -61,6 +67,7 @@ MainWindow::~MainWindow()
     settings.setValue("homescreensimulator/daymode", mp_ui->radioButton_DayMode->isChecked());
     settings.setValue("homescreensimulator/nightmode", mp_ui->radioButton_NightMode->isChecked());
 
+    delete mp_dBusHomeScreenProxy;
     delete mp_dBusProximityProxy;
     delete mp_dBusPopupProxy;
     delete mp_dBusStatusBarProxy;
@@ -169,4 +176,9 @@ void MainWindow::on_pushButton_comboBoxExample_clicked()
 void MainWindow::on_checkBox_ObjectDetected_clicked()
 {
     mp_dBusProximityProxy->setObjectDetected(Qt::Checked == mp_ui->checkBox_ObjectDetected->checkState());
+}
+
+void MainWindow::on_pushButton_ToggleFullScreen_clicked()
+{
+    mp_dBusHomeScreenProxy->toggleFullScreen();
 }

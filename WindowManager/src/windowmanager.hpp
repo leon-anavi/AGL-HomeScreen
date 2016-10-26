@@ -49,6 +49,8 @@ private:
     WindowmanagerAdaptor *mp_windowManagerAdaptor;
     QMap<int, QList<SimpleRect> > m_layouts;
     QMap<int, QString> m_layoutNames;
+    QMap<int, bool> m_layoutFullScreen;
+    QMap<int, int> m_layoutFullScreenAssociated;
     int m_currentLayout;
     void dumpScene();
     int m_homeScreenPid;
@@ -95,11 +97,13 @@ public slots:
 
 // from windowmanager_adapter.h
 public Q_SLOTS: // METHODS
-    int addLayout(int layoutId, const QString &layoutName, const QList<SimpleRect> &surfaceAreas);
+    int addLayout(int layoutId, const QString &layoutName, bool isFullScreen, int associatedFullScreenLayout, const QList<SimpleRect> &surfaceAreas);
+    int getAssociatedFullScreenLayout(int layoutId);
     QList<int> getAvailableLayouts(int numberOfAppSurfaces);
     QList<SimplePoint> getAvailableSurfaces();
     int getLayout();
     QString getLayoutName(int layoutId);
+    bool isLayoutFullScreen(int layoutId);
     void setLayoutById(int layoutId);
     void setLayoutByName(const QString &layoutName);
     void setPidToLayoutArea(int pid, int layoutAreaId);

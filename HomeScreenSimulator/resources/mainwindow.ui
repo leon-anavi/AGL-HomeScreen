@@ -39,7 +39,7 @@
      <widget class="QPushButton" name="pushButton_Update">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>30</x>
         <y>380</y>
         <width>211</width>
         <height>27</height>
@@ -211,6 +211,24 @@
       </property>
       <property name="text">
        <string>object detected</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_FullScreen">
+     <attribute name="title">
+      <string>FullScreen</string>
+     </attribute>
+     <widget class="QPushButton" name="pushButton_ToggleFullScreen">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>50</y>
+        <width>161</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Toggle full screen</string>
       </property>
      </widget>
     </widget>

@@ -17,14 +17,24 @@
       <method name="addLayout">
         <arg name="layoutId" type="i" direction="in"/>
         <arg name="layoutName" type="s" direction="in"/>
+        <arg name="isFullScreen" type="b" direction="in"/>
+        <arg name="associatedFullScreenLayout" type="i" direction="in"/>
         <arg name="surfaceAreas" type="a(iiii)" direction="in"/>
-        <annotation name="org.qtproject.QtDBus.QtTypeName.In2" value="QList&lt;SimpleRect&gt;"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In4" value="QList&lt;SimpleRect&gt;"/>
         <arg name="error" type="i" direction="out"/>
       </method>
       <method name="getAvailableLayouts">
         <arg name="numberOfAppSurfaces" type="i" direction="in"/>
         <arg name="layoutIds" type="ai" direction="out"/>
         <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
+      </method>
+      <method name="isLayoutFullScreen">
+        <arg name="layoutId" type="i" direction="in"/>
+        <arg name="fullScreen" type="b" direction="out"/>
+      </method>
+      <method name="getAssociatedFullScreenLayout">
+        <arg name="layoutId" type="i" direction="in"/>
+        <arg name="associatedFullScreenLayout" type="i" direction="out"/>
       </method>
       <method name="setLayoutById">
         <arg name="layoutId" type="i" direction="in"/>

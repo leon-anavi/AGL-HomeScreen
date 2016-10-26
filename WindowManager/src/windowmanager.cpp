@@ -29,6 +29,8 @@ WindowManager::WindowManager(QObject *parent) :
     QObject(parent),
     m_layouts(),
     m_layoutNames(),
+    m_layoutFullScreen(),
+    m_layoutFullScreenAssociated(),
     m_currentLayout(-1),
     m_homeScreenPid(-1),
 #ifdef __arm__
@@ -369,16 +371,29 @@ void WindowManager::surfaceCallbackFunction_static(t_ilm_surface surface,
 }
 #endif
 
-int WindowManager::addLayout(int layoutId, const QString &layoutName, const QList<SimpleRect> &surfaceAreas)
+int WindowManager::addLayout(int layoutId, const QString &layoutName, bool isFullScreen, int associatedFullScreenLayout, const QList<SimpleRect> &surfaceAreas)
 {
     qDebug("-=[addLayout]=-");
     m_layouts.insert(layoutId, surfaceAreas);
     m_layoutNames.insert(layoutId, layoutName);
-    qDebug("addLayout %d %s, size %d", layoutId, layoutName.toStdString().c_str(), surfaceAreas.size());
+    m_layoutFullScreen.insert(layoutId, isFullScreen);
+    m_layoutFullScreenAssociated.insert(layoutId, associatedFullScreenLayout);
+    qDebug("addLayout %d %s %s, %d, size %d",
+           layoutId,
+           layoutName.toStdString().c_str(),
+           isFullScreen ? "true" : "false",
+           associatedFullScreenLayout,
+           surfaceAreas.size());
 
     dumpScene();
 
     return true;
+}
+
+int WindowManager::getAssociatedFullScreenLayout(int layoutId)
+{
+    qDebug("-=[getAssociatedFullScreenLayout]=-");
+    return m_layoutFullScreenAssociated.find(layoutId).value();
 }
 
 QList<int> WindowManager::getAvailableLayouts(int numberOfAppSurfaces)
@@ -429,6 +444,12 @@ QString WindowManager::getLayoutName(int layoutId)
 {
     qDebug("-=[getLayoutName]=-");
     return m_layoutNames.find(layoutId).value();
+}
+
+bool WindowManager::isLayoutFullScreen(int layoutId)
+{
+    qDebug("-=[isLayoutFullScreen]=-");
+    return m_layoutFullScreen.find(layoutId).value();
 }
 
 void WindowManager::setLayoutById(int layoutId)

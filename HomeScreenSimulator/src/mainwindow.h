@@ -24,6 +24,7 @@
 #include "statusbar_proxy.h"
 #include "popup_proxy.h"
 #include "proximity_proxy.h"
+#include "homescreen_proxy.h"
 
 namespace Ui {
 class MainWindow;
@@ -62,12 +63,15 @@ private slots:
 
     void on_checkBox_ObjectDetected_clicked();
 
+    void on_pushButton_ToggleFullScreen_clicked();
+
 private:
     Ui::MainWindow *mp_ui;
     DaynightmodeAdaptor *mp_dBusDayNightModeAdapter;
     org::agl::statusbar *mp_dBusStatusBarProxy;
     org::agl::popup *mp_dBusPopupProxy;
     org::agl::proximity *mp_dBusProximityProxy;
+    org::agl::homescreen *mp_dBusHomeScreenProxy;
 };
 
 #endif // MAINWINDOW_H

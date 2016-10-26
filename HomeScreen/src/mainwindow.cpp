@@ -100,6 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mp_homeScreenControlInterface = new HomeScreenControlInterface(this);
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
+    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToggleFullscreen()), mp_layoutHandler, SLOT(toggleFullscreen()));
 
     QObject::connect(mp_popupWidget, SIGNAL(comboBoxResult(QString)), mp_layoutHandler, SLOT(setLayoutByName(QString)));
 }

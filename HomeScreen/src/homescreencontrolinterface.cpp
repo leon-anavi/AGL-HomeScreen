@@ -42,7 +42,8 @@ void HomeScreenControlInterface::hardKeyPressed(int key)
     }
 }
 
-void HomeScreenControlInterface::setToFullscreen(int pid)
+void HomeScreenControlInterface::toggleFullScreen()
 {
-    qDebug("setToFullscreen %d", pid);
+    qDebug("toggleFullScreen");
+    newRequestsToggleFullscreen();
 }

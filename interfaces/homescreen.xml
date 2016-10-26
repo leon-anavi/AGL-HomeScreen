@@ -17,8 +17,7 @@
     <method name="hardKeyPressed">
       <arg name="key" type="i" direction="in"/> <!-- using the inputevent.hpp InputEvent::HardKey type -->
     </method>
-    <method name="setToFullscreen">
-      <arg name="pid" type="i" direction="in"/>
+    <method name="toggleFullScreen">
     </method>
   </interface>
 </node>

@@ -36,6 +36,8 @@ void LayoutHandler::setUpLayouts()
     qDebug("setUpLayouts");
     QList<SimpleRect> surfaceAreas;
     SimpleRect surfaceArea;
+    bool isFullScreen;
+    int associatedFullScreenLayout;
 
     const int SCREEN_WIDTH = 1080;
     const int SCREEN_HEIGHT = 1920;
@@ -59,7 +61,10 @@ void LayoutHandler::setUpLayouts()
 
     surfaceAreas.append(surfaceArea);
 
-    mp_dBusWindowManagerProxy->addLayout(1, "one app", surfaceAreas);
+    isFullScreen = false;
+    associatedFullScreenLayout = 4;
+
+    mp_dBusWindowManagerProxy->addLayout(1, "one app", isFullScreen, associatedFullScreenLayout, surfaceAreas);
 
 
     surfaceAreas.clear();
@@ -83,7 +88,10 @@ void LayoutHandler::setUpLayouts()
 
     surfaceAreas.append(surfaceArea);
 
-    mp_dBusWindowManagerProxy->addLayout(2, "top on bottom", surfaceAreas);
+    isFullScreen = false;
+    associatedFullScreenLayout = -1;
+
+    mp_dBusWindowManagerProxy->addLayout(2, "top on bottom", isFullScreen, associatedFullScreenLayout, surfaceAreas);
 
 
     surfaceAreas.clear();
@@ -107,7 +115,30 @@ void LayoutHandler::setUpLayouts()
 
     surfaceAreas.append(surfaceArea);
 
-    mp_dBusWindowManagerProxy->addLayout(3, "side by side", surfaceAreas);
+    isFullScreen = false;
+    associatedFullScreenLayout = -1;
+
+    mp_dBusWindowManagerProxy->addLayout(3, "side by side", isFullScreen, associatedFullScreenLayout, surfaceAreas);
+
+
+    surfaceAreas.clear();
+
+    // layout 4:
+    // one app surface full screen, no statusbar, no control bar
+    surfaceArea.x = 0;
+    surfaceArea.y = 0;
+    surfaceArea.width = SCREEN_WIDTH;
+    surfaceArea.height = SCREEN_HEIGHT;
+
+    surfaceAreas.append(surfaceArea);
+
+    isFullScreen = true;
+    associatedFullScreenLayout = 1;
+
+    mp_dBusWindowManagerProxy->addLayout(4, "one app full screen", isFullScreen, associatedFullScreenLayout, surfaceAreas);
+
+
+    surfaceAreas.clear();
 
 }
 
@@ -136,7 +167,7 @@ void LayoutHandler::makeMeVisible(int pid)
 
         for (int i = 0; i < m_visibleApps.size(); ++i)
         {
-            mp_dBusWindowManagerProxy->setPidToLayoutArea(i, i);
+            mp_dBusWindowManagerProxy->setPidToLayoutArea(m_visibleApps.at(i), i);
         }
     }
     if (1 == availableLayouts.size())
@@ -149,7 +180,7 @@ void LayoutHandler::makeMeVisible(int pid)
         mp_dBusWindowManagerProxy->setLayoutById(availableLayouts.at(0));
         for (int i = 0; i < m_visibleApps.size(); ++i)
         {
-            mp_dBusWindowManagerProxy->setPidToLayoutArea(i, i);
+            mp_dBusWindowManagerProxy->setPidToLayoutArea(m_visibleApps.at(i), i);
         }
     }
     if (1 < availableLayouts.size())
@@ -165,6 +196,25 @@ void LayoutHandler::makeMeVisible(int pid)
 
         mp_dBusPopupProxy->showPopupComboBox("Select Layout", choices);
 
+    }
+}
+
+void LayoutHandler::toggleFullscreen()
+{
+    qDebug("toggleFullscreen");
+    int currentLayout = mp_dBusWindowManagerProxy->getLayout();
+    int associatedFullScreenLayout = mp_dBusWindowManagerProxy->getAssociatedFullScreenLayout(currentLayout);
+    if (-1 != associatedFullScreenLayout)
+    {
+        mp_dBusWindowManagerProxy->setLayoutById(associatedFullScreenLayout);
+        for (int i = 0; i < m_visibleApps.size(); ++i)
+        {
+            mp_dBusWindowManagerProxy->setPidToLayoutArea(m_visibleApps.at(i), i);
+        }
+    }
+    else
+    {
+        qDebug("no associatedFullScreenLayout. Cannot switch to full screen.");
     }
 }
 

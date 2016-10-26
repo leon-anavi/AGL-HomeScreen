@@ -18,11 +18,12 @@ signals:
 
 signals:
     void newRequestsToBeVisibleApp(int pid);
+    void newRequestsToggleFullscreen();
 
 //from homescreen_adapter.h
 public Q_SLOTS: // METHODS
     void hardKeyPressed(int key);
-    void setToFullscreen(int pid);
+    void toggleFullScreen();
 
 private:
     HomescreenAdaptor *mp_homeScreenAdaptor;

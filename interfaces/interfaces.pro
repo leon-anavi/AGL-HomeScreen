@@ -12,10 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT  += core dbus
+QT  += dbus
 QT  -= gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = lib
 CONFIG += staticlib

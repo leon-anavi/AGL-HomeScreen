@@ -15,12 +15,14 @@
 TEMPLATE = subdirs
 
 SUBDIRS = interfaces \
-        HomeScreen \
-	HomeScreenAppFrameworkBinderTizen \
-	HomeScreenSimulator \
-	InputEventManager \
-	SampleAppTimeDate \
-	WindowManager
+    libhomescreen \
+    HomeScreen \
+    HomeScreenAppFrameworkBinderTizen \
+    HomeScreenSimulator \
+    InputEventManager \
+    SampleAppTimeDate \
+    WindowManager \
+    SampleHomeScreenInterfaceApp
 
 HomeScreen.depends = interfaces
 HomeScreenSimulator.depends = interfaces
@@ -28,6 +30,8 @@ HomeScreenAppFrameworkBinderTizen.depends = interfaces
 InputEventManager.depends = interfaces
 SampleAppTimeDate.depends = interfaces
 WindowManager.depends = interfaces
+
+SampleHomeScreenInterfaceApp.depends = libhomescreen
 
 # remove generated files
 QMAKE_CLEAN += -r \

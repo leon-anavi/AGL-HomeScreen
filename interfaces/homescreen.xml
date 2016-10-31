@@ -13,9 +13,21 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
 <node>
+<!--
+  org.agl.homescreen:
+  @short_description: A generic interface for the HomeScreen app.
+
+  This interface is a collection of methods from drifferent functional areas to control the HomeScreen app.
+-->
   <interface name="org.agl.homescreen">
+  <!--
+    hardKeyPressed:
+    @key: The key that was pressed using the inputevent.hpp InputEvent::HardKey type.
+
+    This is used to inject hard keys into the HomeScreen app.
+  -->
     <method name="hardKeyPressed">
-      <arg name="key" type="i" direction="in"/> <!-- using the inputevent.hpp InputEvent::HardKey type -->
+      <arg name="key" type="i" direction="in"/>
     </method>
     <method name="toggleFullScreen">
     </method>

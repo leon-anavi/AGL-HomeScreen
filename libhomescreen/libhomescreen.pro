@@ -35,8 +35,15 @@ gen_proxy_skeleton_c.output = ${QMAKE_FILE_IN_BASE}.c
 gen_proxy_skeleton_c.variable_out = SOURCES
 gen_proxy_skeleton_c.clean = ${QMAKE_FILE_IN_BASE}.c
 
-
 QMAKE_EXTRA_COMPILERS += gen_proxy_skeleton_h gen_proxy_skeleton_c
+
+
+gen_docbook.target = doc
+gen_docbook.commands = \
+    gdbus-codegen --generate-docbook doc $$PWD/../interfaces/homescreen.xml
+
+QMAKE_EXTRA_TARGETS += gen_docbook
+PRE_TARGETDEPS += doc
 
 # remove generated files
 QMAKE_CLEAN += -r \

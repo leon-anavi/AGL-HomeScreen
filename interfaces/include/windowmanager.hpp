@@ -19,6 +19,12 @@
 
 #include <QtDBus>
 
+#define WINDOWMANAGER_NO_ERROR 0
+#define WINDOWMANAGER_ERROR_ID_ALREADY_DEFINED 1
+#define WINDOWMANAGER_ERROR_NAME_ALREADY_DEFINED 2
+#define WINDOWMANAGER_ERROR_ID_NOT_FOUND 3
+#define WINDOWMANAGER_ERROR_NAME_NOT_FOUND 4
+
 class SimplePoint
 {
 public:
@@ -33,27 +39,43 @@ public:
 };
 
 
-class SimpleRect
+class LayoutArea
 {
 public:
-    SimpleRect();
-    virtual ~SimpleRect();
+    LayoutArea();
+    virtual ~LayoutArea();
 
 	int x;
 	int y;
 	int width;
 	int height;
 
-    friend QDBusArgument &operator <<(QDBusArgument &argument, const SimpleRect &mSimpleRect);
-    friend const QDBusArgument &operator >>(const QDBusArgument &argument, SimpleRect &mSimpleRect);
+    friend QDBusArgument &operator <<(QDBusArgument &argument, const LayoutArea &mLayoutArea);
+    friend const QDBusArgument &operator >>(const QDBusArgument &argument, LayoutArea &mLayoutArea);
 };
 
+class Layout
+{
+public:
+    Layout();
+    Layout(int layoutId, const QString &layoutName, const QList<LayoutArea> &surfaceAreas);
+    virtual ~Layout();
+
+    int id;
+    QString name;
+    QList<LayoutArea> layoutAreas;
+
+    friend QDBusArgument &operator <<(QDBusArgument &argument, const Layout &mLayout);
+    friend const QDBusArgument &operator >>(const QDBusArgument &argument, Layout &mLayout);
+};
 
 Q_DECLARE_METATYPE(SimplePoint)
 Q_DECLARE_METATYPE(QList<SimplePoint>)
 
-Q_DECLARE_METATYPE(SimpleRect)
-Q_DECLARE_METATYPE(QList<SimpleRect>)
+Q_DECLARE_METATYPE(LayoutArea)
+Q_DECLARE_METATYPE(QList<LayoutArea>)
 
+Q_DECLARE_METATYPE(Layout)
+Q_DECLARE_METATYPE(QList<Layout>)
 
 #endif // WINDOWMANAGER_H

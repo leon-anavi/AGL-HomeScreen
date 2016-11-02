@@ -25,11 +25,30 @@ SimplePoint::~SimplePoint()
 }
 
 
-SimpleRect::SimpleRect()
+LayoutArea::LayoutArea()
 {
 }
 
-SimpleRect::~SimpleRect()
+LayoutArea::~LayoutArea()
+{
+}
+
+
+Layout::Layout():
+    id(-1),
+    name("N/A"),
+    layoutAreas()
+{
+}
+
+Layout::Layout(int layoutId, const QString &layoutName, const QList<LayoutArea> &surfaceAreas):
+    id(layoutId),
+    name(layoutName),
+    layoutAreas(surfaceAreas)
+{
+}
+
+Layout::~Layout()
 {
 }
 
@@ -52,26 +71,46 @@ const QDBusArgument &operator >>(const QDBusArgument &argument, SimplePoint &mSi
 	return argument;
 }
 
-QDBusArgument &operator <<(QDBusArgument &argument, const SimpleRect &mSimpleRect)
+QDBusArgument &operator <<(QDBusArgument &argument, const LayoutArea &mLayoutArea)
 {
 	argument.beginStructure();
-	argument << mSimpleRect.x;
-	argument << mSimpleRect.y;
-	argument << mSimpleRect.width;
-	argument << mSimpleRect.height;
+    argument << mLayoutArea.x;
+    argument << mLayoutArea.y;
+    argument << mLayoutArea.width;
+    argument << mLayoutArea.height;
 	argument.endStructure();
 
 	return argument;
 }
 
-const QDBusArgument &operator >>(const QDBusArgument &argument, SimpleRect &mSimpleRect)
+const QDBusArgument &operator >>(const QDBusArgument &argument, LayoutArea &mLayoutArea)
 {
 	argument.beginStructure();
-    argument >> mSimpleRect.x;
-    argument >> mSimpleRect.y;
-    argument >> mSimpleRect.width;
-    argument >> mSimpleRect.height;
+    argument >> mLayoutArea.x;
+    argument >> mLayoutArea.y;
+    argument >> mLayoutArea.width;
+    argument >> mLayoutArea.height;
 	argument.endStructure();
 	return argument;
 }
 
+QDBusArgument &operator <<(QDBusArgument &argument, const Layout &mLayout)
+{
+    argument.beginStructure();
+    argument << mLayout.id;
+    argument << mLayout.name;
+    argument << mLayout.layoutAreas;
+    argument.endStructure();
+
+    return argument;
+}
+
+const QDBusArgument &operator >>(const QDBusArgument &argument, Layout &mLayout)
+{
+    argument.beginStructure();
+    argument >> mLayout.id;
+    argument >> mLayout.name;
+    argument >> mLayout.layoutAreas;
+    argument.endStructure();
+    return argument;
+}

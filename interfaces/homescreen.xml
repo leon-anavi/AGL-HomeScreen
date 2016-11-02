@@ -17,7 +17,7 @@
   org.agl.homescreen:
   @short_description: A generic interface for the HomeScreen app.
 
-  This interface is a collection of methods from drifferent functional areas to control the HomeScreen app.
+  This interface is a collection of methods from different functional areas to control the HomeScreen app.
 -->
   <interface name="org.agl.homescreen">
   <!--

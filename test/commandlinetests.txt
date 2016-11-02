@@ -194,6 +194,14 @@ $dbus-send --session --type=method_call --print-reply --dest=org.agl.homescreen 
 Interface:
 org.agl.windowmanager
 
+
+dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.freedesktop.DBus.Properties.GetAll string:"org.agl.windowmanager"
+
+dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.freedesktop.DBus.Properties.Get string:"org.agl.windowmanager" string:"homeScreenPid"
+
+dbus-send --session --type=method_call --print-reply --dest=org.agl.windowmanager /windowmanager org.freedesktop.DBus.Properties.Set string:"org.agl.windowmanager" string:"homeScreenPid" variant:int32:1
+
+
 Method:
       <method name="addLayout">
         <arg name="layoutId" type="i" direction="in"/>

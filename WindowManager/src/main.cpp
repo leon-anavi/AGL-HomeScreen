@@ -25,14 +25,16 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("WindowManager");
-    QCoreApplication::setApplicationVersion("0.3.0");
+    QCoreApplication::setApplicationVersion("0.3.1");
 
     qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
 
     qDBusRegisterMetaType<SimplePoint>();
     qDBusRegisterMetaType<QList<SimplePoint> >();
-    qDBusRegisterMetaType<SimpleRect>();
-    qDBusRegisterMetaType<QList<SimpleRect> >();
+    qDBusRegisterMetaType<LayoutArea>();
+    qDBusRegisterMetaType<QList<LayoutArea> >();
+    qDBusRegisterMetaType<Layout>();
+    qDBusRegisterMetaType<QList<Layout> >();
 
     WindowManager *windowManager = new WindowManager();
     windowManager->start();

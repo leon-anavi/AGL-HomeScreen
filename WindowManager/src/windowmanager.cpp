@@ -23,24 +23,27 @@
 // DO NOT JUDGE THE SOURCE CODE :)
 //////////////////////////////////////////
 
+// three layers will be defined. The HomeScreen will be placed
+// full screen in the background.
+// On top all applications in one layer.
+// On top of that, the popup layer.
+#define WINDOWMANAGER_LAYER_POPUP 100
+#define WINDOWMANAGER_LAYER_APPLICATIONS 101
+#define WINDOWMANAGER_LAYER_HOMESCREEN 102
+
+#define WINDOWMANAGER_LAYER_NUM 3
+
 void* WindowManager::myThis = 0;
 
 WindowManager::WindowManager(QObject *parent) :
     QObject(parent),
     m_layouts(),
-    m_layoutNames(),
-    m_layoutFullScreen(),
-    m_layoutFullScreenAssociated(),
+    m_surfaces(),
+    mp_layoutAreaToSurfaceIdAssignment(0),
     m_currentLayout(-1),
-    m_homeScreenPid(-1),
-#ifdef __arm__
-    mp_surfaces(0),
-    mp_processLayers(0),
-#endif
-    mp_layoutAreaToPidAssignment(0)
+    m_homeScreenPid(-1)
 {
     qDebug("-=[WindowManager]=-");
-    qDebug("WindowManager");
     // publish windowmanager interface
     mp_windowManagerAdaptor = new WindowmanagerAdaptor((QObject*)this);
 
@@ -52,11 +55,8 @@ WindowManager::WindowManager(QObject *parent) :
 void WindowManager::start()
 {
     qDebug("-=[start]=-");
-    mp_layoutAreaToPidAssignment = new QMap<int, unsigned int>;
+    mp_layoutAreaToSurfaceIdAssignment = new QMap<int, unsigned int>;
 #ifdef __arm__
-    mp_processLayers = new QList<int>;
-    mp_surfaces = new QMap<t_ilm_uint, SurfaceInfo>;
-
     ilmErrorTypes err;
 
     err = ilm_init();
@@ -64,6 +64,10 @@ void WindowManager::start()
 
     myThis = this;
     err =  ilm_registerNotification(WindowManager::notificationFunc_static, this);
+
+    createNewLayer(WINDOWMANAGER_LAYER_POPUP);
+    createNewLayer(WINDOWMANAGER_LAYER_APPLICATIONS);
+    createNewLayer(WINDOWMANAGER_LAYER_HOMESCREEN);
 #endif
 }
 
@@ -72,12 +76,9 @@ WindowManager::~WindowManager()
     qDebug("-=[~WindowManager]=-");
     delete mp_windowManagerAdaptor;
 #ifdef __arm__
-    delete mp_surfaces;
-    delete mp_processLayers;
-
     ilm_destroy();
 #endif
-    delete mp_layoutAreaToPidAssignment;
+    delete mp_layoutAreaToSurfaceIdAssignment;
 }
 
 void WindowManager::dumpScene()
@@ -85,20 +86,19 @@ void WindowManager::dumpScene()
     qDebug("\n");
     qDebug("current layout   : %d", m_currentLayout);
     qDebug("available layouts: %d", m_layouts.size());
-    QMap<int, QList<SimpleRect> >::iterator i = m_layouts.begin();
+    QList<Layout>::const_iterator i = m_layouts.begin();
 
-    QList<int> result;
     while (i != m_layouts.constEnd())
     {
-        qDebug("--[id: %d]--[%s]--", i.key(), m_layoutNames.find(i.key()).value().toStdString().c_str());
-        qDebug("  %d surface areas", i.value().size());
-        for (int j = 0; j < i.value().size(); ++j)
+        qDebug("--[id: %d]--[%s]--", i->id, i->name.toStdString().c_str());
+        qDebug("  %d surface areas", i->layoutAreas.size());
+        for (int j = 0; j < i->layoutAreas.size(); ++j)
         {
             qDebug("  -area %d", j);
-            qDebug("    -x     : %d", i.value().at(j).x);
-            qDebug("    -y     : %d", i.value().at(j).y);
-            qDebug("    -width : %d", i.value().at(j).width);
-            qDebug("    -height: %d", i.value().at(j).height);
+            qDebug("    -x     : %d", i->layoutAreas.at(j).x);
+            qDebug("    -y     : %d", i->layoutAreas.at(j).y);
+            qDebug("    -width : %d", i->layoutAreas.at(j).width);
+            qDebug("    -height: %d", i->layoutAreas.at(j).height);
         }
 
         ++i;
@@ -111,21 +111,27 @@ void WindowManager::createNewLayer(int layerId)
 {
     qDebug("-=[createNewLayer]=-");
     qDebug("layerId %d", layerId);
-    ilmErrorTypes err;
 
     t_ilm_uint screenID = 0;
     t_ilm_uint width;
     t_ilm_uint height;
 
-    err = ilm_getScreenResolution(screenID, &width, &height);
+    ilm_getScreenResolution(screenID, &width, &height);
 
     t_ilm_layer newLayerId = layerId;
-    err = ilm_layerCreateWithDimension(&newLayerId, width, height);
-
-    t_ilm_float opacity = 0.0;
-    err =  ilm_layerSetOpacity(newLayerId, opacity);
-
-    ilm_layerSetVisibility(newLayerId, ILM_FALSE);
+    ilm_layerCreateWithDimension(&newLayerId, width, height);
+    ilm_layerSetOpacity(newLayerId, 1.0);
+    ilm_layerSetVisibility(newLayerId, ILM_TRUE);
+    ilm_layerSetSourceRectangle(newLayerId,
+                                    0,
+                                    0,
+                                    width,
+                                    height);
+    ilm_layerSetDestinationRectangle(newLayerId,
+                                    0,
+                                    0,
+                                    width,
+                                    height);
 
     ilm_commitChanges();
 }
@@ -135,75 +141,11 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
     qDebug("-=[addSurfaceToLayer]=-");
     qDebug("surfaceId %d", surfaceId);
     qDebug("layerId %d", layerId);
-    t_ilm_int length;
-    t_ilm_layer* pArray;
 
-    ilm_getLayerIDs(&length, &pArray);
-    bool layerFound(false);
-    for (int i = 0; i < length; ++i)
+    if (layerId == WINDOWMANAGER_LAYER_HOMESCREEN)
     {
-        if (layerId == pArray[i])
-        {
-            layerFound = true;
-        }
-    }
-
-    if (!layerFound)
-    {
-        createNewLayer(layerId);
-    }
-
-    struct ilmSurfaceProperties surfaceProperties;
-    ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
-    //qDebug("  origSourceWidth : %d", surfaceProperties.origSourceWidth);
-    //qDebug("  origSourceHeight: %d", surfaceProperties.origSourceHeight);
-
-    ilm_layerSetSourceRectangle(layerId,
-                                     0,
-                                     0,
-                                     surfaceProperties.origSourceWidth,
-                                     surfaceProperties.origSourceHeight);
-    ilm_commitChanges();
-
-    ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-    ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-    ilm_surfaceSetOpacity(surfaceId, 1.0);
-    ilm_surfaceSetVisibility(surfaceId, true);
-
-    ilm_layerAddSurface(layerId, surfaceId);
-
-    ilm_commitChanges();
-}
-
-void WindowManager::updateScreen()
-{
-    qDebug("-=[updateScreen]=-");
-    int numberOfLayersToShow = 0;
-
-    QMap<int, QList<SimpleRect> >::iterator i = m_layouts.find(m_currentLayout);
-    if (m_layouts.end() != i)
-    {
-        numberOfLayersToShow += i.value().size();
-        qDebug("the current layout provides %d render areas", i.value().size());
-    }
-    else
-    {
-        qDebug("the current layout provides no render areas!");
-    }
-
-
-    t_ilm_layer renderOrder[numberOfLayersToShow];
-    int renderOrderCounter = 0;
-
-    qDebug("show home screen app");
-    if (-1 != m_homeScreenPid)
-    {
-        renderOrder[renderOrderCounter] = m_homeScreenPid;
-        ++renderOrderCounter;
-
-        ilm_layerSetVisibility(m_homeScreenPid, ILM_TRUE);
-        t_ilm_float opacity = 1.0;
-        ilm_layerSetOpacity(m_homeScreenPid, opacity);
+        struct ilmSurfaceProperties surfaceProperties;
+        ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
         // homescreen app always fullscreen in the back
         t_ilm_uint screenID = 0;
@@ -212,53 +154,109 @@ void WindowManager::updateScreen()
 
         ilm_getScreenResolution(screenID, &width, &height);
 
-        ilm_layerSetDestinationRectangle(m_homeScreenPid,
-                                         0,
-                                         0,
-                                         width,
-                                         height);
+        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, width, height);
+        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetOpacity(surfaceId, 1.0);
+        ilm_surfaceSetVisibility(surfaceId, ILM_TRUE);
+
+        ilm_layerAddSurface(layerId, surfaceId);
     }
 
-
-    qDebug("show %d apps", numberOfLayersToShow);
-    for (int j = 0; j < numberOfLayersToShow; ++j)
+    if (layerId == WINDOWMANAGER_LAYER_APPLICATIONS)
     {
-        int layerToShow = mp_layoutAreaToPidAssignment->find(j).value();
-        if (layerToShow != m_homeScreenPid)
-        {
-            qDebug("  app no. %d: %d", j, layerToShow);
-            renderOrder[renderOrderCounter] = layerToShow;
-            ++renderOrderCounter;
+        struct ilmSurfaceProperties surfaceProperties;
+        ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
-            ilm_layerSetVisibility(layerToShow, ILM_TRUE);
-            t_ilm_float opacity = 1.0;
-            ilm_layerSetOpacity(layerToShow, opacity);
+        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetOpacity(surfaceId, 0.0);
+        ilm_surfaceSetVisibility(surfaceId, ILM_FALSE);
 
-            qDebug("  layout area %d", j);
-            qDebug("    x: %d", m_layouts.find(m_currentLayout).value()[j].x);
-            qDebug("    x: %d", m_layouts.find(m_currentLayout).value()[j].y);
-            qDebug("    w: %d", m_layouts.find(m_currentLayout).value()[j].width);
-            qDebug("    h: %d", m_layouts.find(m_currentLayout).value()[j].height);
-
-            ilm_layerSetDestinationRectangle(layerToShow,
-                                             m_layouts.find(m_currentLayout).value()[j].x,
-                                             m_layouts.find(m_currentLayout).value()[j].y,
-                                             m_layouts.find(m_currentLayout).value()[j].width,
-                                             m_layouts.find(m_currentLayout).value()[j].height);
-        }
+        ilm_layerAddSurface(layerId, surfaceId);
     }
 
-    qDebug("renderOrder");
-    for (int j = 0; j < renderOrderCounter; ++j)
+    if (layerId == WINDOWMANAGER_LAYER_POPUP)
     {
-        qDebug("  %d: %d", j, renderOrder[j]);
-    }
+        struct ilmSurfaceProperties surfaceProperties;
+        ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
-    ilm_displaySetRenderOrder(0, renderOrder, renderOrderCounter);
+        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetOpacity(surfaceId, 0.0);
+        ilm_surfaceSetVisibility(surfaceId, ILM_FALSE);
+
+        ilm_layerAddSurface(layerId, surfaceId);
+    }
 
     ilm_commitChanges();
 }
 
+#endif
+
+void WindowManager::updateScreen()
+{
+    qDebug("-=[updateScreen]=-");
+
+    if (-1 != m_currentLayout)
+    {
+#ifdef __arm__
+
+        t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+        renderOrder[0] = WINDOWMANAGER_LAYER_HOMESCREEN;
+        renderOrder[1] = WINDOWMANAGER_LAYER_APPLICATIONS;
+        renderOrder[2] = WINDOWMANAGER_LAYER_POPUP;
+
+        // hide all surfaces
+        for (int i = 0; i < m_surfaces.size(); ++i)
+        {
+            ilm_surfaceSetVisibility(m_surfaces.at(i), ILM_FALSE);
+            ilm_surfaceSetOpacity(m_surfaces.at(i), 0.0);
+        }
+
+        // find the current used layout
+        QList<Layout>::const_iterator ci = m_layouts.begin();
+
+        Layout currentLayout;
+        while (ci != m_layouts.constEnd())
+        {
+            if (ci->id == m_currentLayout)
+            {
+                currentLayout = *ci;
+            }
+
+            ++ci;
+        }
+
+        qDebug("show %d apps", mp_layoutAreaToSurfaceIdAssignment->size());
+        for (int j = 0; j < mp_layoutAreaToSurfaceIdAssignment->size(); ++j)
+        {
+            int surfaceToShow = mp_layoutAreaToSurfaceIdAssignment->find(j).value();
+            qDebug("  surface no. %d: %d", j, surfaceToShow);
+
+            ilm_surfaceSetVisibility(surfaceToShow, ILM_TRUE);
+            ilm_surfaceSetOpacity(surfaceToShow, 1.0);
+
+            qDebug("  layout area %d", j);
+            qDebug("    x: %d", currentLayout.layoutAreas[j].x);
+            qDebug("    y: %d", currentLayout.layoutAreas[j].y);
+            qDebug("    w: %d", currentLayout.layoutAreas[j].width);
+            qDebug("    h: %d", currentLayout.layoutAreas[j].height);
+
+            ilm_surfaceSetDestinationRectangle(surfaceToShow,
+                                             currentLayout.layoutAreas[j].x,
+                                             currentLayout.layoutAreas[j].y,
+                                             currentLayout.layoutAreas[j].width,
+                                             currentLayout.layoutAreas[j].height);
+        }
+
+        ilm_displaySetRenderOrder(0, renderOrder, WINDOWMANAGER_LAYER_NUM);
+
+        ilm_commitChanges();
+#endif
+    }
+}
+
+#ifdef __arm__
 void WindowManager::notificationFunc_non_static(ilmObjectType object,
                                     t_ilm_uint id,
                                     t_ilm_bool created)
@@ -272,42 +270,34 @@ void WindowManager::notificationFunc_non_static(ilmObjectType object,
         if (created)
         {
             qDebug("Surface created, ID: %d", id);
-            //qDebug("Surface created, ID: 0x%s", QString(QByteArray::number(id,16)).toStdString().c_str());
             ilm_getPropertiesOfSurface(id, &surfaceProperties);
             qDebug("  origSourceWidth : %d", surfaceProperties.origSourceWidth);
             qDebug("  origSourceHeight: %d", surfaceProperties.origSourceHeight);
-            SurfaceInfo surfaceInfo;
-            surfaceInfo.pid = surfaceProperties.creatorPid;
-            QString procInfoFileName = QString("/proc/") + QString::number(surfaceInfo.pid) + QString("/comm");
-            QFile procInfo(procInfoFileName);
-            if (procInfo.open(QIODevice::ReadOnly))
+
+            if (m_homeScreenPid == surfaceProperties.creatorPid)
             {
-                QTextStream in(&procInfo);
-                surfaceInfo.processName = in.readLine();
-                qDebug("  creator pid %d %s", surfaceInfo.pid, surfaceInfo.processName.toStdString().c_str());
-                addSurfaceToLayer(id, surfaceProperties.creatorPid);
-
-                mp_surfaces->insert(id, surfaceInfo);
-                ilm_surfaceAddNotification(id, surfaceCallbackFunction_static);
-
-                ilm_commitChanges();
-
-                if (0 == QString::compare("weston-fullscre", surfaceInfo.processName))
+                if (m_homeScreenSurfaceId != id)
                 {
                     qDebug("HomeScreen app detected");
-                    m_homeScreenPid = surfaceInfo.pid;
+                    m_homeScreenSurfaceId = id;
+                    addSurfaceToLayer(id, WINDOWMANAGER_LAYER_HOMESCREEN);
                     updateScreen();
                 }
             }
             else
             {
-                qDebug("no creator pid found. Ignoring surface!");
+                addSurfaceToLayer(id, WINDOWMANAGER_LAYER_APPLICATIONS);
+
+                m_surfaces.append(id);
             }
+            ilm_surfaceAddNotification(id, surfaceCallbackFunction_static);
+
+            ilm_commitChanges();
         }
         else
         {
             qDebug("Surface destroyed, ID: %d", id);
-            mp_surfaces->erase(mp_surfaces->find(id));
+            m_surfaces.removeAt(m_surfaces.indexOf(id));
             ilm_surfaceRemoveNotification(id);
 
             ilm_commitChanges();
@@ -326,9 +316,6 @@ void WindowManager::notificationFunc_static(ilmObjectType object,
 {
     static_cast<WindowManager*>(WindowManager::myThis)->notificationFunc_non_static(object, id, created);
 }
-
-
-
 
 void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
                                     struct ilmSurfaceProperties* surfaceProperties,
@@ -371,42 +358,59 @@ void WindowManager::surfaceCallbackFunction_static(t_ilm_surface surface,
 }
 #endif
 
-int WindowManager::addLayout(int layoutId, const QString &layoutName, bool isFullScreen, int associatedFullScreenLayout, const QList<SimpleRect> &surfaceAreas)
-{
-    qDebug("-=[addLayout]=-");
-    m_layouts.insert(layoutId, surfaceAreas);
-    m_layoutNames.insert(layoutId, layoutName);
-    m_layoutFullScreen.insert(layoutId, isFullScreen);
-    m_layoutFullScreenAssociated.insert(layoutId, associatedFullScreenLayout);
-    qDebug("addLayout %d %s %s, %d, size %d",
-           layoutId,
-           layoutName.toStdString().c_str(),
-           isFullScreen ? "true" : "false",
-           associatedFullScreenLayout,
-           surfaceAreas.size());
 
+int WindowManager::homeScreenPid() const
+{
+    return m_homeScreenPid;
+}
+
+void WindowManager::setHomeScreenPid(int value)
+{
+    m_homeScreenPid = value;
+#ifdef __arm__
+    // maybe the HomeSceen app has already provided its surface.
+    // if so, shift it to the correct layer
+    // find the current used layout
+    QList<int>::iterator ci = m_surfaces.begin();
+
+    struct ilmSurfaceProperties surfaceProperties;
+    bool found = false;
+    while ((!found) && (ci != m_surfaces.constEnd()))
+    {
+        ilm_getPropertiesOfSurface(*ci, &surfaceProperties);
+        if (m_homeScreenPid == surfaceProperties.creatorPid)
+        {
+            qDebug("HomeScreen app detected");
+            m_homeScreenSurfaceId = *ci;
+            addSurfaceToLayer(*ci, WINDOWMANAGER_LAYER_HOMESCREEN);
+            m_surfaces.erase(ci);
+            found = true;
+            updateScreen();
+        }
+
+        ++ci;
+    }
+#endif
+
+    updateScreen();
     dumpScene();
-
-    return true;
 }
 
-int WindowManager::getAssociatedFullScreenLayout(int layoutId)
+int WindowManager::layoutId() const
 {
-    qDebug("-=[getAssociatedFullScreenLayout]=-");
-    return m_layoutFullScreenAssociated.find(layoutId).value();
+    return m_currentLayout;
 }
 
-QList<int> WindowManager::getAvailableLayouts(int numberOfAppSurfaces)
+QString WindowManager::layoutName() const
 {
-    qDebug("-=[getAvailableLayouts]=-");
-    QMap<int, QList<SimpleRect> >::iterator i = m_layouts.begin();
+    QList<Layout>::const_iterator i = m_layouts.begin();
 
-    QList<int> result;
+    QString result = "not found";
     while (i != m_layouts.constEnd())
     {
-        if (i.value().size() == numberOfAppSurfaces)
+        if (i->id == m_currentLayout)
         {
-            result.append(i.key());
+            result = i->name;
         }
 
         ++i;
@@ -415,81 +419,124 @@ QList<int> WindowManager::getAvailableLayouts(int numberOfAppSurfaces)
     return result;
 }
 
-// maybe not needed anymore
-QList<SimplePoint> WindowManager::getAvailableSurfaces()
-{
-    qDebug("-=[getAvailableSurfaces]=-");
-    QList<SimplePoint> points;
-    SimplePoint point;
-    point.x = 1;
-    point.y = 2;
-    points.append(point);
-    point.x = 11;
-    point.y = 22;
-    points.append(point);
-    point.x = 111;
-    point.y = 222;
-    points.append(point);
 
-    return points;
+int WindowManager::addLayout(int layoutId, const QString &layoutName, const QList<LayoutArea> &surfaceAreas)
+{
+    qDebug("-=[addLayout]=-");
+    m_layouts.append(Layout(layoutId, layoutName, surfaceAreas));
+
+    qDebug("addLayout %d %s, size %d",
+           layoutId,
+           layoutName.toStdString().c_str(),
+           surfaceAreas.size());
+
+    dumpScene();
+
+    return WINDOWMANAGER_NO_ERROR;
 }
 
-int WindowManager::getLayout()
+QList<Layout> WindowManager::getAllLayouts()
 {
-    qDebug("-=[getLayout]=-");
-    return m_currentLayout;
+    qDebug("-=[getAllLayouts]=-");
+
+    return m_layouts;
+}
+
+QList<int> WindowManager::getAvailableLayouts(int numberOfAppSurfaces)
+{
+    qDebug("-=[getAvailableLayouts]=-");
+    QList<Layout>::const_iterator i = m_layouts.begin();
+
+    QList<int> result;
+    while (i != m_layouts.constEnd())
+    {
+        if (i->layoutAreas.size() == numberOfAppSurfaces)
+        {
+            result.append(i->id);
+        }
+
+        ++i;
+    }
+
+    return result;
+}
+
+QList<int> WindowManager::getAvailableSurfaces()
+{
+    qDebug("-=[getAvailableSurfaces]=-");
+
+    return m_surfaces;
 }
 
 QString WindowManager::getLayoutName(int layoutId)
 {
     qDebug("-=[getLayoutName]=-");
-    return m_layoutNames.find(layoutId).value();
-}
+    QList<Layout>::const_iterator i = m_layouts.begin();
 
-bool WindowManager::isLayoutFullScreen(int layoutId)
-{
-    qDebug("-=[isLayoutFullScreen]=-");
-    return m_layoutFullScreen.find(layoutId).value();
-}
-
-void WindowManager::setLayoutById(int layoutId)
-{
-    qDebug("-=[setLayoutById]=-");
-    m_currentLayout = layoutId;
-
-    mp_layoutAreaToPidAssignment->clear();
-
-    dumpScene();
-}
-
-void WindowManager::setLayoutByName(const QString &layoutName)
-{
-    qDebug("-=[setLayoutByName]=-");
-    QMap<int, QString>::iterator i = m_layoutNames.begin();
-    while (i != m_layoutNames.constEnd())
+    QString result = "not found";
+    while (i != m_layouts.constEnd())
     {
-        if (i.value() == layoutName)
+        if (i->id == layoutId)
         {
-            m_currentLayout = i.key();
+            result = i->name;
         }
+
         ++i;
     }
 
-    mp_layoutAreaToPidAssignment->clear();
-
-    dumpScene();
+    return result;
 }
 
-void WindowManager::setPidToLayoutArea(int pid, int layoutAreaId)
-{
-    qDebug("-=[setPidToLayoutArea]=-");
-    qDebug("pid %d", pid);
-    qDebug("layoutAreaId %d", layoutAreaId);
-    mp_layoutAreaToPidAssignment->insert(layoutAreaId, pid);
 
-#ifdef __arm__
-    updateScreen();
-#endif
+int WindowManager::setLayoutById(int layoutId)
+{
+    qDebug("-=[setLayoutById]=-");
+    int result = WINDOWMANAGER_NO_ERROR;
+    m_currentLayout = layoutId;
+
+    mp_layoutAreaToSurfaceIdAssignment->clear();
 
     dumpScene();
+
+    return result;
+}
+
+int WindowManager::setLayoutByName(const QString &layoutName)
+{
+    qDebug("-=[setLayoutByName]=-");
+    int result = WINDOWMANAGER_NO_ERROR;
+
+    QList<Layout>::const_iterator i = m_layouts.begin();
+
+    while (i != m_layouts.constEnd())
+    {
+        if (i->name == layoutName)
+        {
+            m_currentLayout = i->id;
+
+            mp_layoutAreaToSurfaceIdAssignment->clear();
+
+            dumpScene();
+        }
+
+        ++i;
+    }
+
+    return result;
+}
+
+int WindowManager::setSurfaceToLayoutArea(int surfaceId, int layoutAreaId)
+{
+    qDebug("-=[setSurfaceToLayoutArea]=-");
+    int result = WINDOWMANAGER_NO_ERROR;
+
+    qDebug("surfaceId %d", surfaceId);
+    qDebug("layoutAreaId %d", layoutAreaId);
+    mp_layoutAreaToSurfaceIdAssignment->insert(layoutAreaId, surfaceId);
+
+    updateScreen();
+
+    dumpScene();
+
+    return result;
 }

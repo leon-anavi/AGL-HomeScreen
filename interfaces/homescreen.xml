@@ -29,7 +29,48 @@
     <method name="hardKeyPressed">
       <arg name="key" type="i" direction="in"/>
     </method>
-    <method name="toggleFullScreen">
+  <!--
+    requestSurfaceIdToFullScreen:
+    @surfaceId: The surface that request to be shown fullscreen.
+
+    This allows an application to set a surface to full screen.
+  -->
+    <method name="requestSurfaceIdToFullScreen">
+      <arg name="surfaceId" type="i" direction="in"/>
+    </method>
+  <!--
+    getLayoutRenderAreaForSurfaceId:
+    @surfaceId: The surface that is requested.
+    @renderArea: The layout render area in which the given surface is located.
+
+    Before an application uses renderSurfaceToArea to render a surface into an area inside a layout area,
+    this method should be used to get the dimension of the layout area, in which the surface
+    currently is positioned.
+  -->
+    <method name="getLayoutRenderAreaForSurfaceId">
+      <arg name="surfaceId" type="i" direction="in"/>
+      <arg name="renderArea" type="(iiii)" direction="out"/>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QRect"/>
+    </method>
+  <!--
+    renderSurfaceToArea:
+    @surfaceId: The surface that is requested.
+    @renderArea: The render area inside the current layout area.
+
+    This is a special case. In the normal use case, one layout area is always filled completely
+    with one surface. By using this function, an app can request to position a surface in the
+    layout area.
+    Example:
+    If the layout area is 500x500 pixel in size, the normal use case qould be, that a surface
+    is positioned at x=0, y=0 with a width and a size of 500. With this function, an application can position surfaces
+    free in this area.
+    E.g.: Position surface 101 at x=10, y=30, width=300, height=100 and 
+    surface 104 at x=100, y=130, width=30, height=10
+  -->
+    <method name="renderSurfaceToArea">
+      <arg name="surfaceId" type="i" direction="in"/>
+      <arg name="renderArea" type="(iiii)" direction="in"/>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QRect"/>
     </method>
   </interface>
 </node>

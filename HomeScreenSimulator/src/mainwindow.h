@@ -63,8 +63,6 @@ private slots:
 
     void on_checkBox_ObjectDetected_clicked();
 
-    void on_pushButton_ToggleFullScreen_clicked();
-
 private:
     Ui::MainWindow *mp_ui;
     DaynightmodeAdaptor *mp_dBusDayNightModeAdapter;

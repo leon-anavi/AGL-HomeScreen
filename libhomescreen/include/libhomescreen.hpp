@@ -5,6 +5,14 @@
 struct _LibHomeScreenHomescreen;
 typedef struct _LibHomeScreenHomescreen LibHomeScreenHomescreen;
 
+typedef struct
+{
+    int x;
+    int y;
+    int width;
+    int height;
+} sRectangle;
+
 class LibHomeScreen
 {
 public:
@@ -12,8 +20,10 @@ public:
     ~LibHomeScreen();
 
     // these are representing the D-Bus methods:
+    sRectangle getLayoutRenderAreaForSurfaceId(int surfaceId);
     void hardKeyPressed(int key);
-    void toggleFullScreen();
+    void renderSurfaceToArea(int surfaceId, const sRectangle &renderArea);
+    void requestSurfaceIdToFullScreen(int surfaceId);
 
 private:
     LibHomeScreenHomescreen *mp_libHomeScreenHomescreen_Proxy;

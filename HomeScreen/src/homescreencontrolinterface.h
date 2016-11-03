@@ -15,15 +15,18 @@ public:
     ~HomeScreenControlInterface();
 
 signals:
-
-signals:
     void newRequestsToBeVisibleApp(int pid);
-    void newRequestsToggleFullscreen();
+
+    QRect newRequestGetLayoutRenderAreaForSurfaceId(int surfaceId);
+    void newRequestRenderSurfaceToArea(int surfaceId, const QRect &renderArea);
+    void newRequestSurfaceIdToFullScreen(int surfaceId);
 
 //from homescreen_adapter.h
 public Q_SLOTS: // METHODS
+    QRect getLayoutRenderAreaForSurfaceId(int surfaceId);
     void hardKeyPressed(int key);
-    void toggleFullScreen();
+    void renderSurfaceToArea(int surfaceId, const QRect &renderArea);
+    void requestSurfaceIdToFullScreen(int surfaceId);
 
 private:
     HomescreenAdaptor *mp_homeScreenAdaptor;

@@ -214,24 +214,6 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_FullScreen">
-     <attribute name="title">
-      <string>FullScreen</string>
-     </attribute>
-     <widget class="QPushButton" name="pushButton_ToggleFullScreen">
-      <property name="geometry">
-       <rect>
-        <x>80</x>
-        <y>50</y>
-        <width>161</width>
-        <height>27</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Toggle full screen</string>
-      </property>
-     </widget>
-    </widget>
     <widget class="QWidget" name="tab_FutureFeatures">
      <attribute name="title">
       <string>Future features</string>

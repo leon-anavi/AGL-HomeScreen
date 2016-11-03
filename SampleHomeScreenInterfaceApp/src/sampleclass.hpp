@@ -9,8 +9,10 @@ public:
     SampleClass();
     ~SampleClass();
 
+    sRectangle getLayoutRenderAreaForSurfaceId(int surfaceId);
     void hardKeyPressed(int key);
-    void toggleFullScreen();
+    void renderSurfaceToArea(int surfaceId, const sRectangle &renderArea);
+    void requestSurfaceIdToFullScreen(int surfaceId);
 
 private:
     LibHomeScreen *mp_libHomeScreen;

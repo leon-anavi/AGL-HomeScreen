@@ -169,9 +169,14 @@ void LayoutHandler::makeMeVisible(int surfaceId)
     }
 }
 
-void LayoutHandler::toggleFullscreen()
+void LayoutHandler::requestRenderSurfaceToArea(int surfaceId, const QRect &renderArea)
 {
-    qDebug("toggleFullscreen");
+    qDebug("requestRenderSurfaceToArea %d %d,%d,%d,%d", surfaceId, renderArea.x(), renderArea.y(), renderArea.width(), renderArea.height());
+}
+
+void LayoutHandler::requestSurfaceIdToFullScreen(int surfaceId)
+{
+    qDebug("requestSurfaceIdToFullScreen %d", surfaceId);
 }
 
 void LayoutHandler::setLayoutByName(QString layoutName)

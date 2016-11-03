@@ -18,7 +18,9 @@ signals:
 
 public slots:
     void makeMeVisible(int surfaceId);
-    void toggleFullscreen();
+
+    void requestRenderSurfaceToArea(int surfaceId, const QRect &renderArea);
+    void requestSurfaceIdToFullScreen(int surfaceId);
     void setLayoutByName(QString layoutName);
 
 private:

@@ -89,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(mp_applauncherwidget, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
 
+
     // apply color scheme
     updateColorScheme();
 
@@ -100,7 +101,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mp_homeScreenControlInterface = new HomeScreenControlInterface(this);
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
-    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToggleFullscreen()), mp_layoutHandler, SLOT(toggleFullscreen()));
+    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestSurfaceIdToFullScreen(int)), mp_layoutHandler, SLOT(requestSurfaceIdToFullScreen(int)));
+    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestRenderSurfaceToArea(int, QRect)), mp_layoutHandler, SLOT(requestRenderSurfaceToArea(int,QRect)));
+    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestSurfaceIdToFullScreen(int)), mp_layoutHandler, SLOT(requestSurfaceIdToFullScreen(int)));
 
     QObject::connect(mp_popupWidget, SIGNAL(comboBoxResult(QString)), mp_layoutHandler, SLOT(setLayoutByName(QString)));
 }

@@ -177,8 +177,3 @@ void MainWindow::on_checkBox_ObjectDetected_clicked()
 {
     mp_dBusProximityProxy->setObjectDetected(Qt::Checked == mp_ui->checkBox_ObjectDetected->checkState());
 }
-
-void MainWindow::on_pushButton_ToggleFullScreen_clicked()
-{
-    mp_dBusHomeScreenProxy->toggleFullScreen();
-}

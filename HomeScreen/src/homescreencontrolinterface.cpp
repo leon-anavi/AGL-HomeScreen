@@ -24,6 +24,12 @@ HomeScreenControlInterface::~HomeScreenControlInterface()
     delete mp_homeScreenAdaptor;
 }
 
+QRect HomeScreenControlInterface::getLayoutRenderAreaForSurfaceId(int surfaceId)
+{
+    qDebug("getLayoutRenderAreaForSurfaceId %d", surfaceId);
+    return newRequestGetLayoutRenderAreaForSurfaceId(surfaceId);
+}
+
 void HomeScreenControlInterface::hardKeyPressed(int key)
 {
     int pid = -1;
@@ -42,8 +48,14 @@ void HomeScreenControlInterface::hardKeyPressed(int key)
     }
 }
 
-void HomeScreenControlInterface::toggleFullScreen()
+void HomeScreenControlInterface::renderSurfaceToArea(int surfaceId, const QRect &renderArea)
 {
-    qDebug("toggleFullScreen");
-    newRequestsToggleFullscreen();
+    qDebug("requestSurfaceIdToFullScreen %d", surfaceId);
+    newRequestRenderSurfaceToArea(surfaceId, renderArea);
+}
+
+void HomeScreenControlInterface::requestSurfaceIdToFullScreen(int surfaceId)
+{
+    qDebug("requestSurfaceIdToFullScreen %d", surfaceId);
+    newRequestSurfaceIdToFullScreen(surfaceId);
 }

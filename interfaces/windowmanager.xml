@@ -146,13 +146,6 @@
 			<arg name="surfaceIds" type="a(i)" direction="out"/>
 			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/> 
 		</method>
-
-		<!--
-		  homeScreenPid:
-		  The PID of the Home Screen app. The Home Screen app requires a special handling.
-		  It will always be visible in the background. So it will be placed in a special layer at the lowest z-order.
-		-->
-		<property name="homeScreenPid" type="i" access="readwrite"/>
 	</interface>
 </node>
 

@@ -46,8 +46,6 @@ private:
     QMap<int, unsigned int> *mp_layoutAreaToSurfaceIdAssignment;
 
     int m_currentLayout;
-    int m_homeScreenPid;
-    int m_homeScreenSurfaceId;
 
     void dumpScene();
 
@@ -86,10 +84,6 @@ public slots:
 
 // from windowmanager_adapter.h
 public: // PROPERTIES
-    Q_PROPERTY(int homeScreenPid READ homeScreenPid WRITE setHomeScreenPid)
-    int homeScreenPid() const;
-    void setHomeScreenPid(int value);
-
     Q_PROPERTY(int layoutId READ layoutId)
     int layoutId() const;
 

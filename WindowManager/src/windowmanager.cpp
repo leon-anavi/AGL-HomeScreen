@@ -33,6 +33,10 @@
 
 #define WINDOWMANAGER_LAYER_NUM 3
 
+// the HomeScreen app has to have the surface id 1000
+#define WINDOWMANAGER_HOMESCREEN_MAIN_SURFACE_ID 1000
+
+
 void* WindowManager::myThis = 0;
 
 WindowManager::WindowManager(QObject *parent) :
@@ -40,8 +44,7 @@ WindowManager::WindowManager(QObject *parent) :
     m_layouts(),
     m_surfaces(),
     mp_layoutAreaToSurfaceIdAssignment(0),
-    m_currentLayout(-1),
-    m_homeScreenPid(-1)
+    m_currentLayout(-1)
 {
     qDebug("-=[WindowManager]=-");
     // publish windowmanager interface
@@ -160,7 +163,7 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
         ilm_getScreenResolution(screenID, &width, &height);
 
         ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, width, height);
-        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, width, height);
         ilm_surfaceSetOpacity(surfaceId, 1.0);
         ilm_surfaceSetVisibility(surfaceId, ILM_TRUE);
 
@@ -282,15 +285,11 @@ void WindowManager::notificationFunc_non_static(ilmObjectType object,
             qDebug("  origSourceWidth : %d", surfaceProperties.origSourceWidth);
             qDebug("  origSourceHeight: %d", surfaceProperties.origSourceHeight);
 
-            if (m_homeScreenPid == surfaceProperties.creatorPid)
+            if (WINDOWMANAGER_HOMESCREEN_MAIN_SURFACE_ID == id)
             {
-                if (m_homeScreenSurfaceId != id)
-                {
-                    qDebug("HomeScreen app detected");
-                    m_homeScreenSurfaceId = id;
-                    addSurfaceToLayer(id, WINDOWMANAGER_LAYER_HOMESCREEN);
-                    updateScreen();
-                }
+                qDebug("HomeScreen app detected");
+                addSurfaceToLayer(id, WINDOWMANAGER_LAYER_HOMESCREEN);
+                updateScreen();
             }
             else
             {
@@ -335,25 +334,34 @@ void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
     {
         qDebug("ILM_NOTIFICATION_VISIBILITY");
     }
-
     if (ILM_NOTIFICATION_OPACITY & mask)
     {
         qDebug("ILM_NOTIFICATION_OPACITY");
     }
-
     if (ILM_NOTIFICATION_ORIENTATION & mask)
     {
         qDebug("ILM_NOTIFICATION_ORIENTATION");
     }
-
     if (ILM_NOTIFICATION_SOURCE_RECT & mask)
     {
         qDebug("ILM_NOTIFICATION_SOURCE_RECT");
     }
-
     if (ILM_NOTIFICATION_DEST_RECT & mask)
     {
         qDebug("ILM_NOTIFICATION_DEST_RECT");
+    }
+    if (ILM_NOTIFICATION_CONTENT_AVAILABLE & mask)
+    {
+        qDebug("ILM_NOTIFICATION_CONTENT_AVAILABLE");
+    }
+    if (ILM_NOTIFICATION_CONTENT_REMOVED & mask)
+    {
+        qDebug("ILM_NOTIFICATION_CONTENT_REMOVED");
+    }
+    if (ILM_NOTIFICATION_CONFIGURED & mask)
+    {
+        qDebug("ILM_NOTIFICATION_CONFIGURED");
+        updateScreen();
     }
 }
 
@@ -365,44 +373,6 @@ void WindowManager::surfaceCallbackFunction_static(t_ilm_surface surface,
     static_cast<WindowManager*>(WindowManager::myThis)->surfaceCallbackFunction_non_static(surface, surfaceProperties, mask);
 }
 #endif
-
-
-int WindowManager::homeScreenPid() const
-{
-    return m_homeScreenPid;
-}
-
-void WindowManager::setHomeScreenPid(int value)
-{
-    m_homeScreenPid = value;
-#ifdef __arm__
-    // maybe the HomeSceen app has already provided its surface.
-    // if so, shift it to the correct layer
-    // find the current used layout
-    QList<int>::iterator ci = m_surfaces.begin();
-
-    struct ilmSurfaceProperties surfaceProperties;
-    bool found = false;
-    while ((!found) && (ci != m_surfaces.constEnd()))
-    {
-        ilm_getPropertiesOfSurface(*ci, &surfaceProperties);
-        if (m_homeScreenPid == surfaceProperties.creatorPid)
-        {
-            qDebug("HomeScreen app detected");
-            m_homeScreenSurfaceId = *ci;
-            addSurfaceToLayer(*ci, WINDOWMANAGER_LAYER_HOMESCREEN);
-            m_surfaces.erase(ci);
-            found = true;
-            updateScreen();
-        }
-
-        ++ci;
-    }
-#endif
-
-    updateScreen();
-    dumpScene();
-}
 
 int WindowManager::layoutId() const
 {

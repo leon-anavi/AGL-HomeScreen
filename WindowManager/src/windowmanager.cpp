@@ -147,6 +147,11 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
         struct ilmSurfaceProperties surfaceProperties;
         ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
+        qDebug("sourceX %d", surfaceProperties.sourceX);
+        qDebug("sourceY %d", surfaceProperties.sourceY);
+        qDebug("sourceWidth %d", surfaceProperties.sourceWidth);
+        qDebug("sourceHeight %d", surfaceProperties.sourceHeight);
+
         // homescreen app always fullscreen in the back
         t_ilm_uint screenID = 0;
         t_ilm_uint width;
@@ -197,14 +202,9 @@ void WindowManager::updateScreen()
 {
     qDebug("-=[updateScreen]=-");
 
+#ifdef __arm__
     if (-1 != m_currentLayout)
     {
-#ifdef __arm__
-
-        t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
-        renderOrder[0] = WINDOWMANAGER_LAYER_HOMESCREEN;
-        renderOrder[1] = WINDOWMANAGER_LAYER_APPLICATIONS;
-        renderOrder[2] = WINDOWMANAGER_LAYER_POPUP;
 
         // hide all surfaces
         for (int i = 0; i < m_surfaces.size(); ++i)
@@ -249,11 +249,19 @@ void WindowManager::updateScreen()
                                              currentLayout.layoutAreas[j].height);
         }
 
-        ilm_displaySetRenderOrder(0, renderOrder, WINDOWMANAGER_LAYER_NUM);
-
         ilm_commitChanges();
-#endif
     }
+
+    t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+    renderOrder[0] = WINDOWMANAGER_LAYER_HOMESCREEN;
+    renderOrder[1] = WINDOWMANAGER_LAYER_APPLICATIONS;
+    renderOrder[2] = WINDOWMANAGER_LAYER_POPUP;
+
+    ilm_displaySetRenderOrder(0, renderOrder, WINDOWMANAGER_LAYER_NUM);
+
+    ilm_commitChanges();
+
+#endif
 }
 
 #ifdef __arm__

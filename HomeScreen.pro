@@ -22,7 +22,9 @@ SUBDIRS = interfaces \
     InputEventManager \
     SampleAppTimeDate \
     WindowManager \
-    SampleHomeScreenInterfaceApp
+    SampleHomeScreenInterfaceApp \
+    SampleNavigationApp \
+    SampleMediaApp
 
 HomeScreen.depends = interfaces
 HomeScreenSimulator.depends = interfaces

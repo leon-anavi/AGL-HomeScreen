@@ -122,6 +122,19 @@
 		</method>
 
 		<!--
+		  getAllSurfacesOfProcess:
+		  @pid: The PID of the process.
+		  @surfaceIds: A list of surfaces that were created by the process.
+
+		  The surface IDs can be used to assign them to a layout render area.
+		-->
+		<method name="getAllSurfacesOfProcess">
+			<arg name="pid" type="i" direction="in"/>
+			<arg name="layoutIds" type="ai" direction="out"/>
+			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
+		</method>
+
+		<!--
 		  setSurfaceToLayoutArea:
 		  @surfaceId: The ID of the surface that shall be positioned.
 		  @layoutAreaId: The ID of the layout area where the surface shall be rendered.

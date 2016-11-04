@@ -420,6 +420,24 @@ QList<Layout> WindowManager::getAllLayouts()
     return m_layouts;
 }
 
+QList<int> WindowManager::getAllSurfacesOfProcess(int pid)
+{
+    QList<int> result;
+#ifdef __arm__
+    struct ilmSurfaceProperties surfaceProperties;
+
+    for (int i = 0; i < m_surfaces.size(); ++i)
+    {
+        ilm_getPropertiesOfSurface(m_surfaces.at(i), &surfaceProperties);
+        if (pid == surfaceProperties.creatorPid)
+        {
+            result.append(m_surfaces.at(i));
+        }
+    }
+#endif
+    return result;
+}
+
 QList<int> WindowManager::getAvailableLayouts(int numberOfAppSurfaces)
 {
     qDebug("-=[getAvailableLayouts]=-");

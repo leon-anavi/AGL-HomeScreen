@@ -17,7 +17,7 @@ public:
 signals:
 
 public slots:
-    void makeMeVisible(int surfaceId);
+    void makeMeVisible(int pid);
 
     void requestRenderSurfaceToArea(int surfaceId, const QRect &renderArea);
     void requestSurfaceIdToFullScreen(int surfaceId);

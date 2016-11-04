@@ -17,11 +17,11 @@
       <arg name="in" type="s" direction="in"/>
       <arg name="out" type="s" direction="out"/>
     </method>
-    <method name="stop">
+    <method name="pause">
       <arg name="in" type="s" direction="in"/>
       <arg name="out" type="s" direction="out"/>
     </method>
-    <method name="continue">
+    <method name="resume">
       <arg name="in" type="s" direction="in"/>
       <arg name="out" type="s" direction="out"/>
     </method>

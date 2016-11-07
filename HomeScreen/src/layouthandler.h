@@ -19,6 +19,8 @@ signals:
 public slots:
     void makeMeVisible(int pid);
 
+    QList<int> requestGetAllSurfacesOfProcess(int pid);
+    int requestGetSurfaceStatus(int surfaceId);
     void requestRenderSurfaceToArea(int surfaceId, const QRect &renderArea);
     void requestSurfaceIdToFullScreen(int surfaceId);
     void setLayoutByName(QString layoutName);

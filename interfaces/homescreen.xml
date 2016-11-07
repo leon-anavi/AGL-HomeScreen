@@ -19,59 +19,83 @@
 
   This interface is a collection of methods from different functional areas to control the HomeScreen app.
 -->
-  <interface name="org.agl.homescreen">
-  <!--
-    hardKeyPressed:
-    @key: The key that was pressed using the inputevent.hpp InputEvent::HardKey type.
+	<interface name="org.agl.homescreen">
+		<!--
+		hardKeyPressed:
+		@key: The key that was pressed using the inputevent.hpp InputEvent::HardKey type.
 
-    This is used to inject hard keys into the HomeScreen app.
-  -->
-    <method name="hardKeyPressed">
-      <arg name="key" type="i" direction="in"/>
-    </method>
-  <!--
-    requestSurfaceIdToFullScreen:
-    @surfaceId: The surface that request to be shown fullscreen.
+		This is used to inject hard keys into the HomeScreen app.
+		-->
+		<method name="hardKeyPressed">
+			<arg name="key" type="i" direction="in"/>
+		</method>
+		<!--
+		getSurfaceStatus:
+		@surfaceId: The given surface.
+		@status: The status can be unknown (-1), visible (0), invisible (1)
 
-    This allows an application to set a surface to full screen.
-  -->
-    <method name="requestSurfaceIdToFullScreen">
-      <arg name="surfaceId" type="i" direction="in"/>
-    </method>
-  <!--
-    getLayoutRenderAreaForSurfaceId:
-    @surfaceId: The surface that is requested.
-    @renderArea: The layout render area in which the given surface is located.
+		A surface can have three states. It can be visible, then it is shown on the screen.
+		It can be invisible, then it is not shown on the screen. Or the state is unknown.
+		-->
+		<method name="getSurfaceStatus">
+			<arg name="surfaceId" type="i" direction="in"/>
+			<arg name="status" type="i" direction="out"/>
+		</method>
+		<!--
+		requestSurfaceIdToFullScreen:
+		@surfaceId: The surface that request to be shown fullscreen.
 
-    Before an application uses renderSurfaceToArea to render a surface into an area inside a layout area,
-    this method should be used to get the dimension of the layout area, in which the surface
-    currently is positioned.
-  -->
-    <method name="getLayoutRenderAreaForSurfaceId">
-      <arg name="surfaceId" type="i" direction="in"/>
-      <arg name="renderArea" type="(iiii)" direction="out"/>
-      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QRect"/>
-    </method>
-  <!--
-    renderSurfaceToArea:
-    @surfaceId: The surface that is requested.
-    @renderArea: The render area inside the current layout area.
+		This allows an application to set a surface to full screen.
+		-->
+		<method name="requestSurfaceIdToFullScreen">
+			<arg name="surfaceId" type="i" direction="in"/>
+		</method>
+		<!--
+		  getAllSurfacesOfProcess:
+		  @pid: The PID of the process.
+		  @surfaceIds: A list of surfaces that were created by the process.
 
-    This is a special case. In the normal use case, one layout area is always filled completely
-    with one surface. By using this function, an app can request to position a surface in the
-    layout area.
-    Example:
-    If the layout area is 500x500 pixel in size, the normal use case qould be, that a surface
-    is positioned at x=0, y=0 with a width and a size of 500. With this function, an application can position surfaces
-    free in this area.
-    E.g.: Position surface 101 at x=10, y=30, width=300, height=100 and 
-    surface 104 at x=100, y=130, width=30, height=10
-  -->
-    <method name="renderSurfaceToArea">
-      <arg name="surfaceId" type="i" direction="in"/>
-      <arg name="renderArea" type="(iiii)" direction="in"/>
-      <annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QRect"/>
-    </method>
-  </interface>
+		  The surface IDs can for example be used to assign them to a layout render area.
+		-->
+		<method name="getAllSurfacesOfProcess">
+			<arg name="pid" type="i" direction="in"/>
+			<arg name="surfaceIds" type="ai" direction="out"/>
+			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
+		</method>
+		<!--
+		getLayoutRenderAreaForSurfaceId:
+		@surfaceId: The surface that is requested.
+		@renderArea: The layout render area in which the given surface is located.
+
+		Before an application uses renderSurfaceToArea to render a surface into an area inside a layout area,
+		this method should be used to get the dimension of the layout area, in which the surface
+		currently is positioned.
+		-->
+		<method name="getLayoutRenderAreaForSurfaceId">
+			<arg name="surfaceId" type="i" direction="in"/>
+			<arg name="renderArea" type="(iiii)" direction="out"/>
+			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QRect"/>
+		</method>
+		<!--
+		renderSurfaceToArea:
+		@surfaceId: The surface that is requested.
+		@renderArea: The render area inside the current layout area.
+
+		This is a special case. In the normal use case, one layout area is always filled completely
+		with one surface. By using this function, an app can request to position a surface in the
+		layout area.
+		Example:
+		If the layout area is 500x500 pixel in size, the normal use case qould be, that a surface
+		is positioned at x=0, y=0 with a width and a size of 500. With this function, an application can position surfaces
+		free in this area.
+		E.g.: Position surface 101 at x=10, y=30, width=300, height=100 and 
+		surface 104 at x=100, y=130, width=30, height=10
+		-->
+		<method name="renderSurfaceToArea">
+			<arg name="surfaceId" type="i" direction="in"/>
+			<arg name="renderArea" type="(iiii)" direction="in"/>
+			<annotation name="org.qtproject.QtDBus.QtTypeName.In1" value="QRect"/>
+		</method>
+	</interface>
 </node>
 

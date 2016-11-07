@@ -17,13 +17,17 @@ public:
 signals:
     void newRequestsToBeVisibleApp(int pid);
 
+    QList<int> newRequestGetAllSurfacesOfProcess(int pid);
     QRect newRequestGetLayoutRenderAreaForSurfaceId(int surfaceId);
+    int newRequestGetSurfaceStatus(int surfaceId);
     void newRequestRenderSurfaceToArea(int surfaceId, const QRect &renderArea);
     void newRequestSurfaceIdToFullScreen(int surfaceId);
 
 //from homescreen_adapter.h
 public Q_SLOTS: // METHODS
+    QList<int> getAllSurfacesOfProcess(int pid);
     QRect getLayoutRenderAreaForSurfaceId(int surfaceId);
+    int getSurfaceStatus(int surfaceId);
     void hardKeyPressed(int key);
     void renderSurfaceToArea(int surfaceId, const QRect &renderArea);
     void requestSurfaceIdToFullScreen(int surfaceId);

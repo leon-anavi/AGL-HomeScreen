@@ -175,6 +175,33 @@ void LayoutHandler::makeMeVisible(int pid)
     }
 }
 
+QList<int> LayoutHandler::requestGetAllSurfacesOfProcess(int pid)
+{
+    qDebug("requestGetAllSurfacesOfProcess %d", pid);
+
+    return mp_dBusWindowManagerProxy->getAllSurfacesOfProcess(pid);
+}
+
+int LayoutHandler::requestGetSurfaceStatus(int surfaceId)
+{
+    int result = -1;
+
+    if (-1 != m_visibleSurfaces.indexOf(surfaceId))
+    {
+        result = 0;
+    }
+    if (-1 != m_invisibleSurfaces.indexOf(surfaceId))
+    {
+        result = 1;
+    }
+    if (-1 != m_requestsToBeVisibleSurfaces.indexOf(surfaceId))
+    {
+        result = 1;
+    }
+
+    return result;
+}
+
 void LayoutHandler::requestRenderSurfaceToArea(int surfaceId, const QRect &renderArea)
 {
     qDebug("requestRenderSurfaceToArea %d %d,%d,%d,%d", surfaceId, renderArea.x(), renderArea.y(), renderArea.width(), renderArea.height());

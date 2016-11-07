@@ -24,10 +24,22 @@ HomeScreenControlInterface::~HomeScreenControlInterface()
     delete mp_homeScreenAdaptor;
 }
 
+QList<int> HomeScreenControlInterface::getAllSurfacesOfProcess(int pid)
+{
+    qDebug("getAllSurfacesOfProcess %d", pid);
+    return newRequestGetAllSurfacesOfProcess(pid);
+}
+
 QRect HomeScreenControlInterface::getLayoutRenderAreaForSurfaceId(int surfaceId)
 {
     qDebug("getLayoutRenderAreaForSurfaceId %d", surfaceId);
     return newRequestGetLayoutRenderAreaForSurfaceId(surfaceId);
+}
+
+int HomeScreenControlInterface::getSurfaceStatus(int surfaceId)
+{
+    qDebug("getSurfaceStatus %d", surfaceId);
+    return newRequestGetSurfaceStatus(surfaceId);
 }
 
 void HomeScreenControlInterface::hardKeyPressed(int key)

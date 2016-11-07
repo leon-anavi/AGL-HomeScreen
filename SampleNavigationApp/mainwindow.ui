@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(85, 255, 255);</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -31,7 +34,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>60</y>
+      <y>90</y>
       <width>100</width>
       <height>100</height>
      </rect>
@@ -44,7 +47,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>220</y>
+      <y>260</y>
       <width>161</width>
       <height>17</height>
      </rect>
@@ -53,36 +56,6 @@
      <string>400x300px default size</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>400</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuSampleMenu">
-    <property name="title">
-     <string>SampleMenu</string>
-    </property>
-   </widget>
-   <widget class="QMenu" name="menuYet_Another_Sample">
-    <property name="title">
-     <string>Yet Another Sample</string>
-    </property>
-   </widget>
-   <addaction name="menuSampleMenu"/>
-   <addaction name="menuYet_Another_Sample"/>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

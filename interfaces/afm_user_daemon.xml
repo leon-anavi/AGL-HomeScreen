@@ -41,5 +41,8 @@
       <arg name="in" type="s" direction="in"/>
       <arg name="out" type="s" direction="out"/>
     </method>
+    <signal name="changed">
+      <arg name="out" type="s" direction="out"/>
+    </signal>
   </interface>
 </node>

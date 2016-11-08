@@ -12,29 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TEMPLATE = subdirs
+QT       += core dbus
+QT       -= gui
 
-SUBDIRS = interfaces \
-    libhomescreen \
-    HomeScreen \
-    HomeScreenAppFrameworkBinderAGL \
-    HomeScreenSimulator \
-    InputEventManager \
-    SampleAppTimeDate \
-    WindowManager \
-    SampleHomeScreenInterfaceApp \
-    SampleNavigationApp \
-    SampleMediaApp
+TARGET = HomeScreenAppFrameworkBinderAGL
+CONFIG   += console
+CONFIG   -= app_bundle
 
-HomeScreen.depends = interfaces
-HomeScreenSimulator.depends = interfaces
-HomeScreenAppFrameworkBinderAGL.depends = interfaces
-InputEventManager.depends = interfaces
-SampleAppTimeDate.depends = interfaces
-WindowManager.depends = interfaces
+TEMPLATE = app
 
-SampleHomeScreenInterfaceApp.depends = libhomescreen
+
+SOURCES += src/main.cpp \
+    src/homescreenappframeworkbinderagl.cpp
+
+HEADERS += \
+    src/homescreenappframeworkbinderagl.h
+
+INCLUDEPATH += $$OUT_PWD/../interfaces
+INCLUDEPATH += ../interfaces/
+
+LIBS += -L$$OUT_PWD/../interfaces -linterfaces
+
+OTHER_FILES += \
+    README.md
 
 # remove generated files
 QMAKE_CLEAN += -r \
+    $$OUT_PWD/HomeScreenAppFrameworkBinderAGL \
     $$OUT_PWD/Makefile

@@ -1,4 +1,4 @@
-AGL Home Screen AppFramework Binder for Tizen App Framework
+AGL Home Screen AppFramework Binder for AGL App Framework
 
 
 Build with QtCreator 3.0.1

@@ -34,6 +34,8 @@ public:
 public slots:
     void updateColorScheme();
 signals:
+    void hideAppLayer();
+
     void settingsButtonPressed();
     void homeButtonPressed();
 

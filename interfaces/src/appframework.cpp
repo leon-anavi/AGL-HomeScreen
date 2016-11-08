@@ -16,56 +16,57 @@
 
 #include "include/appframework.hpp"
 
-AppInfo::AppInfo(QObject *parent) :
-    QObject(parent)
-{
-}
 
-AppInfo::AppInfo(const AppInfo &other) :
-    QObject(other.parent()),
-    name(other.getName()),
-    iconPath(other.getIconPath()),
-    description(other.getDescription())
+AppInfo::AppInfo()
 {
-}
-
-AppInfo& AppInfo::operator=(const AppInfo &other)
-{
-    setParent(other.parent());
-    name = other.getName();
-    iconPath = other.getIconPath();
-    description = other.getDescription();
-
-    return *this;
 }
 
 AppInfo::~AppInfo()
 {
 }
 
-void AppInfo::registerMetaType()
+void AppInfo::read(const QJsonObject &json)
 {
-    qRegisterMetaType<AppInfo>("AppInfo");
-    qDBusRegisterMetaType<AppInfo>();
+    id = json["id"].toString();
+    version = json["id"].toString();
+    width = json["id"].toInt();
+    height = json["id"].toInt();
+    name = json["id"].toString();
+    description = json["id"].toString();
+    shortname = json["id"].toString();
+    author = json["id"].toString();
+    iconPath = json["id"].toString();
 }
 
-
-// Marshall the MyStructure data into a D-Bus argument
-QDBusArgument &operator<<(QDBusArgument &argument, const AppInfo &appInfo)
+QDBusArgument &operator <<(QDBusArgument &argument, const AppInfo &mAppInfo)
 {
     argument.beginStructure();
-    argument << appInfo.name << appInfo.iconPath << appInfo.description;
+    argument << mAppInfo.id;
+    argument << mAppInfo.version;
+    argument << mAppInfo.width;
+    argument << mAppInfo.height;
+    argument << mAppInfo.name;
+    argument << mAppInfo.description;
+    argument << mAppInfo.shortname;
+    argument << mAppInfo.author;
+    argument << mAppInfo.iconPath;
     argument.endStructure();
-    qDebug("appInfo.name:<< %s", appInfo.name.toStdString().c_str());
+
     return argument;
 }
 
-// Retrieve the MyStructure data from the D-Bus argument
-const QDBusArgument &operator>>(const QDBusArgument &argument, AppInfo &appInfo)
+const QDBusArgument &operator >>(const QDBusArgument &argument, AppInfo &mAppInfo)
 {
     argument.beginStructure();
-    argument >> appInfo.name >> appInfo.iconPath >> appInfo.description;
+    argument >> mAppInfo.id;
+    argument >> mAppInfo.version;
+    argument >> mAppInfo.width;
+    argument >> mAppInfo.height;
+    argument >> mAppInfo.name;
+    argument >> mAppInfo.description;
+    argument >> mAppInfo.shortname;
+    argument >> mAppInfo.author;
+    argument >> mAppInfo.iconPath;
     argument.endStructure();
-    qDebug("appInfo.name:>> %s", appInfo.name.toStdString().c_str());
     return argument;
 }

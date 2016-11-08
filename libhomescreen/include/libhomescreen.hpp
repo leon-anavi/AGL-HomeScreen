@@ -1,6 +1,8 @@
 #ifndef LIBHOMESCREEN_HPP
 #define LIBHOMESCREEN_HPP
 
+#include <list>
+
 // forward declarations
 struct _LibHomeScreenHomescreen;
 typedef struct _LibHomeScreenHomescreen LibHomeScreenHomescreen;
@@ -20,7 +22,9 @@ public:
     ~LibHomeScreen();
 
     // these are representing the D-Bus methods:
+    std::list<int> getAllSurfacesOfProcess(int pid);
     sRectangle getLayoutRenderAreaForSurfaceId(int surfaceId);
+    int getSurfaceStatus(int surfaceId);
     void hardKeyPressed(int key);
     void renderSurfaceToArea(int surfaceId, const sRectangle &renderArea);
     void requestSurfaceIdToFullScreen(int surfaceId);

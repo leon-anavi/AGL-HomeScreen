@@ -40,6 +40,18 @@
 		</method>
 
 		<!--
+		  deleteLayoutById:
+		  @layoutId: The ID of the layout to delete.
+		  @error: WINDOWMANAGER_NO_ERROR or the first error that occurred.
+
+		  Deletes the layout with the given ID. This cannot be the current active layout!
+		-->
+		<method name="deleteLayoutById">
+			<arg name="layoutId" type="i" direction="in"/>
+			<arg name="error" type="i" direction="out"/>
+		</method>
+
+		<!--
 		  setLayoutById:
 		  @layoutId: The ID of the layout to activate.
 		  @error: WINDOWMANAGER_NO_ERROR or the first error that occurred.
@@ -158,6 +170,27 @@
 		<method name="getAvailableSurfaces">
 			<arg name="surfaceIds" type="a(i)" direction="out"/>
 			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/> 
+		</method>
+
+		<!--
+		  showLayer:
+		  @layer: The ID of the layer to show. POPUP=0, APPS=1, HOMESCREEN=2
+
+		  Show complete layers.
+		  By default, all layers are shown.
+		-->
+		<method name="showLayer">
+			<arg name="layer" type="i" direction="in"/>
+		</method>
+		<!--
+		  hideLayer:
+		  @layer: The ID of the layer to hide. POPUP=0, APPS=1, HOMESCREEN=2
+
+		  Hide complete layers.
+		  By default, all layers are shown.
+		-->
+		<method name="hideLayer">
+			<arg name="layer" type="i" direction="in"/>
 		</method>
 	</interface>
 </node>

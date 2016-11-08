@@ -13,14 +13,45 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
 <node>
-  <interface name="org.agl.appframework">
-      <method name="getAvailableAppNames">
-        <arg name="names" type="as" direction="out"/>
-      </method>
-      <method name="launchApp">
-        <arg name="name" type="s" direction="in"/>
-        <arg name="pid" type="i" direction="out"/>
-      </method>
-  </interface>
+	<!--
+	  org.agl.appframework:
+	  @short_description: The interface of the app framework binder.
+
+	  The app framework has to provide some basic functionality like 
+	  getting a list of applications and start them. In further versions,
+	  also pausing or stopping, .
+	-->
+	<interface name="org.agl.appframework">
+		<!--
+		  getAvailableApps:
+		  @apps: A list of applications that can be launched.
+
+		  The application info consists of:
+		  string id;
+		  string version;
+		  int width;
+		  int height;
+		  string name;
+		  string description;
+		  string shortname;
+		  string author;
+		  string iconPath;
+		-->
+		<method name="getAvailableApps">
+			<arg name="apps" type="{ssiisssss}" direction="out"/>
+			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;AppInfo&gt;"/>
+		</method>
+		<!--
+		  launchApp:
+		  @name: The name of the application that shall be launched.
+		  @pid: Returns the pid of the process.
+
+		  Use the id of the application info to launch the app.
+		-->
+		<method name="launchApp">
+			<arg name="name" type="s" direction="in"/>
+			<arg name="pid" type="i" direction="out"/>
+		</method>
+	</interface>
 </node>
 

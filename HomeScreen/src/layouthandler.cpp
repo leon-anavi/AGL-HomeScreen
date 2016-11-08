@@ -1,7 +1,9 @@
 #include "layouthandler.h"
+#include <QTimerEvent>
 
 LayoutHandler::LayoutHandler(QObject *parent) :
     QObject(parent),
+    m_secondsTimerId(-1),
     mp_dBusWindowManagerProxy(0),
     mp_dBusPopupProxy(0),
     m_visibleSurfaces(),
@@ -112,65 +114,109 @@ void LayoutHandler::setUpLayouts()
     mp_dBusWindowManagerProxy->addLayout(3, "side by side", surfaceAreas);
 }
 
+void LayoutHandler::showAppLayer()
+{
+    mp_dBusWindowManagerProxy->showLayer(1); //1==app layer
+}
+
+void LayoutHandler::hideAppLayer()
+{
+    mp_dBusWindowManagerProxy->hideLayer(1); //1==app layer
+}
+
 void LayoutHandler::makeMeVisible(int pid)
 {
     qDebug("makeMeVisible %d", pid);
 
-    QList<int> allSurfaces = mp_dBusWindowManagerProxy->getAllSurfacesOfProcess(pid);
-    qSort(allSurfaces);
+    m_requestsToBeVisiblePids.append(pid);
 
-    if (0 != allSurfaces.size())
+    // callback every second
+    if (-1 != m_secondsTimerId)
     {
-        m_requestsToBeVisibleSurfaces.append(allSurfaces.at(0));
+        killTimer(m_secondsTimerId);
+        m_secondsTimerId = -1;
+    }
+    m_secondsTimerId = startTimer(1000);
+}
 
-        qDebug("m_visibleSurfaces %d", m_visibleSurfaces.size());
-        qDebug("m_invisibleSurfaces %d", m_invisibleSurfaces.size());
-        qDebug("m_requestsToBeVisibleSurfaces %d", m_requestsToBeVisibleSurfaces.size());
+void LayoutHandler::checkToDoQueue()
+{
+    if ((-1 != m_secondsTimerId) && (0 == m_requestsToBeVisiblePids.size()))
+    {
+        killTimer(m_secondsTimerId);
+        m_secondsTimerId = -1;
+    }
 
-        QList<int> availableLayouts = mp_dBusWindowManagerProxy->getAvailableLayouts(m_visibleSurfaces.size() + m_requestsToBeVisibleSurfaces.size());
-        if (0 == availableLayouts.size())
+    if (0 != m_requestsToBeVisiblePids.size())
+    {
+        int pid = m_requestsToBeVisiblePids.at(0);
+        qDebug("pid %d wants to be visible", pid);
+
+        QList<int> allSurfaces;
+        allSurfaces = mp_dBusWindowManagerProxy->getAllSurfacesOfProcess(pid);
+        if (0 == allSurfaces.size())
         {
-            // no layout fits the need!
-            // replace the last app
-            qDebug("no layout fits the need!");
-            qDebug("replace the last surface");
-
-            m_invisibleSurfaces.append(m_visibleSurfaces.last());
-            m_visibleSurfaces.removeLast();
-
-            m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
-            m_requestsToBeVisibleSurfaces.clear();
-
-            for (int i = 0; i < m_visibleSurfaces.size(); ++i)
-            {
-                mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
-            }
+            qDebug("no surfaces for pid %d. retrying!", pid);
         }
-        if (1 == availableLayouts.size())
+        else
         {
-            // switch to new layout
-            qDebug("switch to new layout %d", availableLayouts.at(0));
-            m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
-            m_requestsToBeVisibleSurfaces.clear();
+            m_requestsToBeVisiblePids.removeAt(0);
+            qSort(allSurfaces);
 
-            mp_dBusWindowManagerProxy->setLayoutById(availableLayouts.at(0));
-            for (int i = 0; i < m_visibleSurfaces.size(); ++i)
+            if (0 != allSurfaces.size())
             {
-                mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
-            }
-        }
-        if (1 < availableLayouts.size())
-        {
-            // more than one layout possible! Ask user.
-            qDebug("more than one layout possible! Ask user.");
+                m_requestsToBeVisibleSurfaces.append(allSurfaces.at(0));
 
-            QStringList choices;
-            for (int i = 0; i < availableLayouts.size(); ++i)
-            {
-                choices.append(mp_dBusWindowManagerProxy->getLayoutName(availableLayouts.at(i)));
-            }
+                qDebug("m_visibleSurfaces %d", m_visibleSurfaces.size());
+                qDebug("m_invisibleSurfaces %d", m_invisibleSurfaces.size());
+                qDebug("m_requestsToBeVisibleSurfaces %d", m_requestsToBeVisibleSurfaces.size());
 
-            mp_dBusPopupProxy->showPopupComboBox("Select Layout", choices);
+                QList<int> availableLayouts = mp_dBusWindowManagerProxy->getAvailableLayouts(m_visibleSurfaces.size() + m_requestsToBeVisibleSurfaces.size());
+                if (0 == availableLayouts.size())
+                {
+                    // no layout fits the need!
+                    // replace the last app
+                    qDebug("no layout fits the need!");
+                    qDebug("replace the last surface");
+
+                    m_invisibleSurfaces.append(m_visibleSurfaces.last());
+                    m_visibleSurfaces.removeLast();
+
+                    m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
+                    m_requestsToBeVisibleSurfaces.clear();
+
+                    for (int i = 0; i < m_visibleSurfaces.size(); ++i)
+                    {
+                        mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
+                    }
+                }
+                if (1 == availableLayouts.size())
+                {
+                    // switch to new layout
+                    qDebug("switch to new layout %d", availableLayouts.at(0));
+                    m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
+                    m_requestsToBeVisibleSurfaces.clear();
+
+                    mp_dBusWindowManagerProxy->setLayoutById(availableLayouts.at(0));
+                    for (int i = 0; i < m_visibleSurfaces.size(); ++i)
+                    {
+                        mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
+                    }
+                }
+                if (1 < availableLayouts.size())
+                {
+                    // more than one layout possible! Ask user.
+                    qDebug("more than one layout possible! Ask user.");
+
+                    QStringList choices;
+                    for (int i = 0; i < availableLayouts.size(); ++i)
+                    {
+                        choices.append(mp_dBusWindowManagerProxy->getLayoutName(availableLayouts.at(i)));
+                    }
+
+                    mp_dBusPopupProxy->showPopupComboBox("Select Layout", choices);
+                }
+            }
         }
     }
 }
@@ -225,3 +271,12 @@ void LayoutHandler::setLayoutByName(QString layoutName)
         mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(i, i);
     }
 }
+
+void LayoutHandler::timerEvent(QTimerEvent *e)
+{
+    if (e->timerId() == m_secondsTimerId)
+    {
+        checkToDoQueue();
+    }
+}
+

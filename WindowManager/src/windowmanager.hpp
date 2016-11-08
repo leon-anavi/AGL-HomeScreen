@@ -92,14 +92,17 @@ public: // PROPERTIES
 
 public Q_SLOTS: // METHODS
     int addLayout(int layoutId, const QString &layoutName, const QList<LayoutArea> &surfaceAreas);
+    int deleteLayoutById(int layoutId);
     QList<Layout> getAllLayouts();
     QList<int> getAllSurfacesOfProcess(int pid);
     QList<int> getAvailableLayouts(int numberOfAppSurfaces);
     QList<int> getAvailableSurfaces();
     QString getLayoutName(int layoutId);
+    void hideLayer(int layer);
     int setLayoutById(int layoutId);
     int setLayoutByName(const QString &layoutName);
     int setSurfaceToLayoutArea(int surfaceId, int layoutAreaId);
+    void showLayer(int layer);
 };
 
 

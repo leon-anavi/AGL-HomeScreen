@@ -40,6 +40,9 @@ int main(int argc, char *argv[])
 
     qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
 
+    qDBusRegisterMetaType<AppInfo>();
+    qDBusRegisterMetaType<QList<AppInfo> >();
+
     MainWindow w;
     w.show();
 #ifdef __arm__

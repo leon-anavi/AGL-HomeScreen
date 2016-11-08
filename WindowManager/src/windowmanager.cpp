@@ -413,6 +413,37 @@ int WindowManager::addLayout(int layoutId, const QString &layoutName, const QLis
     return WINDOWMANAGER_NO_ERROR;
 }
 
+int WindowManager::deleteLayoutById(int layoutId)
+{
+    qDebug("-=[deleteLayoutById]=-");
+    qDebug("layoutId: %d", layoutId);
+    int result = WINDOWMANAGER_NO_ERROR;
+
+    if (m_currentLayout == layoutId)
+    {
+        result = WINDOWMANAGER_ERROR_ID_IN_USE;
+    }
+    else
+    {
+        QList<Layout>::iterator i = m_layouts.begin();
+        result = WINDOWMANAGER_ERROR_ID_IN_USE;
+        while (i != m_layouts.constEnd())
+        {
+            if (i->id == layoutId)
+            {
+                m_layouts.erase(i);
+                result = WINDOWMANAGER_NO_ERROR;
+                break;
+            }
+
+            ++i;
+        }
+    }
+
+    return result;
+}
+
+
 QList<Layout> WindowManager::getAllLayouts()
 {
     qDebug("-=[getAllLayouts]=-");
@@ -483,6 +514,27 @@ QString WindowManager::getLayoutName(int layoutId)
     return result;
 }
 
+void WindowManager::hideLayer(int layer)
+{
+    qDebug("-=[hideLayer]=-");
+    qDebug("layer %d", layer);
+
+#ifdef __arm__
+    if (0 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_POPUP, ILM_FALSE);
+    }
+    if (1 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_FALSE);
+    }
+    if (2 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN, ILM_FALSE);
+    }
+    ilm_commitChanges();
+#endif
+}
 
 int WindowManager::setLayoutById(int layoutId)
 {
@@ -535,4 +587,26 @@ int WindowManager::setSurfaceToLayoutArea(int surfaceId, int layoutAreaId)
     dumpScene();
 
     return result;
+}
+
+void WindowManager::showLayer(int layer)
+{
+    qDebug("-=[showLayer]=-");
+    qDebug("layer %d", layer);
+
+#ifdef __arm__
+    if (0 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_POPUP, ILM_TRUE);
+    }
+    if (1 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_TRUE);
+    }
+    if (2 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN, ILM_TRUE);
+    }
+    ilm_commitChanges();
+#endif
 }

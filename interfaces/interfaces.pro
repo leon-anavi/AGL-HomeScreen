@@ -28,6 +28,7 @@ SOURCES += src/appframework.cpp \
 
 XMLSOURCES = \
     appframework.xml \
+    afm_user_daemon.xml \
     daynightmode.xml \
     homescreen.xml \
     inputevent.xml \

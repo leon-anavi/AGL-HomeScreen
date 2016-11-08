@@ -11,15 +11,24 @@ SampleClass::~SampleClass()
     delete mp_libHomeScreen;
 }
 
+std::list<int> SampleClass::getAllSurfacesOfProcess(int pid)
+{
+    return mp_libHomeScreen->getAllSurfacesOfProcess(pid);
+}
 
 sRectangle SampleClass::getLayoutRenderAreaForSurfaceId(int surfaceId)
 {
-    mp_libHomeScreen->getLayoutRenderAreaForSurfaceId(surfaceId);
+    return mp_libHomeScreen->getLayoutRenderAreaForSurfaceId(surfaceId);
 }
 
 void SampleClass::hardKeyPressed(int key)
 {
     mp_libHomeScreen->hardKeyPressed(key);
+}
+
+int SampleClass::getSurfaceStatus(int surfaceId)
+{
+    return mp_libHomeScreen->getSurfaceStatus(surfaceId);
 }
 
 void SampleClass::renderSurfaceToArea(int surfaceId, const sRectangle &renderArea)

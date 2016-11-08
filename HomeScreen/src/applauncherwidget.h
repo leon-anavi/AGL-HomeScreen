@@ -45,10 +45,11 @@ private slots:
 
 signals:
     void newRequestsToBeVisibleApp(int pid);
+    void showAppLayer();
 
 private:
     Ui::AppLauncherWidget *mp_ui;
-    QList<AppInfo> *mp_appList;
+    QList<AppInfo> m_appList;
     QTableWidget *mp_appTable;
     org::agl::appframework *mp_dBusAppFrameworkProxy;
 };

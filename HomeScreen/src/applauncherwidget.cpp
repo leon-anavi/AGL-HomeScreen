@@ -27,18 +27,18 @@
 AppLauncherWidget::AppLauncherWidget(QWidget *parent) :
     QWidget(parent),
     mp_ui(new Ui::AppLauncherWidget),
-    mp_appList(new QList<AppInfo>()),
+    m_appList(),
     mp_appTable(0),
     mp_dBusAppFrameworkProxy()
 {
     mp_ui->setupUi(this);
 
-    AppInfo ai;
+    /*AppInfo ai;
     for (int i = 0; i < 100; ++i)
     {
         ai.setName("test" + QString::number(i));
         mp_appList->append(ai);
-    }
+    }*/
 
     qDebug("D-Bus: connect to org.agl.homescreenappframeworkbinder /AppFramework");
     mp_dBusAppFrameworkProxy = new org::agl::appframework("org.agl.homescreenappframeworkbinder",
@@ -54,7 +54,6 @@ AppLauncherWidget::~AppLauncherWidget()
     {
         delete mp_appTable;
     }
-    delete mp_appList;
     delete mp_ui;
 }
 
@@ -101,12 +100,11 @@ void AppLauncherWidget::populateAppList()
 
     int i;
 
-    QStringList apps = mp_dBusAppFrameworkProxy->getAvailableAppNames();
-    mp_appList->clear();
+    m_appList = mp_dBusAppFrameworkProxy->getAvailableApps();
 
-    mp_appTable->setRowCount((apps.size() + (APP_LIST_COLUMN_COUNT - 1)) / APP_LIST_COLUMN_COUNT);
+    mp_appTable->setRowCount((m_appList.size() + (APP_LIST_COLUMN_COUNT - 1)) / APP_LIST_COLUMN_COUNT);
 
-    if (apps.size() >= (9 * APP_LIST_COLUMN_COUNT))
+    if (m_appList.size() >= (9 * APP_LIST_COLUMN_COUNT))
     {
         mp_appTable->resize(1000, 1920 - 40 - 40 - 60 - 60);
     }
@@ -122,19 +120,11 @@ void AppLauncherWidget::populateAppList()
         mp_appTable->horizontalHeader()->resizeSection(i, 190);
     }
 
-    AppInfo ai;
-    for (i = 0; i < apps.size(); ++i)
-    {
-        qDebug("new app: %s", apps.at(i).toStdString().c_str());
-        ai.setName(apps.at(i));
-        mp_appList->append(ai);
-    }
-
-    for (i = 0; i < mp_appList->size(); i++)
+    for (i = 0; i < m_appList.size(); i++)
     {
        mp_appTable->setItem(i / APP_LIST_COLUMN_COUNT,
                             i % APP_LIST_COLUMN_COUNT,
-                            new QTableWidgetItem(mp_appList->at(i).getName()));
+                            new QTableWidgetItem(m_appList.at(i).name));
        mp_appTable->item(i / APP_LIST_COLUMN_COUNT,
                          i % APP_LIST_COLUMN_COUNT)->setFlags(Qt::ItemIsEnabled);
        mp_appTable->item(i / APP_LIST_COLUMN_COUNT,
@@ -144,13 +134,15 @@ void AppLauncherWidget::populateAppList()
 
 void AppLauncherWidget::on_tableView_clicked(int row, int col)
 {
-    if (mp_appList->size() > row * APP_LIST_COLUMN_COUNT + col)
+    if (m_appList.size() > row * APP_LIST_COLUMN_COUNT + col)
     {
-        int pid = mp_dBusAppFrameworkProxy->launchApp(mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName());
-        qDebug("%d, %d: start app %s", row, col, mp_appList->at(row * APP_LIST_COLUMN_COUNT + col).getName().toStdString().c_str());
+        int pid = mp_dBusAppFrameworkProxy->launchApp(m_appList.at(row * APP_LIST_COLUMN_COUNT + col).id);
+        qDebug("%d, %d: start app %s", row, col, m_appList.at(row * APP_LIST_COLUMN_COUNT + col).id.toStdString().c_str());
         qDebug("pid: %d", pid);
 
         // the new app wants to be visible by default
         newRequestsToBeVisibleApp(pid);
+
+        showAppLayer();
     }
 }

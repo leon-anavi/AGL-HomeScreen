@@ -86,8 +86,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QObject::connect(mp_controlBarWidget, SIGNAL(settingsButtonPressed()), mp_settingsWidget, SLOT(raise()));
     QObject::connect(mp_controlBarWidget, SIGNAL(homeButtonPressed()), mp_applauncherwidget, SLOT(raise()));
+    QObject::connect(mp_controlBarWidget, SIGNAL(hideAppLayer()), mp_layoutHandler, SLOT(hideAppLayer()));
 
     QObject::connect(mp_applauncherwidget, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
+    QObject::connect(mp_applauncherwidget, SIGNAL(showAppLayer()), mp_layoutHandler, SLOT(showAppLayer()));
 
 
     // apply color scheme

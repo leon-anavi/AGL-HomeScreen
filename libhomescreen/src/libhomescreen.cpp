@@ -29,6 +29,44 @@ LibHomeScreen::~LibHomeScreen()
     g_object_unref(mp_libHomeScreenHomescreen_Proxy);
 }
 
+std::list<int> LibHomeScreen::getAllSurfacesOfProcess(int pid)
+{
+    std::list<int> result;
+
+    GError *err = NULL;
+
+    GVariant *out_surfaceIds;
+
+    lib_home_screen_homescreen_call_get_all_surfaces_of_process_sync(
+                mp_libHomeScreenHomescreen_Proxy,
+                pid,
+                &out_surfaceIds,
+                NULL,
+                &err);
+
+    if (NULL != err)
+    {
+        fprintf(stderr, "Unable to call getAllSurfacesOfProcess: %s\n", err->message);
+    }
+
+
+    GVariant *element;
+    GVariantIter iter;
+    int i;
+
+    if (g_variant_iter_init(&iter, out_surfaceIds))
+    {
+        while ((element = g_variant_iter_next_value(&iter)) != NULL)
+        {
+            g_variant_get(element, "i", &i);
+            result.push_back(i);
+            g_variant_unref(element);
+        }
+    }
+
+    return result;
+}
+
 sRectangle LibHomeScreen::getLayoutRenderAreaForSurfaceId(int surfaceId)
 {
     sRectangle result;
@@ -49,6 +87,28 @@ sRectangle LibHomeScreen::getLayoutRenderAreaForSurfaceId(int surfaceId)
     }
 
     g_variant_get(out_renderArea, "(iiii)", result.x, result.y, result.width, result.height);
+
+    return result;
+}
+
+int LibHomeScreen::getSurfaceStatus(int surfaceId)
+{
+    int result;
+    GError *err = NULL;
+
+    GVariant *out_renderArea;
+
+    lib_home_screen_homescreen_call_get_surface_status_sync(
+                mp_libHomeScreenHomescreen_Proxy,
+                surfaceId,
+                &result,
+                NULL,
+                &err);
+
+    if (NULL != err)
+    {
+        fprintf(stderr, "Unable to call getSurfaceStatus: %s\n", err->message);
+    }
 
     return result;
 }

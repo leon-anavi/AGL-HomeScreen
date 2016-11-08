@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("WindowManager");
-    QCoreApplication::setApplicationVersion("0.4.0");
+    QCoreApplication::setApplicationVersion("0.6.0");
 
     qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
 

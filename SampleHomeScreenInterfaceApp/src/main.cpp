@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     cout << "SampleHomeScreenInterfaceApp" << endl;
-    cout << "v0.4.0" << endl;
+    cout << "v0.6.0" << endl;
 
     SampleClass *sampleClass = new SampleClass();
 

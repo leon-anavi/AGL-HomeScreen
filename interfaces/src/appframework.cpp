@@ -28,14 +28,14 @@ AppInfo::~AppInfo()
 void AppInfo::read(const QJsonObject &json)
 {
     id = json["id"].toString();
-    version = json["id"].toString();
-    width = json["id"].toInt();
-    height = json["id"].toInt();
-    name = json["id"].toString();
-    description = json["id"].toString();
-    shortname = json["id"].toString();
-    author = json["id"].toString();
-    iconPath = json["id"].toString();
+    version = json["version"].toString();
+    width = json["width"].toInt();
+    height = json["height"].toInt();
+    name = json["name"].toString();
+    description = json["description"].toString();
+    shortname = json["shortname"].toString();
+    author = json["author"].toString();
+    iconPath = json["iconPath"].toString();
 }
 
 QDBusArgument &operator <<(QDBusArgument &argument, const AppInfo &mAppInfo)

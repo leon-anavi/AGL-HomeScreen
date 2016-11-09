@@ -54,6 +54,7 @@ void LayoutHandler::setUpLayouts()
     const int CONTROLBAR_Y = SCREEN_HEIGHT - CONTROLBAR_HEIGHT;
 
 
+    // only one Layout for CES2017 needed
     // layout 1:
     // one app surface, statusbar, control bar
     surfaceArea.x = 0;
@@ -65,7 +66,7 @@ void LayoutHandler::setUpLayouts()
 
     mp_dBusWindowManagerProxy->addLayout(1, "one app", surfaceAreas);
 
-
+    /*
     surfaceAreas.clear();
 
     // layout 2:
@@ -111,7 +112,7 @@ void LayoutHandler::setUpLayouts()
 
     surfaceAreas.append(surfaceArea);
 
-    mp_dBusWindowManagerProxy->addLayout(3, "side by side", surfaceAreas);
+    mp_dBusWindowManagerProxy->addLayout(3, "side by side", surfaceAreas);*/
 }
 
 void LayoutHandler::showAppLayer()
@@ -165,35 +166,29 @@ void LayoutHandler::checkToDoQueue()
 
             if (0 != allSurfaces.size())
             {
-                m_requestsToBeVisibleSurfaces.append(allSurfaces.at(0));
+                if (-1 == m_visibleSurfaces.indexOf(allSurfaces.at(0)))
+                {
+                    qDebug("already visible");
+                }
+                if (-1 == m_invisibleSurfaces.indexOf(allSurfaces.at(0)))
+                {
+                    m_invisibleSurfaces.removeAt(m_invisibleSurfaces.indexOf(allSurfaces.at(0)));
+                }
+                if (-1 == m_requestsToBeVisibleSurfaces.indexOf(allSurfaces.at(0)))
+                {
+                    m_requestsToBeVisibleSurfaces.append(allSurfaces.at(0));
+                }
 
                 qDebug("m_visibleSurfaces %d", m_visibleSurfaces.size());
                 qDebug("m_invisibleSurfaces %d", m_invisibleSurfaces.size());
                 qDebug("m_requestsToBeVisibleSurfaces %d", m_requestsToBeVisibleSurfaces.size());
 
-                QList<int> availableLayouts = mp_dBusWindowManagerProxy->getAvailableLayouts(m_visibleSurfaces.size() + m_requestsToBeVisibleSurfaces.size());
-                if (0 == availableLayouts.size())
-                {
-                    // no layout fits the need!
-                    // replace the last app
-                    qDebug("no layout fits the need!");
-                    qDebug("replace the last surface");
-
-                    m_invisibleSurfaces.append(m_visibleSurfaces.last());
-                    m_visibleSurfaces.removeLast();
-
-                    m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
-                    m_requestsToBeVisibleSurfaces.clear();
-
-                    for (int i = 0; i < m_visibleSurfaces.size(); ++i)
-                    {
-                        mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
-                    }
-                }
+                QList<int> availableLayouts = mp_dBusWindowManagerProxy->getAvailableLayouts(1); // one app only for CES2017
                 if (1 == availableLayouts.size())
                 {
-                    // switch to new layout
-                    qDebug("switch to new layout %d", availableLayouts.at(0));
+                    qDebug("active layout: %d", availableLayouts.at(0));
+                    m_invisibleSurfaces.append(m_visibleSurfaces);
+                    m_visibleSurfaces.clear();
                     m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
                     m_requestsToBeVisibleSurfaces.clear();
 
@@ -203,18 +198,9 @@ void LayoutHandler::checkToDoQueue()
                         mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
                     }
                 }
-                if (1 < availableLayouts.size())
+                else
                 {
-                    // more than one layout possible! Ask user.
-                    qDebug("more than one layout possible! Ask user.");
-
-                    QStringList choices;
-                    for (int i = 0; i < availableLayouts.size(); ++i)
-                    {
-                        choices.append(mp_dBusWindowManagerProxy->getLayoutName(availableLayouts.at(i)));
-                    }
-
-                    mp_dBusPopupProxy->showPopupComboBox("Select Layout", choices);
+                    qDebug("this should not happen!?");
                 }
             }
         }

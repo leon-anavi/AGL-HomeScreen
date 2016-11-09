@@ -28,8 +28,9 @@
 // On top all applications in one layer.
 // On top of that, the popup layer.
 #define WINDOWMANAGER_LAYER_POPUP 100
-#define WINDOWMANAGER_LAYER_APPLICATIONS 101
-#define WINDOWMANAGER_LAYER_HOMESCREEN 102
+#define WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY 101
+#define WINDOWMANAGER_LAYER_APPLICATIONS 102
+#define WINDOWMANAGER_LAYER_HOMESCREEN 103
 
 #define WINDOWMANAGER_LAYER_NUM 3
 
@@ -353,6 +354,7 @@ void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
     if (ILM_NOTIFICATION_CONTENT_AVAILABLE & mask)
     {
         qDebug("ILM_NOTIFICATION_CONTENT_AVAILABLE");
+        updateScreen();
     }
     if (ILM_NOTIFICATION_CONTENT_REMOVED & mask)
     {

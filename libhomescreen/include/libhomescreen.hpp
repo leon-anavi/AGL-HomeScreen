@@ -23,10 +23,9 @@ public:
 
     // these are representing the D-Bus methods:
     std::list<int> getAllSurfacesOfProcess(int pid);
-    sRectangle getLayoutRenderAreaForSurfaceId(int surfaceId);
     int getSurfaceStatus(int surfaceId);
     void hardKeyPressed(int key);
-    void renderSurfaceToArea(int surfaceId, const sRectangle &renderArea);
+    void renderSurfaceToArea(int surfaceId, int layoutArea);
     void requestSurfaceIdToFullScreen(int surfaceId);
 
 private:

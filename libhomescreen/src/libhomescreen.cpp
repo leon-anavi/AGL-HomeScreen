@@ -67,30 +67,6 @@ std::list<int> LibHomeScreen::getAllSurfacesOfProcess(int pid)
     return result;
 }
 
-sRectangle LibHomeScreen::getLayoutRenderAreaForSurfaceId(int surfaceId)
-{
-    sRectangle result;
-    GError *err = NULL;
-
-    GVariant *out_renderArea;
-
-    lib_home_screen_homescreen_call_get_layout_render_area_for_surface_id_sync(
-                mp_libHomeScreenHomescreen_Proxy,
-                surfaceId,
-                &out_renderArea,
-                NULL,
-                &err);
-
-    if (NULL != err)
-    {
-        fprintf(stderr, "Unable to call getLayoutRenderAreaForSurfaceId: %s\n", err->message);
-    }
-
-    g_variant_get(out_renderArea, "(iiii)", result.x, result.y, result.width, result.height);
-
-    return result;
-}
-
 int LibHomeScreen::getSurfaceStatus(int surfaceId)
 {
     int result;
@@ -129,21 +105,14 @@ void LibHomeScreen::hardKeyPressed(int key)
     }
 }
 
-void LibHomeScreen::renderSurfaceToArea(int surfaceId, const sRectangle &renderArea)
+void LibHomeScreen::renderSurfaceToArea(int surfaceId, int layoutArea)
 {
     GError *err = NULL;
-
-    GVariant *variant;
-    GVariantBuilder *builder;
-    builder = g_variant_builder_new(G_VARIANT_TYPE("(iiii)"));
-    g_variant_builder_add(builder, "(iiii)", renderArea.x, renderArea.y, renderArea.width, renderArea.height);
-    variant = g_variant_new("(iiii)", builder);
-    g_variant_builder_unref(builder);
 
     lib_home_screen_homescreen_call_render_surface_to_area_sync(
                 mp_libHomeScreenHomescreen_Proxy,
                 surfaceId,
-                variant,
+                layoutArea,
                 NULL,
                 &err);
 

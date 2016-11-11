@@ -63,6 +63,20 @@
 			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
 		</method>
 		<!--
+		renderSurfaceToAreaAllowed:
+		@surfaceId: The surface that is requested.
+		@layoutArea: The layout area where the surface shall be rendered.
+		@allowed: Returns true, if the surface is allowed to be rendered in the area
+
+		This function can be used to request, if it is allowed to render a surface in a layout area in preparation
+		of the real renderSurfaceToArea command. This call will not change anything, it is only a request.
+		-->
+		<method name="renderSurfaceToAreaAllowed">
+			<arg name="surfaceId" type="i" direction="in"/>
+			<arg name="layoutArea" type="i" direction="in"/>
+			<arg name="allowed" type="b" direction="out"/>
+		</method>
+		<!--
 		renderSurfaceToArea:
 		@surfaceId: The surface that is requested.
 		@layoutArea: The layout area where the surface shall be rendered.

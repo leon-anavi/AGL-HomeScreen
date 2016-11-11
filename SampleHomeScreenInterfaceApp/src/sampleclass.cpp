@@ -31,6 +31,11 @@ void SampleClass::renderSurfaceToArea(int surfaceId, int layoutArea)
     mp_libHomeScreen->renderSurfaceToArea(surfaceId, layoutArea);
 }
 
+bool SampleClass::renderSurfaceToAreaAllowed(int surfaceId, int layoutArea)
+{
+    return mp_libHomeScreen->renderSurfaceToAreaAllowed(surfaceId, layoutArea);
+}
+
 void SampleClass::requestSurfaceIdToFullScreen(int surfaceId)
 {
     mp_libHomeScreen->requestSurfaceIdToFullScreen(surfaceId);

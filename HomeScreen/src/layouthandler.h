@@ -25,7 +25,8 @@ private:
 public slots:
     QList<int> requestGetAllSurfacesOfProcess(int pid);
     int requestGetSurfaceStatus(int surfaceId);
-    void requestRenderSurfaceToArea(int surfaceId, const QRect &renderArea);
+    void requestRenderSurfaceToArea(int surfaceId, int layoutArea);
+    bool requestRenderSurfaceToAreaAllowed(int surfaceId, int layoutArea);
     void requestSurfaceIdToFullScreen(int surfaceId);
     void setLayoutByName(QString layoutName);
 

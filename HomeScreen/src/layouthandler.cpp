@@ -234,9 +234,16 @@ int LayoutHandler::requestGetSurfaceStatus(int surfaceId)
     return result;
 }
 
-void LayoutHandler::requestRenderSurfaceToArea(int surfaceId, const QRect &renderArea)
+void LayoutHandler::requestRenderSurfaceToArea(int surfaceId, int layoutArea)
 {
-    qDebug("requestRenderSurfaceToArea %d %d,%d,%d,%d", surfaceId, renderArea.x(), renderArea.y(), renderArea.width(), renderArea.height());
+    qDebug("requestRenderSurfaceToArea %d %d", surfaceId, layoutArea);
+}
+
+bool LayoutHandler::requestRenderSurfaceToAreaAllowed(int surfaceId, int layoutArea)
+{
+    qDebug("requestRenderSurfaceToAreaAllowed %d %d", surfaceId, layoutArea);
+    bool result = true;
+    return result;
 }
 
 void LayoutHandler::requestSurfaceIdToFullScreen(int surfaceId)

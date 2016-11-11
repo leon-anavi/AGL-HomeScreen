@@ -105,8 +105,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), mp_layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestGetSurfaceStatus(int)), mp_layoutHandler, SLOT(requestGetSurfaceStatus(int)));
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
-    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestSurfaceIdToFullScreen(int)), mp_layoutHandler, SLOT(requestSurfaceIdToFullScreen(int)));
-    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestRenderSurfaceToArea(int, QRect)), mp_layoutHandler, SLOT(requestRenderSurfaceToArea(int,QRect)));
+    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestRenderSurfaceToArea(int, int)), mp_layoutHandler, SLOT(requestRenderSurfaceToArea(int,int)));
+    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestRenderSurfaceToAreaAllowed(int, int)), mp_layoutHandler, SLOT(requestRenderSurfaceToAreaAllowed(int,int)));
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestSurfaceIdToFullScreen(int)), mp_layoutHandler, SLOT(requestSurfaceIdToFullScreen(int)));
 
     QObject::connect(mp_popupWidget, SIGNAL(comboBoxResult(QString)), mp_layoutHandler, SLOT(setLayoutByName(QString)));

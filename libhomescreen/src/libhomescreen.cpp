@@ -122,6 +122,27 @@ void LibHomeScreen::renderSurfaceToArea(int surfaceId, int layoutArea)
     }
 }
 
+bool LibHomeScreen::renderSurfaceToAreaAllowed(int surfaceId, int layoutArea)
+{
+    gboolean result = true;
+    GError *err = NULL;
+
+    lib_home_screen_homescreen_call_render_surface_to_area_allowed_sync(
+                mp_libHomeScreenHomescreen_Proxy,
+                surfaceId,
+                layoutArea,
+                &result,
+                NULL,
+                &err);
+
+    if (NULL != err)
+    {
+        fprintf(stderr, "Unable to call renderSurfaceToArea: %s\n", err->message);
+    }
+
+    return result;
+}
+
 void LibHomeScreen::requestSurfaceIdToFullScreen(int surfaceId)
 {
     GError *err = NULL;

@@ -54,10 +54,16 @@ void HomeScreenControlInterface::hardKeyPressed(int key)
     }
 }
 
-void HomeScreenControlInterface::renderSurfaceToArea(int surfaceId, const QRect &renderArea)
+void HomeScreenControlInterface::renderSurfaceToArea(int surfaceId, int layoutArea)
 {
-    qDebug("requestSurfaceIdToFullScreen %d", surfaceId);
-    newRequestRenderSurfaceToArea(surfaceId, renderArea);
+    qDebug("renderSurfaceToArea %d %d", surfaceId, layoutArea);
+    newRequestRenderSurfaceToArea(surfaceId, layoutArea);
+}
+
+bool HomeScreenControlInterface::renderSurfaceToAreaAllowed(int surfaceId, int layoutArea)
+{
+    qDebug("renderSurfaceToAreaAllowed %d %d", surfaceId, layoutArea);
+    return renderSurfaceToAreaAllowed(surfaceId, layoutArea);
 }
 
 void HomeScreenControlInterface::requestSurfaceIdToFullScreen(int surfaceId)

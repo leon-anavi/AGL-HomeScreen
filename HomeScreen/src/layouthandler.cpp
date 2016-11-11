@@ -27,6 +27,13 @@ LayoutHandler::LayoutHandler(QObject *parent) :
                                               "/Popup",
                                               QDBusConnection::sessionBus(),
                                               0);
+
+    QDBusConnection::sessionBus().connect("org.agl.windowmanager",
+                                       "/windowmanager",
+                                       "org.agl.windowmanager",
+                                       "surfaceVisibilityChanged",
+                                       this,
+                                       SLOT(surfaceVisibilityChanged(int,bool)));
 }
 
 LayoutHandler::~LayoutHandler()
@@ -117,12 +124,14 @@ void LayoutHandler::setUpLayouts()
 
 void LayoutHandler::showAppLayer()
 {
-    mp_dBusWindowManagerProxy->showLayer(1); //1==app layer
+    // POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
+    mp_dBusWindowManagerProxy->showLayer(2); // TODO: enum
 }
 
 void LayoutHandler::hideAppLayer()
 {
-    mp_dBusWindowManagerProxy->hideLayer(1); //1==app layer
+    // POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
+    mp_dBusWindowManagerProxy->hideLayer(2); // TODO: enum
 }
 
 void LayoutHandler::makeMeVisible(int pid)
@@ -263,6 +272,12 @@ void LayoutHandler::setLayoutByName(QString layoutName)
     {
         mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(i, i);
     }
+}
+
+void LayoutHandler::requestSurfaceVisibilityChanged(int surfaceId, bool visible)
+{
+    qDebug("requestSurfaceVisibilityChanged %d %s", surfaceId, visible ? "true" : "false");
+    surfaceVisibilityChanged(surfaceId, visible);
 }
 
 void LayoutHandler::timerEvent(QTimerEvent *e)

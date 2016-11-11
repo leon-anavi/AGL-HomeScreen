@@ -103,6 +103,9 @@ public Q_SLOTS: // METHODS
     int setLayoutByName(const QString &layoutName);
     int setSurfaceToLayoutArea(int surfaceId, int layoutAreaId);
     void showLayer(int layer);
+
+Q_SIGNALS: // SIGNALS
+    void surfaceVisibilityChanged(int surfaceId, bool visible);
 };
 
 

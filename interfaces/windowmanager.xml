@@ -173,8 +173,20 @@
 		</method>
 
 		<!--
+		  surfaceVisibilityChanged:
+		  @surfaceId: The surface that changed.
+		  @visible: True, if the surface is visible.
+
+		  This is emitted when the visible property of the surfaces changes.
+		-->
+		<signal name="surfaceVisibilityChanged">
+			<arg name="surfaceId" type="i"/>
+			<arg name="visible" type="b"/>
+		</signal>
+
+		<!--
 		  showLayer:
-		  @layer: The ID of the layer to show. POPUP=0, APPS=1, HOMESCREEN=2
+		  @layer: The ID of the layer to show. POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
 
 		  Show complete layers.
 		  By default, all layers are shown.
@@ -184,7 +196,7 @@
 		</method>
 		<!--
 		  hideLayer:
-		  @layer: The ID of the layer to hide. POPUP=0, APPS=1, HOMESCREEN=2
+		  @layer: The ID of the layer to hide. POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
 
 		  Hide complete layers.
 		  By default, all layers are shown.

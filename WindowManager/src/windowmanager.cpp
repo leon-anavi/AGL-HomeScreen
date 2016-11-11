@@ -70,6 +70,7 @@ void WindowManager::start()
     err =  ilm_registerNotification(WindowManager::notificationFunc_static, this);
 
     createNewLayer(WINDOWMANAGER_LAYER_POPUP);
+    createNewLayer(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY);
     createNewLayer(WINDOWMANAGER_LAYER_APPLICATIONS);
     createNewLayer(WINDOWMANAGER_LAYER_HOMESCREEN);
 #endif
@@ -184,6 +185,19 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
         ilm_layerAddSurface(layerId, surfaceId);
     }
 
+    if (layerId == WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY)
+    {
+        struct ilmSurfaceProperties surfaceProperties;
+        ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
+
+        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        ilm_surfaceSetOpacity(surfaceId, 0.5);
+        ilm_surfaceSetVisibility(surfaceId, ILM_TRUE);
+
+        ilm_layerAddSurface(layerId, surfaceId);
+    }
+
     if (layerId == WINDOWMANAGER_LAYER_POPUP)
     {
         struct ilmSurfaceProperties surfaceProperties;
@@ -259,7 +273,8 @@ void WindowManager::updateScreen()
     t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
     renderOrder[0] = WINDOWMANAGER_LAYER_HOMESCREEN;
     renderOrder[1] = WINDOWMANAGER_LAYER_APPLICATIONS;
-    renderOrder[2] = WINDOWMANAGER_LAYER_POPUP;
+    renderOrder[2] = WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY;
+    renderOrder[3] = WINDOWMANAGER_LAYER_POPUP;
 
     ilm_displaySetRenderOrder(0, renderOrder, WINDOWMANAGER_LAYER_NUM);
 
@@ -334,6 +349,7 @@ void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
     if (ILM_NOTIFICATION_VISIBILITY & mask)
     {
         qDebug("ILM_NOTIFICATION_VISIBILITY");
+        surfaceVisibilityChanged(surface, surfaceProperties.visibility);
     }
     if (ILM_NOTIFICATION_OPACITY & mask)
     {
@@ -528,9 +544,13 @@ void WindowManager::hideLayer(int layer)
     }
     if (1 == layer)
     {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_FALSE);
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, ILM_FALSE);
     }
     if (2 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_FALSE);
+    }
+    if (3 == layer)
     {
         ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN, ILM_FALSE);
     }
@@ -603,9 +623,13 @@ void WindowManager::showLayer(int layer)
     }
     if (1 == layer)
     {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_TRUE);
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, ILM_TRUE);
     }
     if (2 == layer)
+    {
+        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_TRUE);
+    }
+    if (3 == layer)
     {
         ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN, ILM_TRUE);
     }

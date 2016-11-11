@@ -30,6 +30,12 @@ public slots:
     void requestSurfaceIdToFullScreen(int surfaceId);
     void setLayoutByName(QString layoutName);
 
+    // this will receive the surfaceVisibilityChanged signal of the windowmanager
+    void requestSurfaceVisibilityChanged(int surfaceId, bool visible);
+
+Q_SIGNALS: // SIGNALS
+    void surfaceVisibilityChanged(int surfaceId, bool visible);
+
 protected:
     void timerEvent(QTimerEvent *e);
 private:

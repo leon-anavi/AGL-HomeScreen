@@ -89,6 +89,17 @@
 			<arg name="surfaceId" type="i" direction="in"/>
 			<arg name="layoutArea" type="i" direction="in"/>
 		</method>
+		<!--
+		  surfaceVisibilityChanged:
+		  @surfaceId: The surface that changed.
+		  @visible: True, if the surface is visible.
+
+		  This is emitted when the visible property of the surfaces changes.
+		-->
+		<signal name="surfaceVisibilityChanged">
+			<arg name="surfaceId" type="i"/>
+			<arg name="visible" type="b"/>
+		</signal>
 	</interface>
 </node>
 

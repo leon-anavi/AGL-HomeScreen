@@ -53,6 +53,10 @@ void InputEventManager::hardKeyPressed(int key)
         mp_dBusHomeScreenProxy->hardKeyPressed(key);
         qDebug("hardKeyPressed NAV key pressed!");
         break;
+    case InputEvent::HARDKEY_MEDIA:
+        mp_dBusHomeScreenProxy->hardKeyPressed(key);
+        qDebug("hardKeyPressed MEDIA key pressed!");
+        break;
     default:
         qDebug("hardKeyPressed %d", key);
         break;

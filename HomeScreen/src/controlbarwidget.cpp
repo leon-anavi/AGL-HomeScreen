@@ -83,3 +83,8 @@ void ControlBarWidget::on_pushButton_nav_clicked()
 {
     mp_dBusInputEventProxy->hardKeyPressed(InputEvent::HARDKEY_NAV);
 }
+
+void ControlBarWidget::on_pushButton_media_clicked()
+{
+    mp_dBusInputEventProxy->hardKeyPressed(InputEvent::HARDKEY_MEDIA);
+}

@@ -85,7 +85,7 @@ border-image: url(:/images/transparency.png);</string>
    <widget class="QPushButton" name="pushButton_nav">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>160</x>
       <y>10</y>
       <width>40</width>
       <height>40</height>
@@ -104,6 +104,56 @@ border-image: url(:/images/transparency.png);</string>
     <property name="icon">
      <iconset resource="homescreen.qrc">
       <normaloff>:/icons/explore_day.png</normaloff>:/icons/explore_day.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>40</width>
+      <height>40</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_empty">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>10</y>
+      <width>40</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/transparency.png);
+border-image: url(:/images/transparency.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_media">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>10</y>
+      <width>40</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::NoFocus</enum>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-image: url(:/images/transparency.png);
+border-image: url(:/images/transparency.png);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="homescreen.qrc">
+      <normaloff>:/icons/media_day.png</normaloff>:/icons/media_day.png</iconset>
     </property>
     <property name="iconSize">
      <size>

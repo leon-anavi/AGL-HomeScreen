@@ -349,7 +349,7 @@ void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
     if (ILM_NOTIFICATION_VISIBILITY & mask)
     {
         qDebug("ILM_NOTIFICATION_VISIBILITY");
-        surfaceVisibilityChanged(surface, surfaceProperties.visibility);
+        surfaceVisibilityChanged(surface, surfaceProperties->visibility);
     }
     if (ILM_NOTIFICATION_OPACITY & mask)
     {

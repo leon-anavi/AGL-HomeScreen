@@ -21,7 +21,8 @@ namespace InputEvent {
     typedef enum HardKey
     {
         HARDKEY_UNDEFINED,
-        HARDKEY_NAV
+        HARDKEY_NAV,
+        HARDKEY_MEDIA
     } eHardKey;
 }
 

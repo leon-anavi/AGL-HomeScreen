@@ -44,7 +44,13 @@ void HomeScreenControlInterface::hardKeyPressed(int key)
     {
     case InputEvent::HARDKEY_NAV:
         qDebug("hardKeyPressed NAV key pressed!");
-        pid = mp_dBusAppFrameworkProxy->launchApp("demoapp");
+        pid = mp_dBusAppFrameworkProxy->launchApp("nav@0.1");
+        qDebug("pid: %d", pid);
+        newRequestsToBeVisibleApp(pid);
+        break;
+    case InputEvent::HARDKEY_MEDIA:
+        qDebug("hardKeyPressed MEDIA key pressed!");
+        pid = mp_dBusAppFrameworkProxy->launchApp("media@0.1");
         qDebug("pid: %d", pid);
         newRequestsToBeVisibleApp(pid);
         break;

@@ -44,6 +44,8 @@ private slots:
     void on_pushButton_settings_clicked();
     void on_pushButton_nav_clicked();
 
+    void on_pushButton_media_clicked();
+
 private:
     Ui::ControlBarWidget *mp_ui;
     org::agl::inputevent *mp_dBusInputEventProxy;

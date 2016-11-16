@@ -122,14 +122,14 @@ void LibHomeScreen::renderSurfaceToArea(int surfaceId, int layoutArea)
     }
 }
 
-bool LibHomeScreen::renderSurfaceToAreaAllowed(int surfaceId, int layoutArea)
+bool LibHomeScreen::renderAppToAreaAllowed(int appCategory, int layoutArea)
 {
     gboolean result = true;
     GError *err = NULL;
 
-    lib_home_screen_homescreen_call_render_surface_to_area_allowed_sync(
+    lib_home_screen_homescreen_call_render_app_to_area_allowed_sync(
                 mp_libHomeScreenHomescreen_Proxy,
-                surfaceId,
+                appCategory,
                 layoutArea,
                 &result,
                 NULL,
@@ -137,7 +137,7 @@ bool LibHomeScreen::renderSurfaceToAreaAllowed(int surfaceId, int layoutArea)
 
     if (NULL != err)
     {
-        fprintf(stderr, "Unable to call renderSurfaceToArea: %s\n", err->message);
+        fprintf(stderr, "Unable to call renderAppToAreaAllowed: %s\n", err->message);
     }
 
     return result;

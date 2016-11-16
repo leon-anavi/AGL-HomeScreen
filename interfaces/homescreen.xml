@@ -63,23 +63,24 @@
 			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
 		</method>
 		<!--
-		renderSurfaceToAreaAllowed:
-		@surfaceId: The surface that is requested.
-		@layoutArea: The layout area where the surface shall be rendered.
-		@allowed: Returns true, if the surface is allowed to be rendered in the area
+		renderAppToAreaAllowed:
+		@appCategory: The application category that is requested. Use enum AppCategory for this!
+		@layoutArea: The layout area where the application shall be rendered. Find the layoutArea ids in the layout definition!
+		@allowed: Returns true, if the application is allowed to be rendered in the area
 
-		This function can be used to request, if it is allowed to render a surface in a layout area in preparation
-		of the real renderSurfaceToArea command. This call will not change anything, it is only a request.
+		This function can be used to request, if it is allowed to render an application of a specific category
+		in a layout area. The idea is to decide from an application point of view to allocate recources or not.
+		Example: an application will decide to render video based on this call. This call will not change anything, it is only a request.
 		-->
-		<method name="renderSurfaceToAreaAllowed">
-			<arg name="surfaceId" type="i" direction="in"/>
+		<method name="renderAppToAreaAllowed">
+			<arg name="appCategory" type="i" direction="in"/>
 			<arg name="layoutArea" type="i" direction="in"/>
 			<arg name="allowed" type="b" direction="out"/>
 		</method>
 		<!--
 		renderSurfaceToArea:
 		@surfaceId: The surface that is requested.
-		@layoutArea: The layout area where the surface shall be rendered.
+		@layoutArea: The layout area where the surface shall be rendered. Find the layoutArea ids in the layout definition!
 
 		This is a special case. In the normal use case, one layout area is always filled completely
 		with the first surface, that the process creates (more precise: the surface with the lowest id).

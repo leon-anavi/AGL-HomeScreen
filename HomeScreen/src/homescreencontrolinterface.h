@@ -29,7 +29,7 @@ public Q_SLOTS: // METHODS
     int getSurfaceStatus(int surfaceId);
     void hardKeyPressed(int key);
     void renderSurfaceToArea(int surfaceId, int layoutArea);
-    bool renderSurfaceToAreaAllowed(int surfaceId, int layoutArea);
+    bool renderAppToAreaAllowed(int appCategory, int layoutArea);
     void requestSurfaceIdToFullScreen(int surfaceId);
 private:
     HomescreenAdaptor *mp_homeScreenAdaptor;

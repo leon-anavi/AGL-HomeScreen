@@ -66,10 +66,10 @@ void HomeScreenControlInterface::renderSurfaceToArea(int surfaceId, int layoutAr
     newRequestRenderSurfaceToArea(surfaceId, layoutArea);
 }
 
-bool HomeScreenControlInterface::renderSurfaceToAreaAllowed(int surfaceId, int layoutArea)
+bool HomeScreenControlInterface::renderAppToAreaAllowed(int appCategory, int layoutArea)
 {
-    qDebug("renderSurfaceToAreaAllowed %d %d", surfaceId, layoutArea);
-    return renderSurfaceToAreaAllowed(surfaceId, layoutArea);
+    qDebug("renderAppToAreaAllowed %d %d", appCategory, layoutArea);
+    return true; //TODO: ask policy manager
 }
 
 void HomeScreenControlInterface::requestSurfaceIdToFullScreen(int surfaceId)

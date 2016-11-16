@@ -29,9 +29,9 @@ LibHomeScreen::~LibHomeScreen()
     g_object_unref(mp_libHomeScreenHomescreen_Proxy);
 }
 
-std::list<int> LibHomeScreen::getAllSurfacesOfProcess(int pid)
+std::vector<int> LibHomeScreen::getAllSurfacesOfProcess(int pid)
 {
-    std::list<int> result;
+    std::vector<int> result;
 
     GError *err = NULL;
 

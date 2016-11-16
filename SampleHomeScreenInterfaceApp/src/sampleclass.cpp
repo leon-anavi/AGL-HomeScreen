@@ -11,7 +11,7 @@ SampleClass::~SampleClass()
     delete mp_libHomeScreen;
 }
 
-std::list<int> SampleClass::getAllSurfacesOfProcess(int pid)
+std::vector<int> SampleClass::getAllSurfacesOfProcess(int pid)
 {
     return mp_libHomeScreen->getAllSurfacesOfProcess(pid);
 }

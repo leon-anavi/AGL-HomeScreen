@@ -2,7 +2,7 @@
 #define SAMPLECLASS_HPP
 
 #include "libhomescreen.hpp"
-#include <list>
+#include <vector>
 
 class SampleClass
 {
@@ -10,7 +10,7 @@ public:
     SampleClass();
     ~SampleClass();
 
-    std::list<int> getAllSurfacesOfProcess(int pid);
+    std::vector<int> getAllSurfacesOfProcess(int pid);
     int getSurfaceStatus(int surfaceId);
     void hardKeyPressed(int key);
     void renderSurfaceToArea(int surfaceId, int layoutArea);

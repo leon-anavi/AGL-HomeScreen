@@ -379,6 +379,17 @@ void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
     if (ILM_NOTIFICATION_CONFIGURED & mask)
     {
         qDebug("ILM_NOTIFICATION_CONFIGURED");
+        qDebug("  surfaceProperties %d", surface);
+        qDebug("    surfaceProperties.origSourceWidth: %d", surfaceProperties->origSourceWidth);
+        qDebug("    surfaceProperties.origSourceHeight: %d", surfaceProperties->origSourceHeight);
+
+        ilm_surfaceSetSourceRectangle(surface,
+                                      0,
+                                      0,
+                                      surfaceProperties->origSourceWidth,
+                                      surfaceProperties->origSourceHeight);
+
+        ilm_commitChanges();
         updateScreen();
     }
 }

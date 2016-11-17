@@ -1,0 +1,14 @@
+[Unit]
+Description=AGL Input Event Manager
+
+[Service]
+Type=dbus                                
+BusName=org.agl.inputevent
+ExecStart=/usr/AGL/InputEventManager/InputEventManager
+Restart=on-failure
+RestartSec=5
+
+
+[Install]
+WantedBy=default.target
+

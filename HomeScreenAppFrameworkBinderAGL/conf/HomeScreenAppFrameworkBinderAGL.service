@@ -1,0 +1,14 @@
+[Unit]
+Description=AGL App Framework Binder for HomeScreen
+
+[Service]
+Type=dbus                                
+BusName=org.agl.appframework
+ExecStart=/usr/AGL/HomeScreenAppFrameworkBinderAGL/HomeScreenAppFrameworkBinderAGL
+Restart=on-failure
+RestartSec=5
+
+
+[Install]
+WantedBy=default.target
+

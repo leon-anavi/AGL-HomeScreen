@@ -1,0 +1,15 @@
+[Unit]
+Description=AGL Window Manager
+After=weston.service
+
+[Service]
+Type=dbus                                
+BusName=org.agl.windowmanager
+ExecStart=/usr/AGL/WindowManager/WindowManager
+Restart=on-failure
+RestartSec=5
+
+
+[Install]
+WantedBy=default.target
+

@@ -30,8 +30,3 @@ FORMS    += \
 
 OTHER_FILES += \
     README.md
-
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/HomeScreenSimulator \
-    $$OUT_PWD/Makefile

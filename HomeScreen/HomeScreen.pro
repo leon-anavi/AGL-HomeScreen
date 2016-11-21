@@ -64,9 +64,3 @@ HomeScreen.depends = $(HomeScreen) copydata
 export(HomeScreen.depends)
 export(copydata.commands)
 QMAKE_EXTRA_TARGETS += HomeScreen copydata
-
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/colorschemes \
-    $$OUT_PWD/HomeScreen \
-    $$OUT_PWD/Makefile

@@ -32,8 +32,3 @@ HEADERS += \
 
 OTHER_FILES += \
     README.md
-
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/InputEventManager \
-    $$OUT_PWD/Makefile

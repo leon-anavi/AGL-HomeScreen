@@ -64,7 +64,3 @@ gen_proxy_h.output = ${QMAKE_FILE_IN_BASE}_proxy.h
 gen_proxy_h.clean = ${QMAKE_FILE_IN_BASE}_proxy.h
 
 QMAKE_EXTRA_COMPILERS += gen_adapter_cpp gen_proxy_cpp gen_adapter_h gen_proxy_h
-
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/*

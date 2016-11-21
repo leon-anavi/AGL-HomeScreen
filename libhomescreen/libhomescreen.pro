@@ -38,11 +38,6 @@ gen_docbook.commands = \
 QMAKE_EXTRA_TARGETS += gen_docbook
 PRE_TARGETDEPS += doc
 
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/*
-
-
 #    ../interfaces/appframework.xml \
 #    ../interfaces/daynightmode.xml \
 #    ../interfaces/homescreen.xml \

@@ -37,7 +37,3 @@ SampleAppTimeDate.depends = interfaces
 WindowManager.depends = interfaces
 
 SampleHomeScreenInterfaceApp.depends = libhomescreen
-
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/Makefile

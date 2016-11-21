@@ -11,7 +11,3 @@ HEADERS += \
 INCLUDEPATH += $$PWD/../libhomescreen/include/
 
 LIBS += -L$$OUT_PWD/../libhomescreen -lhomescreen
-
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/*

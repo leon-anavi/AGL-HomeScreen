@@ -31,8 +31,3 @@ config_ivi_layermanagement_api {
 
 OTHER_FILES += \
     README.md
-
-# remove generated files
-QMAKE_CLEAN += -r \
-    $$OUT_PWD/WindowManager \
-    $$OUT_PWD/Makefile

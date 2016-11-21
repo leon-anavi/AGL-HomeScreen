@@ -25,8 +25,6 @@ SOURCES += \
     src/mainwindow.cpp
 
 HEADERS  += \
-    ../interfaces/daynightmode.h \
-    ../interfaces/popup.h \
     src/mainwindow.h
 
 INCLUDEPATH += $$OUT_PWD/../interfaces

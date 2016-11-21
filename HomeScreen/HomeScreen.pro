@@ -31,10 +31,6 @@ SOURCES += \
     src/layouthandler.cpp
 
 HEADERS  += \
-    ../interfaces/appframework.h \
-    ../interfaces/daynightmode.h \
-    ../interfaces/popup.h \
-    ../interfaces/statusbar.h \
     src/mainwindow.h \
     src/settingswidget.h \
     src/popupwidget.h \

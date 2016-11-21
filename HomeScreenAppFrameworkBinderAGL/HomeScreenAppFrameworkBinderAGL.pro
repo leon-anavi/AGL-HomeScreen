@@ -28,10 +28,7 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/homescreenappframeworkbinderagl.h
 
-INCLUDEPATH += $$OUT_PWD/../interfaces
-INCLUDEPATH += ../interfaces/
-
-LIBS += -L$$OUT_PWD/../interfaces -linterfaces
+include(../interfaces/interfaces.pri)
 
 OTHER_FILES += \
     README.md

@@ -26,10 +26,8 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/windowmanager.hpp
 
-INCLUDEPATH += $$OUT_PWD/../interfaces
-INCLUDEPATH += ../interfaces/
+include(../interfaces/interfaces.pri)
 
-LIBS += -L$$OUT_PWD/../interfaces -linterfaces
 contains(QT_ARCH, arm.*) {
     LIBS += -lilmControl -lilmCommon
 }

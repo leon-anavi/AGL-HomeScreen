@@ -40,11 +40,7 @@ HEADERS  += \
     src/homescreencontrolinterface.h \
     src/layouthandler.h
 
-INCLUDEPATH += $$OUT_PWD/../interfaces
-INCLUDEPATH += ../interfaces/
-
-LIBS += -L$$OUT_PWD/../interfaces -linterfaces
-
+include(../interfaces/interfaces.pri)
 
 FORMS    += \
     resources/mainwindow.ui \

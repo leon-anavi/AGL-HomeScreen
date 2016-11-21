@@ -27,10 +27,7 @@ SOURCES += \
 HEADERS  += \
     src/mainwindow.h
 
-INCLUDEPATH += $$OUT_PWD/../interfaces
-INCLUDEPATH += ../interfaces
-
-LIBS += -L$$OUT_PWD/../interfaces -linterfaces
+include(../interfaces/interfaces.pri)
 
 FORMS    += \
     resources/mainwindow.ui

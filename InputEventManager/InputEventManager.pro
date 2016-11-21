@@ -28,10 +28,7 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/inputeventmanager.h
 
-INCLUDEPATH += $$OUT_PWD/../interfaces
-INCLUDEPATH += ../interfaces/
-
-LIBS += -L$$OUT_PWD/../interfaces -linterfaces
+include(../interfaces/interfaces.pri)
 
 #contains(QT_ARCH, arm.*) {
 #    LIBS += -lpkgmgr-info

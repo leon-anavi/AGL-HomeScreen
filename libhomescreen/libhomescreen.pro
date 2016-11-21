@@ -1,13 +1,6 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2016-10-28T11:05:51
-#
-#-------------------------------------------------
-
-QT       -= core gui
-
-TARGET = homescreen
 TEMPLATE = lib
+TARGET = homescreen
+CONFIG -= qt
 
 SOURCES += \
         src/libhomescreen.cpp

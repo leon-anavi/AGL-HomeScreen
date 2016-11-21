@@ -12,23 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT       += core dbus
-QT       -= gui
-
-TARGET = SampleAppTimeDate
-CONFIG   += console
-CONFIG   -= app_bundle
-
 TEMPLATE = app
+TARGET = SampleAppTimeDate
+QT = dbus
 
+include(../interfaces/interfaces.pri)
 
 SOURCES += src/main.cpp \
     src/timedateprovider.cpp
 
 HEADERS += \
     src/timedateprovider.hpp
-
-include(../interfaces/interfaces.pri)
 
 OTHER_FILES += \
     README.md

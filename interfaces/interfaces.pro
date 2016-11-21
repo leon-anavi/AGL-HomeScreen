@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT  += dbus
-QT  -= gui
-
 TEMPLATE = lib
-CONFIG += staticlib
 TARGET = interfaces
+QT = dbus
+CONFIG += staticlib
 
 HEADERS += \
     include/appframework.hpp \

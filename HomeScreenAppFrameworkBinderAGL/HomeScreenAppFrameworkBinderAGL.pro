@@ -12,23 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT       += core dbus
-QT       -= gui
-
-TARGET = HomeScreenAppFrameworkBinderAGL
-CONFIG   += console
-CONFIG   -= app_bundle
-
 TEMPLATE = app
+TARGET = HomeScreenAppFrameworkBinderAGL
+QT = core dbus
 
+include(../interfaces/interfaces.pri)
 
 SOURCES += src/main.cpp \
     src/homescreenappframeworkbinderagl.cpp
 
 HEADERS += \
     src/homescreenappframeworkbinderagl.h
-
-include(../interfaces/interfaces.pri)
 
 OTHER_FILES += \
     README.md

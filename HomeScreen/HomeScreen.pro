@@ -12,12 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT       += core gui dbus
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-TARGET = HomeScreen
 TEMPLATE = app
+TARGET = HomeScreen
+QT = widgets dbus
+
+include(../interfaces/interfaces.pri)
 
 SOURCES += \
     src/main.cpp \
@@ -39,8 +38,6 @@ HEADERS  += \
     src/applauncherwidget.h \
     src/homescreencontrolinterface.h \
     src/layouthandler.h
-
-include(../interfaces/interfaces.pri)
 
 FORMS    += \
     resources/mainwindow.ui \

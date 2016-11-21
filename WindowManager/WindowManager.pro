@@ -12,13 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT       += core dbus
-QT       -= gui
-
+TEMPLATE = app
 TARGET = WindowManager
-CONFIG   += console
-CONFIG   -= app_bundle
+QT = core dbus
 
+include(../interfaces/interfaces.pri)
 
 SOURCES += src/main.cpp \
     src/windowmanager.cpp
@@ -26,13 +24,9 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/windowmanager.hpp
 
-include(../interfaces/interfaces.pri)
-
 contains(QT_ARCH, arm.*) {
     LIBS += -lilmControl -lilmCommon
 }
-
-FORMS +=
 
 OTHER_FILES += \
     README.md
@@ -41,4 +35,3 @@ OTHER_FILES += \
 QMAKE_CLEAN += -r \
     $$OUT_PWD/WindowManager \
     $$OUT_PWD/Makefile
-

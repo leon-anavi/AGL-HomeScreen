@@ -12,15 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT       += core dbus
-QT       -= gui
-
-TARGET = InputEventManager
-CONFIG   += console
-CONFIG   -= app_bundle
-
 TEMPLATE = app
+TARGET = InputEventManager
+QT = core dbus
 
+include(../interfaces/interfaces.pri)
 
 SOURCES += src/main.cpp \
     src/inputeventmanager.cpp
@@ -28,7 +24,6 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/inputeventmanager.h
 
-include(../interfaces/interfaces.pri)
 
 #contains(QT_ARCH, arm.*) {
 #    LIBS += -lpkgmgr-info

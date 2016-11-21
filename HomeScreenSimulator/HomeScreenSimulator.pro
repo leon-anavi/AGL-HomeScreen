@@ -12,13 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-QT       += core gui dbus
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-TARGET = HomeScreenSimulator
 TEMPLATE = app
+TARGET = HomeScreenSimulator
+QT = widgets dbus
 
+include(../interfaces/interfaces.pri)
 
 SOURCES += \
     src/main.cpp \
@@ -27,15 +25,11 @@ SOURCES += \
 HEADERS  += \
     src/mainwindow.h
 
-include(../interfaces/interfaces.pri)
-
 FORMS    += \
     resources/mainwindow.ui
 
 OTHER_FILES += \
     README.md
-
-RESOURCES +=
 
 # remove generated files
 QMAKE_CLEAN += -r \

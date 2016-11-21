@@ -1,6 +1,5 @@
 TEMPLATE = app
-CONFIG += console
-CONFIG -= app_bundle
+TARGET = SampleHomeScreenInterfaceApp
 CONFIG -= qt
 
 SOURCES += src/main.cpp \

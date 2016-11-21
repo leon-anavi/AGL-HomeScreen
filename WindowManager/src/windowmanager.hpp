@@ -24,9 +24,9 @@
 #include "windowmanager_adapter.h"
 
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
 extern "C" {
-#include "ilm/ilm_control.h"
+#include <ilm/ilm_control.h>
 }
 #endif
 
@@ -49,7 +49,7 @@ private:
 
     void dumpScene();
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     void createNewLayer(int layerId);
     void addSurfaceToLayer(int surfaceId, int layerId);
 #endif
@@ -59,7 +59,7 @@ private:
 public:
     static void* myThis;
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     // for general notifications
     void notificationFunc_non_static(ilmObjectType object,
                                         t_ilm_uint id,

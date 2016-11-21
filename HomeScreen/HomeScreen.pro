@@ -17,6 +17,7 @@ TARGET = HomeScreen
 QT = widgets dbus
 
 include(../interfaces/interfaces.pri)
+include(../ivi_layermanagement_api.pri)
 
 SOURCES += \
     src/main.cpp \

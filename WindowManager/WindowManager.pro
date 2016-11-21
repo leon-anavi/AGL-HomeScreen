@@ -17,6 +17,7 @@ TARGET = WindowManager
 QT = core dbus
 
 include(../interfaces/interfaces.pri)
+include(../ivi_layermanagement_api.pri)
 
 SOURCES += src/main.cpp \
     src/windowmanager.cpp
@@ -24,7 +25,7 @@ SOURCES += src/main.cpp \
 HEADERS += \
     src/windowmanager.hpp
 
-contains(QT_ARCH, arm.*) {
+config_ivi_layermanagement_api {
     LIBS += -lilmControl -lilmCommon
 }
 

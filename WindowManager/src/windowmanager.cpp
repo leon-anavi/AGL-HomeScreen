@@ -60,7 +60,7 @@ void WindowManager::start()
 {
     qDebug("-=[start]=-");
     mp_layoutAreaToSurfaceIdAssignment = new QMap<int, unsigned int>;
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     ilmErrorTypes err;
 
     err = ilm_init();
@@ -80,7 +80,7 @@ WindowManager::~WindowManager()
 {
     qDebug("-=[~WindowManager]=-");
     delete mp_windowManagerAdaptor;
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     ilm_destroy();
 #endif
     delete mp_layoutAreaToSurfaceIdAssignment;
@@ -110,7 +110,7 @@ void WindowManager::dumpScene()
     }
 }
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
 
 void WindowManager::createNewLayer(int layerId)
 {
@@ -220,7 +220,7 @@ void WindowManager::updateScreen()
 {
     qDebug("-=[updateScreen]=-");
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     if (-1 != m_currentLayout)
     {
 
@@ -283,7 +283,7 @@ void WindowManager::updateScreen()
 #endif
 }
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
 void WindowManager::notificationFunc_non_static(ilmObjectType object,
                                     t_ilm_uint id,
                                     t_ilm_bool created)
@@ -483,7 +483,7 @@ QList<Layout> WindowManager::getAllLayouts()
 QList<int> WindowManager::getAllSurfacesOfProcess(int pid)
 {
     QList<int> result;
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     struct ilmSurfaceProperties surfaceProperties;
 
     for (int i = 0; i < m_surfaces.size(); ++i)
@@ -548,7 +548,7 @@ void WindowManager::hideLayer(int layer)
     qDebug("-=[hideLayer]=-");
     qDebug("layer %d", layer);
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     if (0 == layer)
     {
         ilm_layerSetVisibility(WINDOWMANAGER_LAYER_POPUP, ILM_FALSE);
@@ -627,7 +627,7 @@ void WindowManager::showLayer(int layer)
     qDebug("-=[showLayer]=-");
     qDebug("layer %d", layer);
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     if (0 == layer)
     {
         ilm_layerSetVisibility(WINDOWMANAGER_LAYER_POPUP, ILM_TRUE);

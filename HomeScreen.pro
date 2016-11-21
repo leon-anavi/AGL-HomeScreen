@@ -14,6 +14,9 @@
 
 TEMPLATE = subdirs
 
+load(configure)
+qtCompileTest(ivi_layermanagement_api)
+
 SUBDIRS = interfaces \
     libhomescreen \
     HomeScreen \

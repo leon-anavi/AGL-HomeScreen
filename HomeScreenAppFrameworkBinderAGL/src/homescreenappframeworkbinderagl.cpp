@@ -39,7 +39,7 @@ HomeScreenAppFrameworkBinderAgl::HomeScreenAppFrameworkBinderAgl(QObject *parent
                                               QDBusConnection::sessionBus(),
                                               0);
 
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     QString runnables = mp_dBusAfmUserProxy->runnables("{\"dummy\": \"entry\"}");
     qDebug("runnables: %s", runnables.toStdString().c_str());
 
@@ -55,8 +55,7 @@ HomeScreenAppFrameworkBinderAgl::HomeScreenAppFrameworkBinderAgl(QObject *parent
         m_apps.append(appInfo);
 
     }
-#endif
-#ifdef __i386__
+#else
     // for the simulation
     /*AppInfo ai;
     ai.setName("org.test.app1");
@@ -82,7 +81,7 @@ QList<AppInfo> HomeScreenAppFrameworkBinderAgl::getAvailableApps()
 int HomeScreenAppFrameworkBinderAgl::launchApp(const QString &name)
 {
     int pid = -1;
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     qDebug("launchApp name: %s", name.toStdString().c_str());
     QString jsonLaunch = "{\"id\":\"" + name + "\", \"mode\":\"local\"}";
     qDebug("jsonLaunch %s", jsonLaunch.toStdString().c_str());
@@ -110,8 +109,7 @@ int HomeScreenAppFrameworkBinderAgl::launchApp(const QString &name)
     }
 
     qDebug("launchApp pid: %d", pid);
-#endif
-#ifdef __i386__
+#else
     qDebug("launchApp name: %s", name.toStdString().c_str());
     pid = qrand();
 #endif

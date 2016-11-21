@@ -45,13 +45,11 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
-#ifdef __arm__
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     // the WindowManager positions the surface correctly
-#endif
-#ifdef __i386__
+#else
     w.move(0, 0);
 #endif
-
 
 #ifdef __arm__
     qDebug("Running on ARM architecture");

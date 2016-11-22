@@ -19,7 +19,7 @@
 
 #include <QWidget>
 #include <include/popup.hpp>
-#include "popup_adapter.h"
+#include "popup_adaptor.h"
 
 namespace Ui {
 class PopupWidget;
@@ -35,7 +35,7 @@ public:
 public slots:
     void updateColorScheme();
 
-    // from popup_adapter.h
+    // from popup_adaptor.h
 public Q_SLOTS: // METHODS
     void showPopup(int /*type*/, const QString &text);
     void showPopupComboBox(const QString &text, const QStringList &choices);

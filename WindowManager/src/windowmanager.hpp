@@ -21,7 +21,7 @@
 #include <QList>
 #include <QMap>
 
-#include "windowmanager_adapter.h"
+#include "windowmanager_adaptor.h"
 
 
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
@@ -82,7 +82,7 @@ public:
 public slots:
 
 
-// from windowmanager_adapter.h
+// from windowmanager_adaptor.h
 public: // PROPERTIES
     Q_PROPERTY(int layoutId READ layoutId)
     int layoutId() const;

@@ -19,7 +19,7 @@
 
 #include <QMainWindow>
 #include <include/daynightmode.hpp>
-#include "daynightmode_adapter.h"
+#include "daynightmode_adaptor.h"
 
 #include "statusbar_proxy.h"
 #include "popup_proxy.h"
@@ -65,7 +65,7 @@ private slots:
 
 private:
     Ui::MainWindow *mp_ui;
-    DaynightmodeAdaptor *mp_dBusDayNightModeAdapter;
+    DaynightmodeAdaptor *mp_dBusDayNightModeAdaptor;
     org::agl::statusbar *mp_dBusStatusBarProxy;
     org::agl::popup *mp_dBusPopupProxy;
     org::agl::proximity *mp_dBusProximityProxy;

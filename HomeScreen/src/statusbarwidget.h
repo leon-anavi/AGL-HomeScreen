@@ -18,7 +18,7 @@
 #define STATUSBARWIDGET_H
 
 #include <QWidget>
-#include "statusbar_adapter.h"
+#include "statusbar_adaptor.h"
 
 namespace Ui {
 class StatusBarWidget;
@@ -34,7 +34,7 @@ public:
 public slots:
     void updateColorScheme();
 
-// from statusbar_adapter.h
+// from statusbar_adaptor.h
 public Q_SLOTS: // METHODS
     QList<int> getAvailablePlaceholders();
     QString getStatusIcon(int placeholderIndex);

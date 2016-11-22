@@ -20,7 +20,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     mp_ui(new Ui::MainWindow),
-    mp_dBusDayNightModeAdapter(0),
+    mp_dBusDayNightModeAdaptor(0),
     mp_dBusStatusBarProxy(0),
     mp_dBusPopupProxy(0),
     mp_dBusProximityProxy(0),
@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QDBusConnection dbus = QDBusConnection::sessionBus();
 
     // publish dbus day night mode interface
-    mp_dBusDayNightModeAdapter = new DaynightmodeAdaptor((QObject*)this);
+    mp_dBusDayNightModeAdaptor = new DaynightmodeAdaptor((QObject*)this);
 
     dbus.registerService("org.agl.homescreen.simulator");
     dbus.registerObject("/", this);
@@ -72,9 +72,9 @@ MainWindow::~MainWindow()
     delete mp_dBusPopupProxy;
     delete mp_dBusStatusBarProxy;
 
-    if (0 == mp_dBusDayNightModeAdapter)
+    if (0 == mp_dBusDayNightModeAdaptor)
     {
-        delete mp_dBusDayNightModeAdapter;
+        delete mp_dBusDayNightModeAdaptor;
     }
     delete mp_ui;
 }

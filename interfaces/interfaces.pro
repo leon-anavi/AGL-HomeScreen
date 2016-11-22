@@ -35,13 +35,13 @@ XMLSOURCES = \
     statusbar.xml \
     windowmanager.xml
 
-gen_adapter_cpp.input = XMLSOURCES
-gen_adapter_cpp.commands = \
-    qdbusxml2cpp -i include/${QMAKE_FILE_IN_BASE}.hpp -m -a ${QMAKE_FILE_IN_BASE}_adapter ${QMAKE_FILE_IN}; \
-    moc $$OUT_PWD/${QMAKE_FILE_IN_BASE}_adapter.h -o $$OUT_PWD/${QMAKE_FILE_IN_BASE}_adapter.moc
-gen_adapter_cpp.output = ${QMAKE_FILE_IN_BASE}_adapter.cpp
-gen_adapter_cpp.variable_out = SOURCES
-gen_adapter_cpp.clean = ${QMAKE_FILE_IN_BASE}_adapter.cpp
+gen_adaptor_cpp.input = XMLSOURCES
+gen_adaptor_cpp.commands = \
+    qdbusxml2cpp -i include/${QMAKE_FILE_IN_BASE}.hpp -m -a ${QMAKE_FILE_IN_BASE}_adaptor ${QMAKE_FILE_IN}; \
+    moc $$OUT_PWD/${QMAKE_FILE_IN_BASE}_adaptor.h -o $$OUT_PWD/${QMAKE_FILE_IN_BASE}_adaptor.moc
+gen_adaptor_cpp.output = ${QMAKE_FILE_IN_BASE}_adaptor.cpp
+gen_adaptor_cpp.variable_out = SOURCES
+gen_adaptor_cpp.clean = ${QMAKE_FILE_IN_BASE}_adaptor.cpp
 
 gen_proxy_cpp.input = XMLSOURCES
 gen_proxy_cpp.commands = \
@@ -51,11 +51,11 @@ gen_proxy_cpp.output = ${QMAKE_FILE_IN_BASE}_proxy.cpp
 gen_proxy_cpp.variable_out = SOURCES
 gen_proxy_cpp.clean = ${QMAKE_FILE_IN_BASE}_proxy.cpp
 
-gen_adapter_h.input = XMLSOURCES
-gen_adapter_h.commands = @echo Fake making the header for ${QMAKE_FILE_IN}
-gen_adapter_h.depends = ${QMAKE_FILE_IN_BASE}_adapter.cpp
-gen_adapter_h.output = ${QMAKE_FILE_IN_BASE}_adapter.h
-gen_adapter_h.clean = ${QMAKE_FILE_IN_BASE}_adapter.h
+gen_adaptor_h.input = XMLSOURCES
+gen_adaptor_h.commands = @echo Fake making the header for ${QMAKE_FILE_IN}
+gen_adaptor_h.depends = ${QMAKE_FILE_IN_BASE}_adaptor.cpp
+gen_adaptor_h.output = ${QMAKE_FILE_IN_BASE}_adaptor.h
+gen_adaptor_h.clean = ${QMAKE_FILE_IN_BASE}_adaptor.h
 
 gen_proxy_h.input = XMLSOURCES
 gen_proxy_h.commands = @echo Fake making the header for ${QMAKE_FILE_IN}
@@ -63,4 +63,4 @@ gen_proxy_h.depends = ${QMAKE_FILE_IN_BASE}_proxy.cpp
 gen_proxy_h.output = ${QMAKE_FILE_IN_BASE}_proxy.h
 gen_proxy_h.clean = ${QMAKE_FILE_IN_BASE}_proxy.h
 
-QMAKE_EXTRA_COMPILERS += gen_adapter_cpp gen_proxy_cpp gen_adapter_h gen_proxy_h
+QMAKE_EXTRA_COMPILERS += gen_adaptor_cpp gen_proxy_cpp gen_adaptor_h gen_proxy_h

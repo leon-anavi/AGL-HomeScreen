@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include "include/homescreen.hpp"
-#include "homescreen_adapter.h"
+#include "homescreen_adaptor.h"
 #include <include/appframework.hpp>
 #include <appframework_proxy.h>
 
@@ -23,7 +23,7 @@ signals:
     bool newRequestRenderSurfaceToAreaAllowed(int surfaceId, int layoutArea);
     void newRequestSurfaceIdToFullScreen(int surfaceId);
 
-//from homescreen_adapter.h
+//from homescreen_adaptor.h
 public Q_SLOTS: // METHODS
     QList<int> getAllSurfacesOfProcess(int pid);
     int getSurfaceStatus(int surfaceId);

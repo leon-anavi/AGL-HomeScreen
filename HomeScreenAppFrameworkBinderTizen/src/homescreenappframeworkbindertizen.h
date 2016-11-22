@@ -19,7 +19,7 @@
 
 #include <QObject>
 #include <include/appframework.hpp>
-#include "appframework_adapter.h"
+#include "appframework_adaptor.h"
 
 #ifdef __arm__
 extern "C" {
@@ -38,7 +38,7 @@ private:
     AppframeworkAdaptor *mp_appframeworkAdaptor;
     QList<AppInfo> m_apps;
 
-    //from appframework_adapter.h
+    //from appframework_adaptor.h
 public Q_SLOTS: // METHODS
     QStringList getAvailableAppNames();
     int launchApp(const QString &name);

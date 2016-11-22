@@ -19,7 +19,7 @@
 
 #include <QMainWindow>
 #include "daynightmode_proxy.h"
-#include "proximity_adapter.h"
+#include "proximity_adaptor.h"
 
 #include "homescreencontrolinterface.h"
 
@@ -48,7 +48,7 @@ public:
 public Q_SLOTS:
     void dayNightModeSlot(int mode);
 
-// from proximity_adapter.h
+// from proximity_adaptor.h
 public Q_SLOTS:
     void setObjectDetected(bool detected);
 

@@ -17,7 +17,7 @@
 #ifndef INPUTEVENTMANAGER_H
 #define INPUTEVENTMANAGER_H
 
-#include "inputevent_adapter.h"
+#include "inputevent_adaptor.h"
 #include <include/homescreen.hpp>
 #include "homescreen_proxy.h"
 
@@ -40,7 +40,7 @@ private:
     InputeventAdaptor *mp_inputEventAdaptor;
     org::agl::homescreen *mp_dBusHomeScreenProxy;
 
-    //from inputevent_adapter.h
+    //from inputevent_adaptor.h
 public Q_SLOTS: // METHODS
     void hardKeyPressed(int key);
 

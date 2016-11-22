@@ -19,7 +19,7 @@
 
 #include <QObject>
 #include <include/appframework.hpp>
-#include "appframework_adapter.h"
+#include "appframework_adaptor.h"
 #include "afm_user_daemon_proxy.h"
 
 
@@ -33,7 +33,7 @@ private:
     AppframeworkAdaptor *mp_appframeworkAdaptor;
     QList<AppInfo> m_apps;
 
-    //from appframework_adapter.h
+    //from appframework_adaptor.h
 public Q_SLOTS: // METHODS
     QList<AppInfo> getAvailableApps();
     int launchApp(const QString &name);

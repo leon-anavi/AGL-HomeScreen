@@ -1,15 +1,15 @@
 [Unit]
 Description=AGL Window Manager
-After=weston.service
+Requires=dbus.service
 
 [Service]
-Type=dbus                                
+User=root
+Type=dbus
 BusName=org.agl.windowmanager
-ExecStart=/usr/AGL/WindowManager/WindowManager
+ExecStart=/usr/AGL/HomeScreen/WindowManager
 Restart=on-failure
-RestartSec=5
-
+RestartSec=1
+StandardOutput=tty
 
 [Install]
 WantedBy=default.target
-

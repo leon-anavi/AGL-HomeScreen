@@ -40,7 +40,7 @@ private:
     InputeventAdaptor *mp_inputEventAdaptor;
     org::agl::homescreen *mp_dBusHomeScreenProxy;
 
-    //from inputevent_adaptor.h
+    //from inputevent_adapter.h
 public Q_SLOTS: // METHODS
     void hardKeyPressed(int key);
 

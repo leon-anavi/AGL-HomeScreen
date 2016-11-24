@@ -15,8 +15,7 @@
  */
 
 #include "windowmanager.hpp"
-#include <wayland-client.h>
-#include <QFile>
+
 
 //////////////////////////////////////////
 // THIS IS STILL UNDER HEAVY DEVELOPMENT!
@@ -48,12 +47,6 @@ WindowManager::WindowManager(QObject *parent) :
     m_currentLayout(-1)
 {
     qDebug("-=[WindowManager]=-");
-    // publish windowmanager interface
-    mp_windowManagerAdaptor = new WindowmanagerAdaptor((QObject*)this);
-
-    QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.registerObject("/windowmanager", this);
-    dbus.registerService("org.agl.windowmanager");
 }
 
 void WindowManager::start()
@@ -65,6 +58,11 @@ void WindowManager::start()
 
     err = ilm_init();
     qDebug("ilm_init = %d", err);
+    if(ILM_SUCCESS != err)
+    {
+        qDebug("failed! Exiting!");
+        exit(-1);
+    }
 
     myThis = this;
     err =  ilm_registerNotification(WindowManager::notificationFunc_static, this);
@@ -74,6 +72,13 @@ void WindowManager::start()
     createNewLayer(WINDOWMANAGER_LAYER_APPLICATIONS);
     createNewLayer(WINDOWMANAGER_LAYER_HOMESCREEN);
 #endif
+
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerObject("/windowmanager", this);
+    dbus.registerService("org.agl.windowmanager");
+
+    // publish windowmanager interface
+    mp_windowManagerAdaptor = new WindowmanagerAdaptor((QObject*)this);
 }
 
 WindowManager::~WindowManager()

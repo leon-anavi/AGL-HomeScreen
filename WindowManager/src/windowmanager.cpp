@@ -275,13 +275,25 @@ void WindowManager::updateScreen()
         ilm_commitChanges();
     }
 
+    // display layer render order
     t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
     renderOrder[0] = WINDOWMANAGER_LAYER_HOMESCREEN;
     renderOrder[1] = WINDOWMANAGER_LAYER_APPLICATIONS;
     renderOrder[2] = WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY;
     renderOrder[3] = WINDOWMANAGER_LAYER_POPUP;
-
     ilm_displaySetRenderOrder(0, renderOrder, WINDOWMANAGER_LAYER_NUM);
+
+    // layer surface render order
+    t_ilm_int length;
+    t_ilm_surface* pArray;
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_HOMESCREEN, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_HOMESCREEN, pArray, length);
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_APPLICATIONS, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_APPLICATIONS, pArray, length);
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, pArray, length);
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_POPUP, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_POPUP, pArray, length);
 
     ilm_commitChanges();
 

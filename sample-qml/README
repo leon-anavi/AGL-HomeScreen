@@ -1,0 +1,16 @@
+How to create and install sample qml application
+
+$ cd ${sample-qml-build-directory} // in build directory 
+Copy appropriate file to build-directory. See following example
+$ ls ${sample-qml-build-directory}
+MainForm.ui.qml  apps        dummyimports  main.qml   sample-qml
+agl-image.png    config.xml  imports       main2.qml
+
+$ zip -q -r sample-qml.wgt .
+$ cp sample-qml.wgt ${SDCARD}/home/root
+
+then boot sd card
+# afm-util install sample-qml.wgt
+reboot
+# afm-util start sample-qml@0.1
+or Click and start from HomeScreen

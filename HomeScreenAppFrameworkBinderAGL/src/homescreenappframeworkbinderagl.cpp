@@ -51,7 +51,7 @@ HomeScreenAppFrameworkBinderAgl::HomeScreenAppFrameworkBinderAgl(QObject *parent
         QJsonObject appObject = appsArray[i].toObject();
         AppInfo appInfo;
         appInfo.read(appObject);
-        qDebug("name %s", appInfo.name.toStdString().c_str());
+        qDebug("name %s", appInfo.name().toStdString().c_str());
         m_apps.append(appInfo);
 
     }

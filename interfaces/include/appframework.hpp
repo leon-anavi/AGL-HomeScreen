@@ -17,31 +17,49 @@
 #ifndef APPFRAMEWORK_HPP
 #define APPFRAMEWORK_HPP
 
-#include <QtDBus>
+#include <QtCore/QSharedDataPointer>
+#include <QtDBus/QDBusArgument>
 
 class AppInfo
 {
+    Q_GADGET
+    Q_PROPERTY(QString id READ id)
+    Q_PROPERTY(QString version READ version)
+    Q_PROPERTY(int width READ width)
+    Q_PROPERTY(int height READ height)
+    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString description READ description)
+    Q_PROPERTY(QString shortname READ shortname)
+    Q_PROPERTY(QString author READ author)
+    Q_PROPERTY(QString iconPath READ iconPath)
 public:
     AppInfo();
+    AppInfo(const AppInfo &other);
     virtual ~AppInfo();
+    AppInfo &operator =(const AppInfo &other);
+    void swap(AppInfo &other) { qSwap(d, other.d); }
 
-    QString id;
-    QString version;
-    int width;
-    int height;
-    QString name;
-    QString description;
-    QString shortname;
-    QString author;
-    QString iconPath;
+    QString id() const;
+    QString version() const;
+    int width() const;
+    int height() const;
+    QString name() const;
+    QString description() const;
+    QString shortname() const;
+    QString author() const;
+    QString iconPath() const;
 
     void read(const QJsonObject &json);
 
-    friend QDBusArgument &operator <<(QDBusArgument &argument, const AppInfo &mAppInfo);
-    friend const QDBusArgument &operator >>(const QDBusArgument &argument, AppInfo &mAppInfo);
+    friend QDBusArgument &operator <<(QDBusArgument &argument, const AppInfo &appInfo);
+    friend const QDBusArgument &operator >>(const QDBusArgument &argument, AppInfo &appInfo);
+
+private:
+    class Private;
+    QSharedDataPointer<Private> d;
 };
 
-
+Q_DECLARE_SHARED(AppInfo)
 Q_DECLARE_METATYPE(AppInfo)
 Q_DECLARE_METATYPE(QList<AppInfo>)
 

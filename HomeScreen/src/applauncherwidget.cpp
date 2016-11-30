@@ -124,7 +124,7 @@ void AppLauncherWidget::populateAppList()
     {
        mp_appTable->setItem(i / APP_LIST_COLUMN_COUNT,
                             i % APP_LIST_COLUMN_COUNT,
-                            new QTableWidgetItem(m_appList.at(i).name));
+                            new QTableWidgetItem(m_appList.at(i).name()));
        mp_appTable->item(i / APP_LIST_COLUMN_COUNT,
                          i % APP_LIST_COLUMN_COUNT)->setFlags(Qt::ItemIsEnabled);
        mp_appTable->item(i / APP_LIST_COLUMN_COUNT,
@@ -136,8 +136,8 @@ void AppLauncherWidget::on_tableView_clicked(int row, int col)
 {
     if (m_appList.size() > row * APP_LIST_COLUMN_COUNT + col)
     {
-        int pid = mp_dBusAppFrameworkProxy->launchApp(m_appList.at(row * APP_LIST_COLUMN_COUNT + col).id);
-        qDebug("%d, %d: start app %s", row, col, m_appList.at(row * APP_LIST_COLUMN_COUNT + col).id.toStdString().c_str());
+        int pid = mp_dBusAppFrameworkProxy->launchApp(m_appList.at(row * APP_LIST_COLUMN_COUNT + col).id());
+        qDebug("%d, %d: start app %s", row, col, m_appList.at(row * APP_LIST_COLUMN_COUNT + col).id().toStdString().c_str());
         qDebug("pid: %d", pid);
 
         // the new app wants to be visible by default

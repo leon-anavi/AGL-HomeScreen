@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+        <file>apps/HVAC/TemperatureWheel.qml</file>
+        <file>apps/HVAC/TempSlider.qml</file>
+        <file>apps/HVAC/SeatHeatButton.qml</file>
+        <file>apps/HVAC/MiddleColumn.qml</file>
+        <file>apps/HVAC/HazardButton.qml</file>
+        <file>apps/HVAC/HVAC.qml</file>
+        <file>apps/HVAC/FanControl.qml</file>
+        <file>apps/HVAC/ClimateButton.qml</file>
+        <file>imports/vehicle/qmldir</file>
+        <file>imports/utils/qmldir</file>
+        <file>imports/system/qmldir</file>
+        <file>imports/radio/qmldir</file>
+        <file>imports/components/qmldir</file>
+        <file>dummyimports/radio/qmldir</file>
+        <file>dummyimports/com/pelagicore/qmldevinfo/qmldir</file>
+        <file>dummyimports/amb/qmldir</file>
+    </qresource>
+</RCC>

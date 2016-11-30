@@ -27,7 +27,8 @@ SUBDIRS = interfaces \
     WindowManager \
     SampleHomeScreenInterfaceApp \
     SampleNavigationApp \
-    SampleMediaApp
+    SampleMediaApp \
+    sample-qml \
 
 HomeScreen.depends = interfaces
 HomeScreenSimulator.depends = interfaces

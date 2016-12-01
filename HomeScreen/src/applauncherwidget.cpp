@@ -114,11 +114,11 @@ void AppLauncherWidget::populateAppList()
     }
 
 
-    for (i = 0; i < (mp_appTable->rowCount() * APP_LIST_COLUMN_COUNT); i++)
+    /*for (i = 0; i < (mp_appTable->rowCount() * APP_LIST_COLUMN_COUNT); i++)
     {
         mp_appTable->verticalHeader()->resizeSection(i, 190);
         mp_appTable->horizontalHeader()->resizeSection(i, 190);
-    }
+    }*/
 
     for (i = 0; i < m_appList.size(); i++)
     {

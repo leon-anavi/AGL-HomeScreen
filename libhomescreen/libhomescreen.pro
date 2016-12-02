@@ -38,11 +38,10 @@ gen_docbook.commands = \
 QMAKE_EXTRA_TARGETS += gen_docbook
 PRE_TARGETDEPS += doc
 
-#    ../interfaces/appframework.xml \
-#    ../interfaces/daynightmode.xml \
-#    ../interfaces/homescreen.xml \
-#    ../interfaces/inputevent.xml \
-#    ../interfaces/popup.xml \
-#    ../interfaces/proximity.xml \
-#    ../interfaces/statusbar.xml \
-#    ../interfaces/windowmanager.xml
+CONFIG += create_pc create_prl
+QMAKE_PKGCONFIG_NAME = libhomescreen
+QMAKE_PKGCONFIG_DESCRIPTION = A generic interface for the HomeScreen app
+QMAKE_PKGCONFIG_LIBDIR = /usr/lib64
+QMAKE_PKGCONFIG_INCDIR = /usr/include
+QMAKE_PKGCONFIG_REQUIRES = glib-2.0 gio-unix-2.0
+QMAKE_PKGCONFIG_DESTDIR = pkgconfig

@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>TopSection_NoText_NoIcons-01.png</file>
+        <file>Utility_Logo_Background-01.png</file>
+        <file>Utility_Logo_Colour-01.png</file>
+        <file>Utility_Music_Background-01.png</file>
+        <file>Utility_Radio_Background-01.png</file>
+        <file>AGL_HMI_Background_NoCar-01.png</file>
+    </qresource>
+</RCC>

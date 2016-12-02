@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/images/Status">
+        <file>HMI_Status_Wifi_NoBars-01.png</file>
+        <file>HMI_Status_Bluetooth_Inactive-01.png</file>
+        <file>HMI_Status_Bluetooth_On-01.png</file>
+        <file>HMI_Status_Signal_1Bars-01.png</file>
+        <file>HMI_Status_Signal_2Bars-01.png</file>
+        <file>HMI_Status_Signal_3Bars-01.png</file>
+        <file>HMI_Status_Signal_4Bars-01.png</file>
+        <file>HMI_Status_Signal_Full-01.png</file>
+        <file>HMI_Status_Signal_NoBars-01.png</file>
+        <file>HMI_Status_Wifi_1Bar-01.png</file>
+        <file>HMI_Status_Wifi_2Bars-01.png</file>
+        <file>HMI_Status_Wifi_3Bars-01.png</file>
+        <file>HMI_Status_Wifi_Full-01.png</file>
+    </qresource>
+</RCC>

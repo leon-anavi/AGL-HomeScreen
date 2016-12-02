@@ -29,6 +29,7 @@ SUBDIRS = interfaces \
     SampleNavigationApp \
     SampleMediaApp \
     sample-qml \
+    HomeScreenNG
 
 HomeScreen.depends = interfaces
 HomeScreenSimulator.depends = interfaces

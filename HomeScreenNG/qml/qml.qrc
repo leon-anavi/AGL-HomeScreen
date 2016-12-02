@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MediaArea.qml</file>
+        <file>MediaAreaBlank.qml</file>
+        <file>MediaAreaMusic.qml</file>
+        <file>MediaAreaRadio.qml</file>
+        <file>ShortcutArea.qml</file>
+        <file>ShortcutIcon.qml</file>
+        <file>StatusArea.qml</file>
+        <file>TopArea.qml</file>
+    </qresource>
+</RCC>

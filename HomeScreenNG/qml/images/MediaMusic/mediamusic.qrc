@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/images/MediaMusic">
+        <file>AlbumArtwork.png</file>
+        <file>BackArrow.png</file>
+        <file>ForwardArrow.png</file>
+        <file>ShuffleIcon.png</file>
+        <file>Volume_Loud.png</file>
+        <file>Volume_Medium.png</file>
+        <file>Volume_Off.png</file>
+    </qresource>
+</RCC>

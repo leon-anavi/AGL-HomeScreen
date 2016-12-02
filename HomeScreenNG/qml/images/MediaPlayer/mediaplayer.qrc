@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/images/MediaPlayer">
+        <file>AGL_MediaPlayer_AlbumArtwork.png</file>
+        <file>AGL_MediaPlayer_BackArrow.png</file>
+        <file>AGL_MediaPlayer_Bluetooth_Active.png</file>
+        <file>AGL_MediaPlayer_Bluetooth_Inactive.png</file>
+        <file>AGL_MediaPlayer_CD_Active.png</file>
+        <file>AGL_MediaPlayer_CD_Inactive.png</file>
+        <file>AGL_MediaPlayer_DividingLine.png</file>
+        <file>AGL_MediaPlayer_ForwardArrow.png</file>
+        <file>AGL_MediaPlayer_Loop_Active.png</file>
+        <file>AGL_MediaPlayer_Loop_Inactive.png</file>
+        <file>AGL_MediaPlayer_Player_Pause.png</file>
+        <file>AGL_MediaPlayer_Player_Play.png</file>
+        <file>AGL_MediaPlayer_Playlist_Active.png</file>
+        <file>AGL_MediaPlayer_Playlist_Inactive.png</file>
+        <file>AGL_MediaPlayer_PlaylistToggle_Active.png</file>
+        <file>AGL_MediaPlayer_PlaylistToggle_Inactive.png</file>
+        <file>AGL_MediaPlayer_Radio_Active.png</file>
+        <file>AGL_MediaPlayer_Radio_Inactive.png</file>
+        <file>AGL_MediaPlayer_Shuffle_Active.png</file>
+        <file>AGL_MediaPlayer_Shuffle_Inactive.png</file>
+        <file>Albums_Active.png</file>
+        <file>Albums_Inactive.png</file>
+        <file>DividingLine.png</file>
+        <file>GreenLine.png</file>
+        <file>Music_Active.png</file>
+        <file>Music_Inactive.png</file>
+        <file>Podcasts_Active.png</file>
+        <file>Podcasts_Inactive.png</file>
+        <file>Popup_Highlight.png</file>
+        <file>Popup_PauseIcon.png</file>
+        <file>Popup_PlayIcon.png</file>
+        <file>Popup_VerticalLine.png</file>
+        <file>X.png</file>
+    </qresource>
+</RCC>

@@ -277,7 +277,7 @@ void LayoutHandler::setLayoutByName(QString layoutName)
 void LayoutHandler::requestSurfaceVisibilityChanged(int surfaceId, bool visible)
 {
     qDebug("requestSurfaceVisibilityChanged %d %s", surfaceId, visible ? "true" : "false");
-    surfaceVisibilityChanged(surfaceId, visible);
+    emit surfaceVisibilityChanged(surfaceId, visible);
 }
 
 void LayoutHandler::timerEvent(QTimerEvent *e)

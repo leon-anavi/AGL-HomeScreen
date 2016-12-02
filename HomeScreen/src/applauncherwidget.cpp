@@ -141,8 +141,8 @@ void AppLauncherWidget::on_tableView_clicked(int row, int col)
         qDebug("pid: %d", pid);
 
         // the new app wants to be visible by default
-        newRequestsToBeVisibleApp(pid);
+        emit newRequestsToBeVisibleApp(pid);
 
-        showAppLayer();
+        emit showAppLayer();
     }
 }

@@ -69,14 +69,14 @@ void ControlBarWidget::updateColorScheme()
 
 void ControlBarWidget::on_pushButton_home_clicked()
 {
-    hideAppLayer();
-    homeButtonPressed();
+    emit hideAppLayer();
+    emit homeButtonPressed();
 }
 
 void ControlBarWidget::on_pushButton_settings_clicked()
 {
-    hideAppLayer();
-    settingsButtonPressed();
+    emit hideAppLayer();
+    emit settingsButtonPressed();
 }
 
 void ControlBarWidget::on_pushButton_nav_clicked()

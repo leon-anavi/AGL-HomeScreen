@@ -46,13 +46,13 @@ void HomeScreenControlInterface::hardKeyPressed(int key)
         qDebug("hardKeyPressed NAV key pressed!");
         pid = mp_dBusAppFrameworkProxy->launchApp("nav@0.1");
         qDebug("pid: %d", pid);
-        newRequestsToBeVisibleApp(pid);
+        emit newRequestsToBeVisibleApp(pid);
         break;
     case InputEvent::HARDKEY_MEDIA:
         qDebug("hardKeyPressed MEDIA key pressed!");
         pid = mp_dBusAppFrameworkProxy->launchApp("media@0.1");
         qDebug("pid: %d", pid);
-        newRequestsToBeVisibleApp(pid);
+        emit newRequestsToBeVisibleApp(pid);
         break;
     default:
         qDebug("hardKeyPressed %d", key);
@@ -63,7 +63,7 @@ void HomeScreenControlInterface::hardKeyPressed(int key)
 void HomeScreenControlInterface::renderSurfaceToArea(int surfaceId, int layoutArea)
 {
     qDebug("renderSurfaceToArea %d %d", surfaceId, layoutArea);
-    newRequestRenderSurfaceToArea(surfaceId, layoutArea);
+    emit newRequestRenderSurfaceToArea(surfaceId, layoutArea);
 }
 
 bool HomeScreenControlInterface::renderAppToAreaAllowed(int appCategory, int layoutArea)
@@ -75,5 +75,5 @@ bool HomeScreenControlInterface::renderAppToAreaAllowed(int appCategory, int lay
 void HomeScreenControlInterface::requestSurfaceIdToFullScreen(int surfaceId)
 {
     qDebug("requestSurfaceIdToFullScreen %d", surfaceId);
-    newRequestSurfaceIdToFullScreen(surfaceId);
+    emit newRequestSurfaceIdToFullScreen(surfaceId);
 }

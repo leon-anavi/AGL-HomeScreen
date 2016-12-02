@@ -85,7 +85,7 @@ void PopupWidget::on_pushButton_OK_clicked()
 {
     if (m_sendComboBoxChoice)
     {
-        comboBoxResult(mp_ui->comboBox_choice->currentText());
+        emit comboBoxResult(mp_ui->comboBox_choice->currentText());
         m_sendComboBoxChoice = false;
     }
     this->close();

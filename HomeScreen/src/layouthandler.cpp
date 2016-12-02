@@ -33,7 +33,7 @@ LayoutHandler::LayoutHandler(QObject *parent) :
                                        "org.agl.windowmanager",
                                        "surfaceVisibilityChanged",
                                        this,
-                                       SLOT(surfaceVisibilityChanged(int,bool)));
+                                       SIGNAL(surfaceVisibilityChanged(int,bool)));
 }
 
 LayoutHandler::~LayoutHandler()

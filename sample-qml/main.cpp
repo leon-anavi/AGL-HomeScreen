@@ -30,22 +30,10 @@ int main(int argc, char *argv[])
     enabled = mp_libHomeScreen->renderAppToAreaAllowed(appcategory, FULLSCREEN);
     if(enabled)
     {
-        QString target(getenv("AFM_APP_INSTALL_DIR"));
-        qDebug("AFM_APP_INSTALL_DIR is " + target.toLatin1());
+        engine.addImportPath(QStringLiteral(":/imports"));
+        engine.addImportPath(QStringLiteral(":/dummyimports"));
 
-        if(NULL == target)
-        {
-            target = ".";
-        }
-
-        QString load_path;
-        load_path = target + "/imports";
-        engine.addImportPath(load_path);
-        load_path = target + "/dummyimports";
-        engine.addImportPath(load_path);
-        load_path = target + "/main.qml";
-
-        engine.load(QUrl(load_path));
+        engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
         std::vector<int> surfaceIdList;
         int pid = getpid();

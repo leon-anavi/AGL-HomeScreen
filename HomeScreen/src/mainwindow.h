@@ -26,7 +26,7 @@
 #include "statusbarwidget.h"
 #include "controlbarwidget.h"
 #include "settingswidget.h"
-#include "applauncherwidget.h"
+//#include "applauncher.h"
 #include "popupwidget.h"
 
 #include "layouthandler.h"
@@ -68,7 +68,7 @@ private:
     ControlBarWidget *mp_controlBarWidget;
     org::agl::daynightmode *mp_dBusDayNightMode_ControlBarWidget;
     SettingsWidget *mp_settingsWidget;
-    AppLauncherWidget *mp_applauncherwidget;
+    //AppLauncherWidget *mp_applauncherwidget;
     PopupWidget *mp_popupWidget;
 
     LayoutHandler *mp_layoutHandler;

@@ -16,20 +16,17 @@
 
 #include "mainwindow.h"
 #include <QApplication>
-#include <QSysInfo>
-//#include <QSharedMemory>
+#include <QtGui/QGuiApplication>
+#include <QtQml/QQmlApplicationEngine>
+#include <QtQml/qqml.h>
+
+#include "../src2/applicationlauncher.h"
+#include "../src2/statusbarmodel.h"
+#include "layouthandler.h"
+
 
 int main(int argc, char *argv[])
 {
-    // allow only one instance of this application
-    /*QSharedMemory appInstance;
-    appInstance.setKey("HomeScreen");
-    if (!appInstance.create(1))
-    {
-        qDebug("Only one instance of the Home Screen App allowed!");
-        exit(-1);
-    }*/
-
     QApplication a(argc, argv);
 
     // used for application settings (QSettings)
@@ -43,20 +40,13 @@ int main(int argc, char *argv[])
     qDBusRegisterMetaType<AppInfo>();
     qDBusRegisterMetaType<QList<AppInfo> >();
 
-    MainWindow w;
-    w.show();
-#ifdef HAVE_IVI_LAYERMANAGEMENT_API
-    // the WindowManager positions the surface correctly
-#else
-    w.move(0, 0);
-#endif
+    qmlRegisterType<ApplicationLauncher>("HomeScreen", 1, 0, "ApplicationLauncher");
+    qmlRegisterType<StatusBarModel>("HomeScreen", 1, 0, "StatusBarModel");
+    qmlRegisterType<LayoutHandler>("HomeScreen", 1, 0, "LayoutHandler");
 
-#ifdef __arm__
-    qDebug("Running on ARM architecture");
-#endif
-#ifdef __i386__
-    qDebug("Running on x86 architecture");
-#endif
+
+    QQmlApplicationEngine engine;
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return a.exec();
 }

@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2016 The Qt Company Ltd.
  * Copyright (C) 2016 Mentor Graphics Development (Deutschland) GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,44 +15,28 @@
  * limitations under the License.
  */
 
-#ifndef APPLAUNCHERWIDGET_H
-#define APPLAUNCHERWIDGET_H
+#ifndef APPLICATIONLAUNCHER_H
+#define APPLICATIONLAUNCHER_H
 
-#include <QWidget>
-#include <QList>
-#include <QTableWidget>
+#include <QtCore/QObject>
 #include <include/appframework.hpp>
 #include <appframework_proxy.h>
 
-namespace Ui {
-class AppLauncherWidget;
-}
-
-class AppLauncherWidget : public QWidget
+class ApplicationLauncher : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit AppLauncherWidget(QWidget *parent = 0);
-    ~AppLauncherWidget();
-
-    void populateAppList();
-
-public slots:
-    void updateColorScheme();
-
-private slots:
-    void on_tableView_clicked(int row, int col);
+    explicit ApplicationLauncher(QObject *parent = NULL);
+    ~ApplicationLauncher();
 
 signals:
-    void newRequestsToBeVisibleApp(int pid);
-    void showAppLayer();
+    void newAppRequestsToBeVisible(int pid);
+
+public slots:
+    int launch(const QString &application);
 
 private:
-    Ui::AppLauncherWidget *mp_ui;
-    QList<AppInfo> m_appList;
-    QTableWidget *mp_appTable;
     org::agl::appframework *mp_dBusAppFrameworkProxy;
 };
 
-#endif // APPLAUNCHERWIDGET_H
+#endif // APPLICATIONLAUNCHER_H

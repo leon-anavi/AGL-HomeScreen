@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/images/Shortcut">
+        <file>HMI_Shortcut_Home_Active-01.png</file>
+        <file>HMI_Shortcut_Home-01.png</file>
+        <file>HMI_Shortcut_HVAC_Active-01.png</file>
+        <file>HMI_Shortcut_HVAC-01.png</file>
+        <file>HMI_Shortcut_Multimedia_Active-01.png</file>
+        <file>HMI_Shortcut_Multimedia-01.png</file>
+        <file>HMI_Shortcut_Navigation_Active-01.png</file>
+        <file>HMI_Shortcut_Navigation-01.png</file>
+    </qresource>
+</RCC>

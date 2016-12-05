@@ -1,7 +1,7 @@
 AGL Home Screen reference implementation
 
 
-Build with QtCreator 3.0.1
+Build with QtCreator 3.5.1
 
 AGL repo for source code:
 https://gerrit.automotivelinux.org/gerrit/#/admin/projects/staging/HomeScreen

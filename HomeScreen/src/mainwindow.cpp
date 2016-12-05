@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_statusBarWidget(0),
     mp_controlBarWidget(0),
     mp_settingsWidget(0),
-    mp_applauncherwidget(0),
+    //mp_applauncherwidget(0),
     mp_popupWidget(0),
     mp_layoutHandler(new LayoutHandler()),
     mp_dBusDayNightModeProxy(0),
@@ -66,10 +66,10 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_settingsWidget->move(0, 60);
     //mp_settingsWidget->hide();
 
-    mp_applauncherwidget = new AppLauncherWidget(this);
+    /*mp_applauncherwidget = new AppLauncherWidget(this);
     mp_applauncherwidget->raise();
     // apply layout
-    mp_applauncherwidget->move(0, 60);
+    mp_applauncherwidget->move(0, 60);*/
 
 
     mp_popupWidget = new PopupWidget();
@@ -85,11 +85,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(mp_settingsWidget, SIGNAL(colorSchemeChanged()), mp_popupWidget, SLOT(updateColorScheme()));
 
     QObject::connect(mp_controlBarWidget, SIGNAL(settingsButtonPressed()), mp_settingsWidget, SLOT(raise()));
-    QObject::connect(mp_controlBarWidget, SIGNAL(homeButtonPressed()), mp_applauncherwidget, SLOT(raise()));
+    //QObject::connect(mp_controlBarWidget, SIGNAL(homeButtonPressed()), mp_applauncherwidget, SLOT(raise()));
     QObject::connect(mp_controlBarWidget, SIGNAL(hideAppLayer()), mp_layoutHandler, SLOT(hideAppLayer()));
 
-    QObject::connect(mp_applauncherwidget, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
-    QObject::connect(mp_applauncherwidget, SIGNAL(showAppLayer()), mp_layoutHandler, SLOT(showAppLayer()));
+    //QObject::connect(mp_applauncherwidget, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
+    //QObject::connect(mp_applauncherwidget, SIGNAL(showAppLayer()), mp_layoutHandler, SLOT(showAppLayer()));
 
 
     // apply color scheme
@@ -98,8 +98,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // this is only useful during development and will be removed later
     setWindowIcon(QIcon(":/icons/home_day.png"));
 
-    mp_applauncherwidget->populateAppList();
-    mp_layoutHandler->setUpLayouts();
+   // mp_applauncherwidget->populateAppList();
+    //mp_layoutHandler->setUpLayouts();
 
     mp_homeScreenControlInterface = new HomeScreenControlInterface(this);
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), mp_layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
@@ -121,7 +121,7 @@ MainWindow::~MainWindow()
     delete mp_layoutHandler;
 
     delete mp_popupWidget;
-    delete mp_applauncherwidget;
+    //delete mp_applauncherwidget;
     delete mp_settingsWidget;
     delete mp_controlBarWidget;
     delete mp_statusBarWidget;
@@ -170,7 +170,7 @@ void MainWindow::updateColorScheme()
     mp_statusBarWidget->updateColorScheme();
     mp_controlBarWidget->updateColorScheme();
     mp_settingsWidget->updateColorScheme();
-    mp_applauncherwidget->updateColorScheme();
+    //mp_applauncherwidget->updateColorScheme();
     mp_popupWidget->updateColorScheme();
 }
 

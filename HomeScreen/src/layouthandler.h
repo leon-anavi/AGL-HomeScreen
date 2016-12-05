@@ -12,8 +12,6 @@ public:
     explicit LayoutHandler(QObject *parent = 0);
     ~LayoutHandler();
 
-    void setUpLayouts();
-
 signals:
 
 public slots:

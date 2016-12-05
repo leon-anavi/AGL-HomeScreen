@@ -14,7 +14,8 @@
 
 TEMPLATE = app
 TARGET = HomeScreen
-QT = widgets dbus
+QT = qml quick widgets dbus
+CONFIG += c++11
 
 include(../interfaces/interfaces.pri)
 include(../ivi_layermanagement_api.pri)
@@ -26,7 +27,7 @@ SOURCES += \
     src/popupwidget.cpp \
     src/controlbarwidget.cpp \
     src/statusbarwidget.cpp \
-    src/applauncherwidget.cpp \
+    src/applauncher.cpp \
     src/homescreencontrolinterface.cpp \
     src/layouthandler.cpp
 
@@ -36,7 +37,7 @@ HEADERS  += \
     src/popupwidget.h \
     src/controlbarwidget.h \
     src/statusbarwidget.h \
-    src/applauncherwidget.h \
+    src/applauncher.h \
     src/homescreencontrolinterface.h \
     src/layouthandler.h
 
@@ -56,8 +57,29 @@ TRANSLATIONS = \
 OTHER_FILES += \
     README.md
 
+
+HEADERS += \
+    src2/statusbarmodel.h \
+    src2/statusbarserver.h \
+    src2/applicationlauncher.h
+
+SOURCES += \
+    src2/statusbarmodel.cpp \
+    src2/statusbarserver.cpp \
+    src2/applicationlauncher.cpp
+
 RESOURCES += \
     resources/homescreen.qrc
+
+RESOURCES += \
+    qml/images/MediaPlayer/mediaplayer.qrc \
+    qml/images/MediaMusic/mediamusic.qrc \
+    qml/images/Weather/weather.qrc \
+    qml/images/Shortcut/shortcut.qrc \
+    qml/images/Status/status.qrc \
+    qml/images/images.qrc \
+    qml/qml.qrc
+
 
 copydata.commands = $(COPY_DIR) $$PWD/resources/colorschemes $$OUT_PWD
 HomeScreen.depends = $(HomeScreen) copydata

@@ -34,92 +34,40 @@ LayoutHandler::LayoutHandler(QObject *parent) :
                                        "surfaceVisibilityChanged",
                                        this,
                                        SIGNAL(surfaceVisibilityChanged(int,bool)));
-}
 
-LayoutHandler::~LayoutHandler()
-{
-    delete mp_dBusPopupProxy;
-    delete mp_dBusWindowManagerProxy;
-}
-
-void LayoutHandler::setUpLayouts()
-{
-    qDebug("setUpLayouts");
     QList<LayoutArea> surfaceAreas;
     LayoutArea surfaceArea;
 
     const int SCREEN_WIDTH = 1080;
     const int SCREEN_HEIGHT = 1920;
 
-    const int STATUSBAR_HEIGHT = 60;
-    const int STATUSBAR_WIDTH = SCREEN_WIDTH;
-    const int STATUSBAR_X = 0;
-    const int STATUSBAR_Y = 0;
-    const int CONTROLBAR_HEIGHT = 60;
-    const int CONTROLBAR_WIDTH = SCREEN_WIDTH;
-    const int CONTROLBAR_X = 0;
-    const int CONTROLBAR_Y = SCREEN_HEIGHT - CONTROLBAR_HEIGHT;
+    const int TOPAREA_HEIGHT = 218;
+    const int TOPAREA_WIDTH = SCREEN_WIDTH;
+    const int TOPAREA_X = 0;
+    const int TOPAREA_Y = 0;
+    const int MEDIAAREA_HEIGHT = 215;
+    const int MEDIAAREA_WIDTH = SCREEN_WIDTH;
+    const int MEDIAAREA_X = 0;
+    const int MEDIAAREA_Y = SCREEN_HEIGHT - MEDIAAREA_HEIGHT;
 
 
     // only one Layout for CES2017 needed
     // layout 1:
     // one app surface, statusbar, control bar
     surfaceArea.x = 0;
-    surfaceArea.y = STATUSBAR_HEIGHT;
+    surfaceArea.y = TOPAREA_HEIGHT;
     surfaceArea.width = SCREEN_WIDTH;
-    surfaceArea.height = SCREEN_HEIGHT - STATUSBAR_HEIGHT - CONTROLBAR_HEIGHT;
+    surfaceArea.height = SCREEN_HEIGHT - TOPAREA_HEIGHT - MEDIAAREA_HEIGHT;
 
     surfaceAreas.append(surfaceArea);
 
     mp_dBusWindowManagerProxy->addLayout(1, "one app", surfaceAreas);
+}
 
-    /*
-    surfaceAreas.clear();
-
-    // layout 2:
-    // two app surfaces (one on top of the other), statusbar, control bar
-
-    // top surface
-    surfaceArea.x = 0;
-    surfaceArea.y = STATUSBAR_HEIGHT;
-    surfaceArea.width = SCREEN_WIDTH;
-    surfaceArea.height = (SCREEN_HEIGHT - STATUSBAR_HEIGHT - CONTROLBAR_HEIGHT) / 2;
-
-    surfaceAreas.append(surfaceArea);
-
-    // bottom surface
-    surfaceArea.x = 0;
-    surfaceArea.y = SCREEN_HEIGHT / 2;
-    surfaceArea.width = SCREEN_WIDTH;
-    surfaceArea.height = (SCREEN_HEIGHT - STATUSBAR_HEIGHT - CONTROLBAR_HEIGHT) / 2;
-
-    surfaceAreas.append(surfaceArea);
-
-    mp_dBusWindowManagerProxy->addLayout(2, "top on bottom", surfaceAreas);
-
-
-    surfaceAreas.clear();
-
-    // layout 3:
-    // two app surfaces (one besides the other), statusbar, control bar
-
-    // left surface
-    surfaceArea.x = 0;
-    surfaceArea.y = STATUSBAR_HEIGHT;
-    surfaceArea.width = SCREEN_WIDTH / 2;
-    surfaceArea.height = SCREEN_HEIGHT - STATUSBAR_HEIGHT - CONTROLBAR_HEIGHT;
-
-    surfaceAreas.append(surfaceArea);
-
-    // right surface
-    surfaceArea.x = SCREEN_WIDTH / 2;
-    surfaceArea.y = STATUSBAR_HEIGHT;
-    surfaceArea.width = SCREEN_WIDTH / 2;
-    surfaceArea.height = SCREEN_HEIGHT - STATUSBAR_HEIGHT - CONTROLBAR_HEIGHT;
-
-    surfaceAreas.append(surfaceArea);
-
-    mp_dBusWindowManagerProxy->addLayout(3, "side by side", surfaceAreas);*/
+LayoutHandler::~LayoutHandler()
+{
+    delete mp_dBusPopupProxy;
+    delete mp_dBusWindowManagerProxy;
 }
 
 void LayoutHandler::showAppLayer()

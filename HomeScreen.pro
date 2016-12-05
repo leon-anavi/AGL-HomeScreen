@@ -37,5 +37,6 @@ HomeScreenAppFrameworkBinderAGL.depends = interfaces
 InputEventManager.depends = interfaces
 SampleAppTimeDate.depends = interfaces
 WindowManager.depends = interfaces
+HomeScreenNG.depends = interfaces
 
 SampleHomeScreenInterfaceApp.depends = libhomescreen

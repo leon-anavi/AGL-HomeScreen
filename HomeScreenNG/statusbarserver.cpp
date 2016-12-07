@@ -32,6 +32,9 @@ StatusBarServer::~StatusBarServer()
 QList<int> StatusBarServer::getAvailablePlaceholders() const
 {
     QList<int> ret;
+    for (int i = 0; i < SupportedCount; ++i){
+        ret.append(i);
+    }
     return ret;
 }
 

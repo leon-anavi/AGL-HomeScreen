@@ -85,11 +85,7 @@ int HomeScreenAppFrameworkBinderAgl::launchApp(const QString &name)
     qDebug("launchApp name: %s", name.toStdString().c_str());
     QString jsonLaunch = "{\"id\":\"" + name + "\", \"mode\":\"local\"}";
     qDebug("jsonLaunch %s", jsonLaunch.toStdString().c_str());
-    QString runIdString = mp_dBusAfmUserProxy->start(jsonLaunch);
-    qDebug("runIdString %s", runIdString.toStdString().c_str());
-    int runid = runIdString.toInt();
-
-    QString stateString = mp_dBusAfmUserProxy->state(runIdString);
+    QString stateString = mp_dBusAfmUserProxy->once(jsonLaunch);
     qDebug("stateString %s", stateString.toStdString().c_str());
 
     QJsonDocument jsonResponse = QJsonDocument::fromJson(stateString.toUtf8());

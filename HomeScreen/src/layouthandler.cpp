@@ -86,15 +86,23 @@ void LayoutHandler::makeMeVisible(int pid)
 {
     qDebug("makeMeVisible %d", pid);
 
-    m_requestsToBeVisiblePids.append(pid);
-
-    // callback every second
-    if (-1 != m_secondsTimerId)
+    // if app does not request to be visible
+    if (-1 == m_requestsToBeVisiblePids.indexOf(pid))
     {
-        killTimer(m_secondsTimerId);
-        m_secondsTimerId = -1;
+        m_requestsToBeVisiblePids.append(pid);
+
+        // callback every second
+        if (-1 != m_secondsTimerId)
+        {
+            killTimer(m_secondsTimerId);
+            m_secondsTimerId = -1;
+        }
+        m_secondsTimerId = startTimer(1000);
     }
-    m_secondsTimerId = startTimer(1000);
+    else
+    {
+        checkToDoQueue();
+    }
 }
 
 void LayoutHandler::checkToDoQueue()
@@ -123,41 +131,52 @@ void LayoutHandler::checkToDoQueue()
 
             if (0 != allSurfaces.size())
             {
-                if (-1 == m_visibleSurfaces.indexOf(allSurfaces.at(0)))
+                int firstSurface = allSurfaces.at(0);
+
+                if (-1 != m_visibleSurfaces.indexOf(firstSurface))
                 {
                     qDebug("already visible");
                 }
-                if (-1 == m_invisibleSurfaces.indexOf(allSurfaces.at(0)))
-                {
-                    m_invisibleSurfaces.removeAt(m_invisibleSurfaces.indexOf(allSurfaces.at(0)));
-                }
-                if (-1 == m_requestsToBeVisibleSurfaces.indexOf(allSurfaces.at(0)))
-                {
-                    m_requestsToBeVisibleSurfaces.append(allSurfaces.at(0));
-                }
-
-                qDebug("m_visibleSurfaces %d", m_visibleSurfaces.size());
-                qDebug("m_invisibleSurfaces %d", m_invisibleSurfaces.size());
-                qDebug("m_requestsToBeVisibleSurfaces %d", m_requestsToBeVisibleSurfaces.size());
-
-                QList<int> availableLayouts = mp_dBusWindowManagerProxy->getAvailableLayouts(1); // one app only for CES2017
-                if (1 == availableLayouts.size())
-                {
-                    qDebug("active layout: %d", availableLayouts.at(0));
-                    m_invisibleSurfaces.append(m_visibleSurfaces);
-                    m_visibleSurfaces.clear();
-                    m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
-                    m_requestsToBeVisibleSurfaces.clear();
-
-                    mp_dBusWindowManagerProxy->setLayoutById(availableLayouts.at(0));
-                    for (int i = 0; i < m_visibleSurfaces.size(); ++i)
-                    {
-                        mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
-                    }
-                }
                 else
                 {
-                    qDebug("this should not happen!?");
+                    if (-1 != m_invisibleSurfaces.indexOf(firstSurface))
+                    {
+                        m_invisibleSurfaces.removeAt(m_invisibleSurfaces.indexOf(firstSurface));
+                    }
+                    if (-1 == m_requestsToBeVisibleSurfaces.indexOf(firstSurface))
+                    {
+                        m_requestsToBeVisibleSurfaces.append(firstSurface);
+                    }
+
+                    qDebug("before");
+                    qDebug(" m_visibleSurfaces %d", m_visibleSurfaces.size());
+                    qDebug(" m_invisibleSurfaces %d", m_invisibleSurfaces.size());
+                    qDebug(" m_requestsToBeVisibleSurfaces %d", m_requestsToBeVisibleSurfaces.size());
+
+                    QList<int> availableLayouts = mp_dBusWindowManagerProxy->getAvailableLayouts(1); // one app only for CES2017
+                    if (1 == availableLayouts.size())
+                    {
+                        qDebug("active layout: %d", availableLayouts.at(0));
+                        m_invisibleSurfaces.append(m_visibleSurfaces);
+                        m_visibleSurfaces.clear();
+                        m_visibleSurfaces.append(m_requestsToBeVisibleSurfaces);
+                        m_requestsToBeVisibleSurfaces.clear();
+
+                        mp_dBusWindowManagerProxy->setLayoutById(availableLayouts.at(0));
+                        for (int i = 0; i < m_visibleSurfaces.size(); ++i)
+                        {
+                            mp_dBusWindowManagerProxy->setSurfaceToLayoutArea(m_visibleSurfaces.at(i), i);
+                        }
+
+                        qDebug("after");
+                        qDebug(" m_visibleSurfaces %d", m_visibleSurfaces.size());
+                        qDebug(" m_invisibleSurfaces %d", m_invisibleSurfaces.size());
+                        qDebug(" m_requestsToBeVisibleSurfaces %d", m_requestsToBeVisibleSurfaces.size());
+                    }
+                    else
+                    {
+                        qDebug("this should not happen!?");
+                    }
                 }
             }
         }

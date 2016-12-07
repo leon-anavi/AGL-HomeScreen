@@ -42,9 +42,12 @@ void* WindowManager::myThis = 0;
 WindowManager::WindowManager(QObject *parent) :
     QObject(parent),
     m_layouts(),
-    m_surfaces(),
+    m_appSurfaces(),
     mp_layoutAreaToSurfaceIdAssignment(0),
-    m_currentLayout(-1)
+    m_currentLayout(-1),
+    m_screenId(0), // use screen "0"
+    m_screenWidth(0),
+    m_screenHeight(0)
 {
     qDebug("-=[WindowManager]=-");
 }
@@ -65,12 +68,15 @@ void WindowManager::start()
     }
 
     myThis = this;
-    err =  ilm_registerNotification(WindowManager::notificationFunc_static, this);
+
+    ilm_getScreenResolution(m_screenId, &m_screenWidth, &m_screenHeight);
 
     createNewLayer(WINDOWMANAGER_LAYER_POPUP);
     createNewLayer(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY);
     createNewLayer(WINDOWMANAGER_LAYER_APPLICATIONS);
     createNewLayer(WINDOWMANAGER_LAYER_HOMESCREEN);
+
+    ilm_registerNotification(WindowManager::notificationFunc_static, this);
 #endif
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -120,28 +126,22 @@ void WindowManager::dumpScene()
 void WindowManager::createNewLayer(int layerId)
 {
     qDebug("-=[createNewLayer]=-");
-    qDebug("layerId %d", layerId);
-
-    t_ilm_uint screenID = 0;
-    t_ilm_uint width;
-    t_ilm_uint height;
-
-    ilm_getScreenResolution(screenID, &width, &height);
+    qDebug("  layerId %d", layerId);
 
     t_ilm_layer newLayerId = layerId;
-    ilm_layerCreateWithDimension(&newLayerId, width, height);
+    ilm_layerCreateWithDimension(&newLayerId, m_screenWidth, m_screenHeight);
     ilm_layerSetOpacity(newLayerId, 1.0);
     ilm_layerSetVisibility(newLayerId, ILM_TRUE);
     ilm_layerSetSourceRectangle(newLayerId,
                                     0,
                                     0,
-                                    width,
-                                    height);
+                                    m_screenWidth,
+                                    m_screenHeight);
     ilm_layerSetDestinationRectangle(newLayerId,
                                     0,
                                     0,
-                                    width,
-                                    height);
+                                    m_screenWidth,
+                                    m_screenHeight);
 
     ilm_commitChanges();
 }
@@ -149,28 +149,17 @@ void WindowManager::createNewLayer(int layerId)
 void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
 {
     qDebug("-=[addSurfaceToLayer]=-");
-    qDebug("surfaceId %d", surfaceId);
-    qDebug("layerId %d", layerId);
+    qDebug("  surfaceId %d", surfaceId);
+    qDebug("  layerId %d", layerId);
 
     if (layerId == WINDOWMANAGER_LAYER_HOMESCREEN)
     {
         struct ilmSurfaceProperties surfaceProperties;
         ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
-        qDebug("sourceX %d", surfaceProperties.sourceX);
-        qDebug("sourceY %d", surfaceProperties.sourceY);
-        qDebug("sourceWidth %d", surfaceProperties.sourceWidth);
-        qDebug("sourceHeight %d", surfaceProperties.sourceHeight);
-
         // homescreen app always fullscreen in the back
-        t_ilm_uint screenID = 0;
-        t_ilm_uint width;
-        t_ilm_uint height;
-
-        ilm_getScreenResolution(screenID, &width, &height);
-
-        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, width, height);
-        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, width, height);
+        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, m_screenWidth, m_screenHeight);
+        //ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, m_screenWidth, m_screenHeight);
         ilm_surfaceSetOpacity(surfaceId, 1.0);
         ilm_surfaceSetVisibility(surfaceId, ILM_TRUE);
 
@@ -182,10 +171,10 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
         struct ilmSurfaceProperties surfaceProperties;
         ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
-        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-        ilm_surfaceSetOpacity(surfaceId, 0.0);
-        ilm_surfaceSetVisibility(surfaceId, ILM_FALSE);
+        //ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        //ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        //ilm_surfaceSetOpacity(surfaceId, 0.0);
+        //ilm_surfaceSetVisibility(surfaceId, ILM_FALSE);
 
         ilm_layerAddSurface(layerId, surfaceId);
     }
@@ -195,10 +184,10 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
         struct ilmSurfaceProperties surfaceProperties;
         ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
-        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-        ilm_surfaceSetOpacity(surfaceId, 0.5);
-        ilm_surfaceSetVisibility(surfaceId, ILM_TRUE);
+        //ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        //ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        //ilm_surfaceSetOpacity(surfaceId, 0.5);
+        //ilm_surfaceSetVisibility(surfaceId, ILM_TRUE);
 
         ilm_layerAddSurface(layerId, surfaceId);
     }
@@ -208,10 +197,10 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
         struct ilmSurfaceProperties surfaceProperties;
         ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
-        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-        ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
-        ilm_surfaceSetOpacity(surfaceId, 0.0);
-        ilm_surfaceSetVisibility(surfaceId, ILM_FALSE);
+        //ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        //ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, surfaceProperties.origSourceWidth, surfaceProperties.origSourceHeight);
+        //ilm_surfaceSetOpacity(surfaceId, 0.0);
+        //ilm_surfaceSetVisibility(surfaceId, ILM_FALSE);
 
         ilm_layerAddSurface(layerId, surfaceId);
     }
@@ -228,12 +217,13 @@ void WindowManager::updateScreen()
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
     if (-1 != m_currentLayout)
     {
-
         // hide all surfaces
-        for (int i = 0; i < m_surfaces.size(); ++i)
+        for (int i = 0; i < m_appSurfaces.size(); ++i)
         {
-            ilm_surfaceSetVisibility(m_surfaces.at(i), ILM_FALSE);
-            ilm_surfaceSetOpacity(m_surfaces.at(i), 0.0);
+            ilm_layerRemoveSurface(WINDOWMANAGER_LAYER_APPLICATIONS, m_appSurfaces.at(i));
+            //ilm_surfaceSetVisibility(m_appSurfaces.at(i), ILM_FALSE);
+            //ilm_surfaceSetOpacity(m_appSurfaces.at(i), 0.0);
+            ilm_commitChanges();
         }
 
         // find the current used layout
@@ -256,6 +246,8 @@ void WindowManager::updateScreen()
             int surfaceToShow = mp_layoutAreaToSurfaceIdAssignment->find(j).value();
             qDebug("  surface no. %d: %d", j, surfaceToShow);
 
+            addSurfaceToLayer(surfaceToShow, WINDOWMANAGER_LAYER_APPLICATIONS);
+
             ilm_surfaceSetVisibility(surfaceToShow, ILM_TRUE);
             ilm_surfaceSetOpacity(surfaceToShow, 1.0);
 
@@ -270,10 +262,25 @@ void WindowManager::updateScreen()
                                              currentLayout.layoutAreas[j].y,
                                              currentLayout.layoutAreas[j].width,
                                              currentLayout.layoutAreas[j].height);
+            ilm_commitChanges();
         }
-
-        ilm_commitChanges();
     }
+
+    // layer surface render order
+    t_ilm_int length;
+    t_ilm_surface* pArray;
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_HOMESCREEN, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_HOMESCREEN, pArray, length);
+    ilm_commitChanges();
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_APPLICATIONS, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_APPLICATIONS, pArray, length);
+    ilm_commitChanges();
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, pArray, length);
+    ilm_commitChanges();
+    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_POPUP, &length, &pArray);
+    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_POPUP, pArray, length);
+    ilm_commitChanges();
 
     // display layer render order
     t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
@@ -282,21 +289,8 @@ void WindowManager::updateScreen()
     renderOrder[2] = WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY;
     renderOrder[3] = WINDOWMANAGER_LAYER_POPUP;
     ilm_displaySetRenderOrder(0, renderOrder, WINDOWMANAGER_LAYER_NUM);
-
-    // layer surface render order
-    t_ilm_int length;
-    t_ilm_surface* pArray;
-    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_HOMESCREEN, &length, &pArray);
-    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_HOMESCREEN, pArray, length);
-    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_APPLICATIONS, &length, &pArray);
-    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_APPLICATIONS, pArray, length);
-    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, &length, &pArray);
-    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, pArray, length);
-    ilm_getSurfaceIDsOnLayer(WINDOWMANAGER_LAYER_POPUP, &length, &pArray);
-    ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_POPUP, pArray, length);
-
+    ilm_displaySetRenderOrder(1, renderOrder, WINDOWMANAGER_LAYER_NUM);
     ilm_commitChanges();
-
 #endif
 }
 
@@ -326,9 +320,9 @@ void WindowManager::notificationFunc_non_static(ilmObjectType object,
             }
             else
             {
-                addSurfaceToLayer(id, WINDOWMANAGER_LAYER_APPLICATIONS);
+                //addSurfaceToLayer(id, WINDOWMANAGER_LAYER_APPLICATIONS);
 
-                m_surfaces.append(id);
+                m_appSurfaces.append(id);
             }
             ilm_surfaceAddNotification(id, surfaceCallbackFunction_static);
 
@@ -337,7 +331,7 @@ void WindowManager::notificationFunc_non_static(ilmObjectType object,
         else
         {
             qDebug("Surface destroyed, ID: %d", id);
-            m_surfaces.removeAt(m_surfaces.indexOf(id));
+            m_appSurfaces.removeAt(m_appSurfaces.indexOf(id));
             ilm_surfaceRemoveNotification(id);
 
             ilm_commitChanges();
@@ -387,7 +381,7 @@ void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
     if (ILM_NOTIFICATION_CONTENT_AVAILABLE & mask)
     {
         qDebug("ILM_NOTIFICATION_CONTENT_AVAILABLE");
-        updateScreen();
+        //updateScreen();
     }
     if (ILM_NOTIFICATION_CONTENT_REMOVED & mask)
     {
@@ -503,12 +497,12 @@ QList<int> WindowManager::getAllSurfacesOfProcess(int pid)
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
     struct ilmSurfaceProperties surfaceProperties;
 
-    for (int i = 0; i < m_surfaces.size(); ++i)
+    for (int i = 0; i < m_appSurfaces.size(); ++i)
     {
-        ilm_getPropertiesOfSurface(m_surfaces.at(i), &surfaceProperties);
+        ilm_getPropertiesOfSurface(m_appSurfaces.at(i), &surfaceProperties);
         if (pid == surfaceProperties.creatorPid)
         {
-            result.append(m_surfaces.at(i));
+            result.append(m_appSurfaces.at(i));
         }
     }
 #endif
@@ -538,7 +532,7 @@ QList<int> WindowManager::getAvailableSurfaces()
 {
     qDebug("-=[getAvailableSurfaces]=-");
 
-    return m_surfaces;
+    return m_appSurfaces;
 }
 
 QString WindowManager::getLayoutName(int layoutId)

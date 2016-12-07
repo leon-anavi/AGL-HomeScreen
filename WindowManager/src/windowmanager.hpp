@@ -25,9 +25,7 @@
 
 
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
-extern "C" {
 #include <ilm/ilm_control.h>
-}
 #endif
 
 class WindowManager : public QObject
@@ -42,10 +40,14 @@ public:
 private:
     WindowmanagerAdaptor *mp_windowManagerAdaptor;
     QList<Layout> m_layouts;
-    QList<int> m_surfaces;
+    QList<int> m_appSurfaces;
     QMap<int, unsigned int> *mp_layoutAreaToSurfaceIdAssignment;
 
     int m_currentLayout;
+
+    int m_screenId;
+    unsigned int m_screenWidth;
+    unsigned int m_screenHeight;
 
     void dumpScene();
 

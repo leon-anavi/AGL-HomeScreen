@@ -36,19 +36,19 @@ Item {
         id: applicationModel
         ListElement {
             name: 'Home'
-            application: 'webapps-rabbit@0.0'
+            application: 'home@0.1'
         }
         ListElement {
             name: 'Multimedia'
-            application: 'smarthome@0.1'
+            application: 'radio@0.1'
         }
         ListElement {
             name: 'HVAC'
-            application: 'hvac'
+            application: 'hvac@0.1'
         }
         ListElement {
             name: 'Navigation'
-            application: 'navigation'
+            application: 'controls@0.1'
         }
     }
 

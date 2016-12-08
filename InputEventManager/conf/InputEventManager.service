@@ -7,7 +7,7 @@ After=dbus.service
 User=root
 Type=dbus
 BusName=org.agl.inputeventmanager
-ExecStart=/usr/AGL/HomeScreen/InputEventManager
+ExecStart=/usr/AGL/homescreen/InputEventManager
 Restart=on-failure
 RestartSec=5
 

@@ -7,7 +7,7 @@ After=afm-user-daemon.service
 User=root
 Type=dbus
 BusName=org.agl.homescreenappframeworkbinder
-ExecStart=/usr/AGL/HomeScreen/HomeScreenAppFrameworkBinderAGL
+ExecStart=/usr/AGL/homescreen/HomeScreenAppFrameworkBinderAGL
 Restart=on-failure
 RestartSec=5
 

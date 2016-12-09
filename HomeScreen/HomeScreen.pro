@@ -61,9 +61,13 @@ OTHER_FILES += \
 HEADERS += \
     src2/statusbarmodel.h \
     src2/statusbarserver.h \
-    src2/applicationlauncher.h
+    src2/applicationlauncher.h \
+    src2/applicationmodel.h \
+    src2/appinfo.h
 
 SOURCES += \
+    src2/applicationmodel.cpp \
+    src2/appinfo.cpp \
     src2/statusbarmodel.cpp \
     src2/statusbarserver.cpp \
     src2/applicationlauncher.cpp
@@ -72,6 +76,7 @@ RESOURCES += \
     resources/homescreen.qrc
 
 RESOURCES += \
+    qml/images/Home/home.qrc \
     qml/images/MediaPlayer/mediaplayer.qrc \
     qml/images/MediaMusic/mediamusic.qrc \
     qml/images/Weather/weather.qrc \
@@ -79,10 +84,3 @@ RESOURCES += \
     qml/images/Status/status.qrc \
     qml/images/images.qrc \
     qml/qml.qrc
-
-
-copydata.commands = $(COPY_DIR) $$PWD/resources/colorschemes $$OUT_PWD
-HomeScreen.depends = $(HomeScreen) copydata
-export(HomeScreen.depends)
-export(copydata.commands)
-QMAKE_EXTRA_TARGETS += HomeScreen copydata

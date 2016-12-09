@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>Home.qml</file>
         <file>main.qml</file>
         <file>MediaArea.qml</file>
         <file>MediaAreaBlank.qml</file>

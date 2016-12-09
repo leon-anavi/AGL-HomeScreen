@@ -17,20 +17,12 @@
 
 import QtQuick 2.2
 import QtQuick.Layouts 1.1
-import HomeScreen 1.0
 
 Item {
     id: root
     width: 785
     height: 218
 
-    ApplicationLauncher {
-        id: launcher
-    }
-
-    LayoutHandler {
-        id: layoutHandler
-    }
 
     ListModel {
         id: applicationModel
@@ -40,7 +32,7 @@ Item {
         }
         ListElement {
             name: 'Multimedia'
-            application: 'radio@0.1'
+            application: 'mediaplayer@0.1'
         }
         ListElement {
             name: 'HVAC'
@@ -67,8 +59,18 @@ Item {
                 active: model.index === root.currentIndex
                 onClicked: {
                     root.currentIndex = active ? -1 : model.index
-                    pid = launcher.launch(model.application)
-                    layoutHandler.makeMeVisible(pid)
+                    if (0 === model.index) {
+                        appLauncherAreaLauncher.visible = true
+                        applicationArea.visible = false
+                        layoutHandler.hideAppLayer()
+                    }
+                    else {
+                        applicationArea.visible = true
+                        appLauncherAreaLauncher.visible = false
+                        pid = launcher.launch(model.application)
+                        layoutHandler.makeMeVisible(pid)
+                        layoutHandler.showAppLayer()
+                    }
                 }
             }
         }

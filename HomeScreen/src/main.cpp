@@ -23,7 +23,7 @@
 #include "../src2/applicationlauncher.h"
 #include "../src2/statusbarmodel.h"
 #include "layouthandler.h"
-
+#include "../src2/applicationmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
     qDBusRegisterMetaType<QList<AppInfo> >();
 
     qmlRegisterType<ApplicationLauncher>("HomeScreen", 1, 0, "ApplicationLauncher");
+    qmlRegisterType<ApplicationModel>("Home", 1, 0, "ApplicationModel");
     qmlRegisterType<StatusBarModel>("HomeScreen", 1, 0, "StatusBarModel");
     qmlRegisterType<LayoutHandler>("HomeScreen", 1, 0, "LayoutHandler");
 

@@ -18,6 +18,7 @@
 import QtQuick 2.2
 import QtQuick.Window 2.1
 import QtQuick.Layouts 1.1
+import HomeScreen 1.0
 
 Window {
     visible: true
@@ -25,6 +26,14 @@ Window {
     width: container.width * container.scale
     height: container.height * container.scale
     title: 'HomeScreen'
+
+    ApplicationLauncher {
+        id: launcher
+    }
+
+    LayoutHandler {
+        id: layoutHandler
+    }
 
     Image {
         id: container
@@ -48,6 +57,16 @@ Window {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 Layout.preferredHeight: 1920 - 218 - 215
+
+                visible: true
+            }
+
+            Home {
+                id: appLauncherAreaLauncher
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.preferredHeight: 1920 - 218 - 215
+                visible: false
             }
 
             MediaArea {

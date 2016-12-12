@@ -49,6 +49,9 @@ private:
     unsigned int m_screenWidth;
     unsigned int m_screenHeight;
 
+    int* m_showLayers;
+    int getLayerRenderOrder(t_ilm_layer id_array[]);
+
     void dumpScene();
 
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API

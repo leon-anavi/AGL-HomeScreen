@@ -36,8 +36,14 @@
 // the HomeScreen app has to have the surface id 1000
 #define WINDOWMANAGER_HOMESCREEN_MAIN_SURFACE_ID 1000
 
-
 void* WindowManager::myThis = 0;
+
+static const int layer_id_array[] = {
+    WINDOWMANAGER_LAYER_POPUP,
+    WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY,
+    WINDOWMANAGER_LAYER_APPLICATIONS,
+    WINDOWMANAGER_LAYER_HOMESCREEN,
+};
 
 WindowManager::WindowManager(QObject *parent) :
     QObject(parent),
@@ -49,6 +55,13 @@ WindowManager::WindowManager(QObject *parent) :
     m_screenWidth(0),
     m_screenHeight(0)
 {
+    m_showLayers = new int[WINDOWMANAGER_LAYER_NUM];
+
+    m_showLayers[0] = 0; /* POPUP is not shown by default */
+    m_showLayers[1] = 0; /* HOMESCREEN_OVERLAY is not shown by default */
+    m_showLayers[2] = 0; /* APPLICATIONS is not shown by default */
+    m_showLayers[3] = WINDOWMANAGER_LAYER_HOMESCREEN; /* HOMESCREEN is shwon by default */
+
     qDebug("-=[WindowManager]=-");
 }
 
@@ -95,6 +108,19 @@ WindowManager::~WindowManager()
     ilm_destroy();
 #endif
     delete mp_layoutAreaToSurfaceIdAssignment;
+}
+
+int WindowManager::getLayerRenderOrder(t_ilm_layer id_array[])
+{
+    int i, j;
+
+    for (i = WINDOWMANAGER_LAYER_NUM - 1, j = 0; i >= 0; i--, j++) {
+        if (m_showLayers[i] != 0) {
+            id_array[j] = m_showLayers[i];
+        }
+    }
+
+    return j;
 }
 
 void WindowManager::dumpScene()
@@ -284,12 +310,9 @@ void WindowManager::updateScreen()
 
     // display layer render order
     t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
-    renderOrder[0] = WINDOWMANAGER_LAYER_HOMESCREEN;
-    renderOrder[1] = WINDOWMANAGER_LAYER_APPLICATIONS;
-    renderOrder[2] = WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY;
-    renderOrder[3] = WINDOWMANAGER_LAYER_POPUP;
-    ilm_displaySetRenderOrder(0, renderOrder, WINDOWMANAGER_LAYER_NUM);
-    ilm_displaySetRenderOrder(1, renderOrder, WINDOWMANAGER_LAYER_NUM);
+    int num_layers = getLayerRenderOrder(renderOrder);
+    ilm_displaySetRenderOrder(0, renderOrder, num_layers);
+    ilm_displaySetRenderOrder(1, renderOrder, num_layers);
     ilm_commitChanges();
 #endif
 }
@@ -560,23 +583,16 @@ void WindowManager::hideLayer(int layer)
     qDebug("layer %d", layer);
 
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
-    if (0 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_POPUP, ILM_FALSE);
+    // POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
+    if (layer >= 0 && layer < WINDOWMANAGER_LAYER_NUM) {
+        m_showLayers[layer] = 0;
+
+        t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+        int num_layers = getLayerRenderOrder(renderOrder);
+        ilm_displaySetRenderOrder(0, renderOrder, num_layers);
+        ilm_displaySetRenderOrder(1, renderOrder, num_layers);
+        ilm_commitChanges();
     }
-    if (1 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, ILM_FALSE);
-    }
-    if (2 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_FALSE);
-    }
-    if (3 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN, ILM_FALSE);
-    }
-    ilm_commitChanges();
 #endif
 }
 
@@ -639,22 +655,15 @@ void WindowManager::showLayer(int layer)
     qDebug("layer %d", layer);
 
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
-    if (0 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_POPUP, ILM_TRUE);
+    // POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
+    if (layer >= 0 && layer < WINDOWMANAGER_LAYER_NUM) {
+        m_showLayers[layer] = layer_id_array[layer];
+
+        t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
+        int num_layers = getLayerRenderOrder(renderOrder);
+        ilm_displaySetRenderOrder(0, renderOrder, num_layers);
+        ilm_displaySetRenderOrder(1, renderOrder, num_layers);
+        ilm_commitChanges();
     }
-    if (1 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN_OVERLAY, ILM_TRUE);
-    }
-    if (2 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_APPLICATIONS, ILM_TRUE);
-    }
-    if (3 == layer)
-    {
-        ilm_layerSetVisibility(WINDOWMANAGER_LAYER_HOMESCREEN, ILM_TRUE);
-    }
-    ilm_commitChanges();
 #endif
 }

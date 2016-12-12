@@ -18,12 +18,14 @@
 #include <QApplication>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
+#include <QtQml/QQmlContext>
 #include <QtQml/qqml.h>
 
 #include "../src2/applicationlauncher.h"
 #include "../src2/statusbarmodel.h"
 #include "layouthandler.h"
 #include "../src2/applicationmodel.h"
+#include "homescreencontrolinterface.h"
 
 int main(int argc, char *argv[])
 {
@@ -43,10 +45,21 @@ int main(int argc, char *argv[])
     qmlRegisterType<ApplicationLauncher>("HomeScreen", 1, 0, "ApplicationLauncher");
     qmlRegisterType<ApplicationModel>("Home", 1, 0, "ApplicationModel");
     qmlRegisterType<StatusBarModel>("HomeScreen", 1, 0, "StatusBarModel");
-    qmlRegisterType<LayoutHandler>("HomeScreen", 1, 0, "LayoutHandler");
-
 
     QQmlApplicationEngine engine;
+
+    LayoutHandler* layoutHandler = new LayoutHandler();
+
+    HomeScreenControlInterface* hsci = new HomeScreenControlInterface();
+    QObject::connect(hsci, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
+    QObject::connect(hsci, SIGNAL(newRequestGetSurfaceStatus(int)), layoutHandler, SLOT(requestGetSurfaceStatus(int)));
+    QObject::connect(hsci, SIGNAL(newRequestsToBeVisibleApp(int)), layoutHandler, SLOT(makeMeVisible(int)));
+    QObject::connect(hsci, SIGNAL(newRequestRenderSurfaceToArea(int, int)), layoutHandler, SLOT(requestRenderSurfaceToArea(int,int)));
+    QObject::connect(hsci, SIGNAL(newRequestRenderSurfaceToAreaAllowed(int, int)), layoutHandler, SLOT(requestRenderSurfaceToAreaAllowed(int,int)));
+    QObject::connect(hsci, SIGNAL(newRequestSurfaceIdToFullScreen(int)), layoutHandler, SLOT(requestSurfaceIdToFullScreen(int)));
+
+    engine.rootContext()->setContextProperty("layoutHandler", layoutHandler);
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return a.exec();

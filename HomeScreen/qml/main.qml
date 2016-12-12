@@ -31,10 +31,6 @@ Window {
         id: launcher
     }
 
-    LayoutHandler {
-        id: layoutHandler
-    }
-
     Image {
         id: container
         anchors.centerIn: parent

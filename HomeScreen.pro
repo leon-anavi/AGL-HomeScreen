@@ -28,8 +28,7 @@ SUBDIRS = interfaces \
     SampleHomeScreenInterfaceApp \
     SampleNavigationApp \
     SampleMediaApp \
-    sample-qml \
-    HomeScreenNG
+    sample-qml
 
 HomeScreen.depends = interfaces
 HomeScreenSimulator.depends = interfaces
@@ -37,6 +36,5 @@ HomeScreenAppFrameworkBinderAGL.depends = interfaces
 InputEventManager.depends = interfaces
 SampleAppTimeDate.depends = interfaces
 WindowManager.depends = interfaces
-HomeScreenNG.depends = interfaces
 
 SampleHomeScreenInterfaceApp.depends = libhomescreen

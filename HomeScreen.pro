@@ -36,3 +36,4 @@ SampleAppTimeDate.depends = interfaces
 WindowManager.depends = interfaces
 
 SampleHomeScreenInterfaceApp.depends = libhomescreen
+sample-qml.depends = libhomescreen

@@ -65,11 +65,16 @@ Item {
                         layoutHandler.hideAppLayer()
                     }
                     else {
-                        applicationArea.visible = true
-                        appLauncherAreaLauncher.visible = false
                         pid = launcher.launch(model.application)
-                        layoutHandler.makeMeVisible(pid)
-                        layoutHandler.showAppLayer()
+                        if (1 < pid) {
+                            applicationArea.visible = true
+                            appLauncherAreaLauncher.visible = false
+                            layoutHandler.makeMeVisible(pid)
+                            layoutHandler.showAppLayer()
+                        }
+                        else {
+                            console.warn("app cannot be launched!")
+                        }
                     }
                 }
             }

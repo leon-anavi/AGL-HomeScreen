@@ -50,11 +50,16 @@ Item {
             onClicked: {
                 console.log("app is ", model.id)
                 pid = launcher.launch(model.id)
-                layoutHandler.makeMeVisible(pid)
+                if (1 < pid) {
+                    layoutHandler.makeMeVisible(pid)
 
-                applicationArea.visible = true
-                appLauncherAreaLauncher.visible = false
-                layoutHandler.showAppLayer()
+                    applicationArea.visible = true
+                    appLauncherAreaLauncher.visible = false
+                    layoutHandler.showAppLayer()
+                }
+                else {
+                    console.warn("app cannot be launched!")
+                }
             }
         }
     }

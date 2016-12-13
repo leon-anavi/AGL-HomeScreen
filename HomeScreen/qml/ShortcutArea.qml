@@ -70,7 +70,7 @@ Item {
                             applicationArea.visible = true
                             appLauncherAreaLauncher.visible = false
                             layoutHandler.makeMeVisible(pid)
-                            layoutHandler.showAppLayer()
+                            layoutHandler.showAppLayer(pid)
                         }
                         else {
                             console.warn("app cannot be launched!")

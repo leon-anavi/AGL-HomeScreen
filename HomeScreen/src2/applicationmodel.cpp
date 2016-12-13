@@ -45,7 +45,7 @@ ApplicationModel::Private::Private(ApplicationModel *parent)
         data.append(AppInfo(QStringLiteral("Navigation"), QStringLiteral("NAVIGATION"), QStringLiteral("navigation@0.1")));
         data.append(AppInfo(QStringLiteral("Phone"), QStringLiteral("PHONE"), QStringLiteral("phone@0.1")));
         data.append(AppInfo(QStringLiteral("Radio"), QStringLiteral("RADIO"), QStringLiteral("radio@0.1")));
-        data.append(AppInfo(QStringLiteral("Multimedia"), QStringLiteral("MULTIMEDIA"), QStringLiteral("multimedia@0.1")));
+        data.append(AppInfo(QStringLiteral("Multimedia"), QStringLiteral("MULTIMEDIA"), QStringLiteral("mediaplayer@0.1")));
         data.append(AppInfo(QStringLiteral("Connectivity"), QStringLiteral("CONNECTIVITY"), QStringLiteral("connectivity@0.1")));
         data.append(AppInfo(QStringLiteral("Dashboard"), QStringLiteral("DASHBOARD"), QStringLiteral("dashboard@0.1")));
         data.append(AppInfo(QStringLiteral("Settings"), QStringLiteral("SETTINGS"), QStringLiteral("settings@0.1")));

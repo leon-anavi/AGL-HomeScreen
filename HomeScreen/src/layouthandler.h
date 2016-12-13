@@ -15,13 +15,13 @@ public:
 signals:
 
 public slots:
-    void showAppLayer();
+    void showAppLayer(int pid);
     void hideAppLayer();
     void makeMeVisible(int pid);
 private:
     void checkToDoQueue();
 public slots:
-    QList<int> requestGetAllSurfacesOfProcess(int pid);
+  //    QList<int> requestGetAllSurfacesOfProcess(int pid);
     int requestGetSurfaceStatus(int surfaceId);
     void requestRenderSurfaceToArea(int surfaceId, int layoutArea);
     bool requestRenderSurfaceToAreaAllowed(int surfaceId, int layoutArea);

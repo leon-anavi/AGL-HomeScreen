@@ -27,7 +27,6 @@
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
 #include <ilm/ilm_control.h>
 #endif
-
 class WindowManager : public QObject
 {
     Q_OBJECT
@@ -40,7 +39,6 @@ public:
 private:
     WindowmanagerAdaptor *mp_windowManagerAdaptor;
     QList<Layout> m_layouts;
-    QList<int> m_appSurfaces;
     QMap<int, unsigned int> *mp_layoutAreaToSurfaceIdAssignment;
 
     int m_currentLayout;
@@ -49,14 +47,21 @@ private:
     unsigned int m_screenWidth;
     unsigned int m_screenHeight;
 
-    int* m_showLayers;
-    int getLayerRenderOrder(t_ilm_layer id_array[]);
-
     void dumpScene();
 
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
-    void createNewLayer(int layerId);
-    void addSurfaceToLayer(int surfaceId, int layerId);
+    t_ilm_layer* m_showLayers;
+    QMap<pid_t, t_ilm_layer> m_appLayers;
+    int getLayerRenderOrder(t_ilm_layer* id_array);
+
+    void createNewLayer(const int layerId);
+
+    t_ilm_layer getAppLayerID(const pid_t pid);
+
+    pid_t m_pending_to_show;
+
+    void addSurfaceToAppLayer(const int surfaceID);
+    void addSurfaceToLayer(const int surfaceId, const int layerId);
 #endif
     void updateScreen();
 
@@ -99,15 +104,16 @@ public Q_SLOTS: // METHODS
     int addLayout(int layoutId, const QString &layoutName, const QList<LayoutArea> &surfaceAreas);
     int deleteLayoutById(int layoutId);
     QList<Layout> getAllLayouts();
-    QList<int> getAllSurfacesOfProcess(int pid);
+  //    QList<int> getAllSurfacesOfProcess(int pid);
     QList<int> getAvailableLayouts(int numberOfAppSurfaces);
-    QList<int> getAvailableSurfaces();
+  //    QList<int> getAvailableSurfaces();
     QString getLayoutName(int layoutId);
     void hideLayer(int layer);
     int setLayoutById(int layoutId);
     int setLayoutByName(const QString &layoutName);
     int setSurfaceToLayoutArea(int surfaceId, int layoutAreaId);
     void showLayer(int layer);
+    void showAppLayer(int pid);
 
 Q_SIGNALS: // SIGNALS
     void surfaceVisibilityChanged(int surfaceId, bool visible);

@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     LayoutHandler* layoutHandler = new LayoutHandler();
 
     HomeScreenControlInterface* hsci = new HomeScreenControlInterface();
-    QObject::connect(hsci, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
+    //    QObject::connect(hsci, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
     QObject::connect(hsci, SIGNAL(newRequestGetSurfaceStatus(int)), layoutHandler, SLOT(requestGetSurfaceStatus(int)));
     QObject::connect(hsci, SIGNAL(newRequestsToBeVisibleApp(int)), layoutHandler, SLOT(makeMeVisible(int)));
     QObject::connect(hsci, SIGNAL(newRequestRenderSurfaceToArea(int, int)), layoutHandler, SLOT(requestRenderSurfaceToArea(int,int)));

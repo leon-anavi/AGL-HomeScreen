@@ -127,21 +127,9 @@
 		  Returns a list of layouts that offer the exact requested ammount of surface render areas.
 		  If the list is empty, no layout fits the exact ammount.
 		-->
+
 		<method name="getAvailableLayouts">
 			<arg name="numberOfAppSurfaces" type="i" direction="in"/>
-			<arg name="layoutIds" type="ai" direction="out"/>
-			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
-		</method>
-
-		<!--
-		  getAllSurfacesOfProcess:
-		  @pid: The PID of the process.
-		  @surfaceIds: A list of surfaces that were created by the process.
-
-		  The surface IDs can be used to assign them to a layout render area.
-		-->
-		<method name="getAllSurfacesOfProcess">
-			<arg name="pid" type="i" direction="in"/>
 			<arg name="layoutIds" type="ai" direction="out"/>
 			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int&gt;"/>
 		</method>
@@ -187,12 +175,23 @@
 		<!--
 		  showLayer:
 		  @layer: The ID of the layer to show. POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
+		  @pid: The PID of the app to show. (used only when layer is APPS=2)
 
 		  Show complete layers.
 		  By default, all layers are shown.
 		-->
 		<method name="showLayer">
 			<arg name="layer" type="i" direction="in"/>
+			<arg name="pid" type="i" direction="in"/>
+		</method>
+		<!--
+		  showAppLayer:
+		  @pid: The PID of the app to show.
+
+		  Show layer for application .
+		-->
+		<method name="showAppLayer">
+			<arg name="pid" type="i" direction="in"/>
 		</method>
 		<!--
 		  hideLayer:

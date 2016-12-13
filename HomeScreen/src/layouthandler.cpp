@@ -70,10 +70,9 @@ LayoutHandler::~LayoutHandler()
     delete mp_dBusWindowManagerProxy;
 }
 
-void LayoutHandler::showAppLayer()
+void LayoutHandler::showAppLayer(int pid)
 {
-    // POPUP=0, HOMESCREEN_OVERLAY=1, APPS=2, HOMESCREEN=3
-    mp_dBusWindowManagerProxy->showLayer(2); // TODO: enum
+    mp_dBusWindowManagerProxy->showAppLayer(pid);
 }
 
 void LayoutHandler::hideAppLayer()
@@ -86,6 +85,7 @@ void LayoutHandler::makeMeVisible(int pid)
 {
     qDebug("makeMeVisible %d", pid);
 
+#if 0
     // if app does not request to be visible
     if (-1 == m_requestsToBeVisiblePids.indexOf(pid))
     {
@@ -103,10 +103,12 @@ void LayoutHandler::makeMeVisible(int pid)
     {
         checkToDoQueue();
     }
+#endif
 }
 
 void LayoutHandler::checkToDoQueue()
 {
+#if 0
     if ((-1 != m_secondsTimerId) && (0 == m_requestsToBeVisiblePids.size()))
     {
         killTimer(m_secondsTimerId);
@@ -181,14 +183,17 @@ void LayoutHandler::checkToDoQueue()
             }
         }
     }
+#endif
 }
 
+#if 0
 QList<int> LayoutHandler::requestGetAllSurfacesOfProcess(int pid)
 {
     qDebug("requestGetAllSurfacesOfProcess %d", pid);
 
     return mp_dBusWindowManagerProxy->getAllSurfacesOfProcess(pid);
 }
+#endif
 
 int LayoutHandler::requestGetSurfaceStatus(int surfaceId)
 {

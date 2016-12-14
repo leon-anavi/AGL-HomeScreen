@@ -102,7 +102,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //mp_layoutHandler->setUpLayouts();
 
     mp_homeScreenControlInterface = new HomeScreenControlInterface(this);
-    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), mp_layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
+    //    QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), mp_layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestGetSurfaceStatus(int)), mp_layoutHandler, SLOT(requestGetSurfaceStatus(int)));
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestsToBeVisibleApp(int)), mp_layoutHandler, SLOT(makeMeVisible(int)));
     QObject::connect(mp_homeScreenControlInterface, SIGNAL(newRequestRenderSurfaceToArea(int, int)), mp_layoutHandler, SLOT(requestRenderSurfaceToArea(int,int)));

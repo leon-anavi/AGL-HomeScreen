@@ -353,8 +353,7 @@ void WindowManager::updateScreen()
         // display layer render order
         t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
         int num_layers = getLayerRenderOrder(renderOrder);
-        ilm_displaySetRenderOrder(0, renderOrder, num_layers);
-        ilm_displaySetRenderOrder(1, renderOrder, num_layers);
+        ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
         ilm_commitChanges();
     }
 }
@@ -449,6 +448,7 @@ void WindowManager::surfaceCallbackFunction_non_static(t_ilm_surface surface,
     {
         qDebug("ILM_NOTIFICATION_CONTENT_AVAILABLE");
         /* add surface to layer for the application */
+
         ilmErrorTypes result;
         pid_t pid = surfaceProperties->creatorPid;
 
@@ -689,8 +689,7 @@ void WindowManager::hideLayer(int layer)
 
         t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
         int num_layers = getLayerRenderOrder(renderOrder);
-        ilm_displaySetRenderOrder(0, renderOrder, num_layers);
-        ilm_displaySetRenderOrder(1, renderOrder, num_layers);
+        ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
         ilm_commitChanges();
     }
 #endif
@@ -768,8 +767,7 @@ void WindowManager::showLayer(int layer)
 
         t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
         int num_layers = getLayerRenderOrder(renderOrder);
-        ilm_displaySetRenderOrder(0, renderOrder, num_layers);
-        ilm_displaySetRenderOrder(1, renderOrder, num_layers);
+        ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
         ilm_commitChanges();
     }
 #endif
@@ -806,8 +804,7 @@ void WindowManager::showAppLayer(int pid)
     t_ilm_layer renderOrder[WINDOWMANAGER_LAYER_NUM];
 
     int num_layers = getLayerRenderOrder(renderOrder);
-    ilm_displaySetRenderOrder(0, renderOrder, num_layers);
-    ilm_displaySetRenderOrder(1, renderOrder, num_layers);
+    ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
     ilm_commitChanges();
 #endif
 }

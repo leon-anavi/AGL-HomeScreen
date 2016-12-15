@@ -40,7 +40,7 @@ Item {
         }
         ListElement {
             name: 'Navigation'
-            application: 'controls@0.1'
+            application: 'navigation@0.1'
         }
     }
 

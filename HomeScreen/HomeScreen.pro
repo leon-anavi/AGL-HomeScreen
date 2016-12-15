@@ -14,7 +14,7 @@
 
 TEMPLATE = app
 TARGET = HomeScreen
-QT = qml quick widgets dbus
+QT = qml quick dbus
 CONFIG += c++11
 
 include(../interfaces/interfaces.pri)
@@ -22,41 +22,15 @@ include(../ivi_layermanagement_api.pri)
 
 SOURCES += \
     src/main.cpp \
-    src/mainwindow.cpp \
-    src/settingswidget.cpp \
-    src/popupwidget.cpp \
-    src/controlbarwidget.cpp \
-    src/statusbarwidget.cpp \
-    src/applauncher.cpp \
     src/homescreencontrolinterface.cpp \
     src/layouthandler.cpp
 
 HEADERS  += \
-    src/mainwindow.h \
-    src/settingswidget.h \
-    src/popupwidget.h \
-    src/controlbarwidget.h \
-    src/statusbarwidget.h \
-    src/applauncher.h \
     src/homescreencontrolinterface.h \
     src/layouthandler.h
 
-FORMS    += \
-    resources/mainwindow.ui \
-    resources/settingswidget.ui \
-    resources/popupwidget.ui \
-    resources/controlbarwidget.ui \
-    resources/statusbarwidget.ui \
-    resources/applauncherwidget.ui
-
-TRANSLATIONS = \
-    resources/translations/homescreen_en_US.ts \
-    resources/translations/homescreen_de_DE.ts \
-    resources/translations/homescreen_ja_JP.ts
-
 OTHER_FILES += \
     README.md
-
 
 HEADERS += \
     src2/statusbarmodel.h \
@@ -71,9 +45,6 @@ SOURCES += \
     src2/statusbarmodel.cpp \
     src2/statusbarserver.cpp \
     src2/applicationlauncher.cpp
-
-RESOURCES += \
-    resources/homescreen.qrc
 
 RESOURCES += \
     qml/images/Home/home.qrc \

@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-#include "mainwindow.h"
-#include <QApplication>
+#include <QGuiApplication>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
 #include <QtQml/qqml.h>
 
+#include "layouthandler.h"
+#include "homescreencontrolinterface.h"
 #include "../src2/applicationlauncher.h"
 #include "../src2/statusbarmodel.h"
-#include "layouthandler.h"
 #include "../src2/applicationmodel.h"
-#include "homescreencontrolinterface.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QGuiApplication a(argc, argv);
 
     // used for application settings (QSettings)
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("HomeScreen");
-    QCoreApplication::setApplicationVersion("0.6.0");
+    QCoreApplication::setApplicationVersion("0.7.0");
 
     qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
 
@@ -51,7 +50,6 @@ int main(int argc, char *argv[])
     LayoutHandler* layoutHandler = new LayoutHandler();
 
     HomeScreenControlInterface* hsci = new HomeScreenControlInterface();
-    //    QObject::connect(hsci, SIGNAL(newRequestGetAllSurfacesOfProcess(int)), layoutHandler, SLOT(requestGetAllSurfacesOfProcess(int)));
     QObject::connect(hsci, SIGNAL(newRequestGetSurfaceStatus(int)), layoutHandler, SLOT(requestGetSurfaceStatus(int)));
     QObject::connect(hsci, SIGNAL(newRequestsToBeVisibleApp(int)), layoutHandler, SLOT(makeMeVisible(int)));
     QObject::connect(hsci, SIGNAL(newRequestRenderSurfaceToArea(int, int)), layoutHandler, SLOT(requestRenderSurfaceToArea(int,int)));

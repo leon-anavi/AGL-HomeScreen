@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.w3.org/ns/widgets" id="sample-qml" version="0.1">
-  <name>App Framework - sample-qml with homescreen</name>
-  <icon src="agl-image.png"/>
-  <content src="sample-qml" type="application/x-executable"/>
-  <description>This application is used for ... confirm homescreen functionality</description>
-  <author>Sample Company &lt;sample.agl.xxxx@mail.domain.sample.xxxxxx&gt;</author>
-  <license>APL 2.0</license>
-</widget>

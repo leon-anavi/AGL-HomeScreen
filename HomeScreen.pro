@@ -25,8 +25,7 @@ SUBDIRS = interfaces \
     InputEventManager \
     SampleAppTimeDate \
     WindowManager \
-    SampleHomeScreenInterfaceApp \
-    sample-qml
+    SampleHomeScreenInterfaceApp
 
 HomeScreen.depends = interfaces
 HomeScreenSimulator.depends = interfaces
@@ -36,4 +35,3 @@ SampleAppTimeDate.depends = interfaces
 WindowManager.depends = interfaces
 
 SampleHomeScreenInterfaceApp.depends = libhomescreen
-sample-qml.depends = libhomescreen

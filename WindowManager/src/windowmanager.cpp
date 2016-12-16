@@ -48,10 +48,14 @@ WindowManager::WindowManager(QObject *parent) :
     m_currentLayout(-1),
     m_screenId(0), // use screen "0"
     m_screenWidth(0),
-    m_screenHeight(0),
+    m_screenHeight(0)
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
+  ,
     m_appLayers(),
     m_pending_to_show(-1)
+#endif
 {
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     m_showLayers = new t_ilm_layer[WINDOWMANAGER_LAYER_NUM];
 
     m_showLayers[0] = 0; /* POPUP is not shown by default */
@@ -59,6 +63,7 @@ WindowManager::WindowManager(QObject *parent) :
     m_showLayers[2] = 0; /* APPLICATIONS is not shown by default */
     m_showLayers[3] = WINDOWMANAGER_LAYER_HOMESCREEN; /* HOMESCREEN is shwon by default */
 
+#endif
     qDebug("-=[WindowManager]=-");
 }
 
@@ -107,6 +112,7 @@ WindowManager::~WindowManager()
     delete mp_layoutAreaToSurfaceIdAssignment;
 }
 
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
 int WindowManager::getLayerRenderOrder(t_ilm_layer id_array[])
 {
     int i, j;
@@ -119,6 +125,7 @@ int WindowManager::getLayerRenderOrder(t_ilm_layer id_array[])
 
     return j;
 }
+#endif
 
 void WindowManager::dumpScene()
 {
@@ -347,6 +354,7 @@ void WindowManager::updateScreen()
     ilm_layerSetRenderOrder(WINDOWMANAGER_LAYER_POPUP, pArray, length);
     ilm_commitChanges();
 #endif
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     if (m_pending_to_show != -1) {
         showAppLayer(m_pending_to_show);
     } else {
@@ -356,6 +364,7 @@ void WindowManager::updateScreen()
         ilm_displaySetRenderOrder(m_screenId, renderOrder, num_layers);
         ilm_commitChanges();
     }
+#endif
 }
 
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API
@@ -782,11 +791,11 @@ void WindowManager::showAppLayer(int pid)
         /* nothing to show */
         return;
     }
+#ifdef HAVE_IVI_LAYERMANAGEMENT_API
 
     /* clear pending flag */
     m_pending_to_show = -1;
 
-#ifdef HAVE_IVI_LAYERMANAGEMENT_API
     /* search layer id for application to show */
     QMap<pid_t, t_ilm_layer>::const_iterator i = m_appLayers.find(pid);
 

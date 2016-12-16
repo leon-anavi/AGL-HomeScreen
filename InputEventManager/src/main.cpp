@@ -15,19 +15,23 @@
  */
 
 #include <QCoreApplication>
+#include <QCommandLineParser>
 #include "inputeventmanager.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    // used for application settings (QSettings)
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("InputEventManager");
-    QCoreApplication::setApplicationVersion("0.4.0");
+    QCoreApplication::setApplicationVersion("0.7.0");
 
-    qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
+    QCommandLineParser parser;
+    parser.setApplicationDescription("AGL InputEventManager - see wwww... for more details");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.process(a);
 
     InputEventManager *inputEventManager = new InputEventManager();
 

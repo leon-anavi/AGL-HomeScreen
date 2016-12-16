@@ -40,13 +40,13 @@
 
 void* WindowManager::myThis = 0;
 
-WindowManager::WindowManager(QObject *parent) :
+WindowManager::WindowManager(int displayId, QObject *parent) :
     QObject(parent),
     m_layouts(),
     //    m_appSurfaces(),
     mp_layoutAreaToSurfaceIdAssignment(0),
     m_currentLayout(-1),
-    m_screenId(0), // use screen "0"
+    m_screenId(displayId),
     m_screenWidth(0),
     m_screenHeight(0)
 #ifdef HAVE_IVI_LAYERMANAGEMENT_API

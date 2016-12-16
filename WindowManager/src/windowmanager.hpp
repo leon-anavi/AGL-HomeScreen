@@ -32,7 +32,7 @@ class WindowManager : public QObject
     Q_OBJECT
 
 public:
-    explicit WindowManager(QObject *parent = 0);
+    explicit WindowManager(int displayId, QObject *parent = 0);
     ~WindowManager();
 
     void start();

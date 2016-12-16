@@ -15,19 +15,34 @@
  */
 
 #include <QCoreApplication>
+#include <QCommandLineParser>
 #include "windowmanager.hpp"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    // used for application settings (QSettings)
     QCoreApplication::setOrganizationDomain("LinuxFoundation");
     QCoreApplication::setOrganizationName("AutomotiveGradeLinux");
     QCoreApplication::setApplicationName("WindowManager");
-    QCoreApplication::setApplicationVersion("0.6.0");
+    QCoreApplication::setApplicationVersion("0.7.0");
 
-    qDebug("%s, v%s", QCoreApplication::applicationName().toStdString().c_str(), QCoreApplication::applicationVersion().toStdString().c_str());
+    QCommandLineParser parser;
+    parser.setApplicationDescription("AGL WindowManager - see wwww... for more details");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    QCommandLineOption displayOption(QStringList() << "d" << "display-id",
+        QCoreApplication::translate("main", "The display with this <id> to manage. Default=0"),
+        QCoreApplication::translate("main", "id"));
+    parser.addOption(displayOption);
+    parser.process(a);
+
+    int displayId = 0;
+    if (parser.isSet(displayOption))
+    {
+        displayId = parser.value(displayOption).toInt();
+    }
+    qDebug() << "Using display" << displayId;
 
     qDBusRegisterMetaType<SimplePoint>();
     qDBusRegisterMetaType<QList<SimplePoint> >();
@@ -36,7 +51,7 @@ int main(int argc, char *argv[])
     qDBusRegisterMetaType<Layout>();
     qDBusRegisterMetaType<QList<Layout> >();
 
-    WindowManager *windowManager = new WindowManager();
+    WindowManager *windowManager = new WindowManager(displayId);
     windowManager->start();
 
 #ifdef __arm__

@@ -18,6 +18,11 @@
 #include <QCommandLineParser>
 #include "windowmanager.hpp"
 
+
+void noOutput(QtMsgType, const QMessageLogContext &, const QString &)
+{
+}
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -31,11 +36,19 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("AGL WindowManager - see wwww... for more details");
     parser.addHelpOption();
     parser.addVersionOption();
+    QCommandLineOption quietOption(QStringList() << "q" << "quiet",
+        QCoreApplication::translate("main", "Be quiet. No outputs."));
+    parser.addOption(quietOption);
     QCommandLineOption displayOption(QStringList() << "d" << "display-id",
         QCoreApplication::translate("main", "The display with this <id> to manage. Default=0"),
         QCoreApplication::translate("main", "id"));
     parser.addOption(displayOption);
     parser.process(a);
+
+    if (parser.isSet(quietOption))
+    {
+        qInstallMessageHandler(noOutput);
+    }
 
     int displayId = 0;
     if (parser.isSet(displayOption))

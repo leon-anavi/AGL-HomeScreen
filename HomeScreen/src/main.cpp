@@ -27,6 +27,10 @@
 #include "../src2/statusbarmodel.h"
 #include "../src2/applicationmodel.h"
 
+void noOutput(QtMsgType, const QMessageLogContext &, const QString &)
+{
+}
+
 int main(int argc, char *argv[])
 {
     QGuiApplication a(argc, argv);
@@ -40,7 +44,15 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription("AGL HomeScreen - see wwww... for more details");
     parser.addHelpOption();
     parser.addVersionOption();
+    QCommandLineOption quietOption(QStringList() << "q" << "quiet",
+        QCoreApplication::translate("main", "Be quiet. No outputs."));
+    parser.addOption(quietOption);
     parser.process(a);
+
+    if (parser.isSet(quietOption))
+    {
+        qInstallMessageHandler(noOutput);
+    }
 
     qDBusRegisterMetaType<AppInfo>();
     qDBusRegisterMetaType<QList<AppInfo> >();

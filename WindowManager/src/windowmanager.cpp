@@ -38,6 +38,14 @@
 // the HomeScreen app has to have the surface id 1000
 #define WINDOWMANAGER_HOMESCREEN_MAIN_SURFACE_ID 1000
 
+// Quick hack for scaling layer to fit non-FHD(1920x1080) screen
+//  * source rect of layer should be 1920x1080
+//  * destination rect of layer should fit physical display resolution
+//  * source rect of surface shoud be based on 1920x1080
+//  * destination rect of surface should be based on 1920x1080
+#define WINDOWMANAGER_HOMESCREEN_WIDTH  1080
+#define WINDOWMANAGER_HOMESCREEN_HEIGHT 1920
+
 void* WindowManager::myThis = 0;
 
 WindowManager::WindowManager(int displayId, QObject *parent) :
@@ -159,14 +167,16 @@ void WindowManager::createNewLayer(int layerId)
     qDebug("  layerId %d", layerId);
 
     t_ilm_layer newLayerId = layerId;
-    ilm_layerCreateWithDimension(&newLayerId, m_screenWidth, m_screenHeight);
+    ilm_layerCreateWithDimension(&newLayerId,
+                                    WINDOWMANAGER_HOMESCREEN_WIDTH,
+                                    WINDOWMANAGER_HOMESCREEN_HEIGHT);
     ilm_layerSetOpacity(newLayerId, 1.0);
     ilm_layerSetVisibility(newLayerId, ILM_TRUE);
     ilm_layerSetSourceRectangle(newLayerId,
                                     0,
                                     0,
-                                    m_screenWidth,
-                                    m_screenHeight);
+                                    WINDOWMANAGER_HOMESCREEN_WIDTH,
+                                    WINDOWMANAGER_HOMESCREEN_HEIGHT);
     ilm_layerSetDestinationRectangle(newLayerId,
                                     0,
                                     0,
@@ -229,7 +239,9 @@ void WindowManager::addSurfaceToLayer(int surfaceId, int layerId)
         ilm_getPropertiesOfSurface(surfaceId, &surfaceProperties);
 
         // homescreen app always fullscreen in the back
-        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0, m_screenWidth, m_screenHeight);
+        ilm_surfaceSetDestinationRectangle(surfaceId, 0, 0,
+                                           WINDOWMANAGER_HOMESCREEN_WIDTH,
+                                           WINDOWMANAGER_HOMESCREEN_HEIGHT);
         //ilm_surfaceSetSourceRectangle(surfaceId, 0, 0, m_screenWidth, m_screenHeight);
         ilm_surfaceSetOpacity(surfaceId, 1.0);
         ilm_surfaceSetVisibility(surfaceId, ILM_TRUE);

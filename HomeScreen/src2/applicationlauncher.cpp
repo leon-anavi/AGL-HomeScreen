@@ -43,5 +43,20 @@ int ApplicationLauncher::launch(const QString &application)
     result = mp_dBusAppFrameworkProxy->launchApp(application);
     qDebug() << "pid:" << result;
 
+    if (result > 1) {
+        setCurrent(application);
+    }
     return result;
+}
+
+QString ApplicationLauncher::current() const
+{
+    return m_current;
+}
+
+void ApplicationLauncher::setCurrent(const QString &current)
+{
+    if (m_current == current) return;
+    m_current = current;
+    emit currentChanged(current);
 }

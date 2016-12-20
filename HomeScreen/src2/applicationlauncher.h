@@ -25,18 +25,24 @@
 class ApplicationLauncher : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString current READ current WRITE setCurrent NOTIFY currentChanged)
 public:
     explicit ApplicationLauncher(QObject *parent = NULL);
     ~ApplicationLauncher();
 
+    QString current() const;
+
 signals:
     void newAppRequestsToBeVisible(int pid);
+    void currentChanged(const QString &current);
 
 public slots:
     int launch(const QString &application);
+    void setCurrent(const QString &current);
 
 private:
     org::agl::appframework *mp_dBusAppFrameworkProxy;
+    QString m_current;
 };
 
 #endif // APPLICATIONLAUNCHER_H

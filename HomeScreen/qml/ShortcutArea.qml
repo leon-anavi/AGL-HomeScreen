@@ -28,7 +28,7 @@ Item {
         id: applicationModel
         ListElement {
             name: 'Home'
-            application: 'home@0.1'
+            application: ''
         }
         ListElement {
             name: 'Multimedia'
@@ -44,7 +44,6 @@ Item {
         }
     }
 
-    property int currentIndex: -1 // TODO: to be moved to whereever right
     property int pid: -1
 
     RowLayout {
@@ -56,13 +55,13 @@ Item {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 name: model.name
-                active: model.index === root.currentIndex
+                active: model.application === launcher.current
                 onClicked: {
-                    root.currentIndex = active ? -1 : model.index
                     if (0 === model.index) {
                         appLauncherAreaLauncher.visible = true
                         applicationArea.visible = false
                         layoutHandler.hideAppLayer()
+                        launcher.current = ''
                     }
                     else {
                         pid = launcher.launch(model.application)

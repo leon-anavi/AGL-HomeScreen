@@ -38,6 +38,7 @@ Item {
         height: cellHeight * 3
         cellWidth: 320
         cellHeight: 320
+        interactive: false
 
         model: ApplicationModel {}
         delegate: MouseArea {

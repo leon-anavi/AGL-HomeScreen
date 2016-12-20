@@ -23,9 +23,9 @@
 
 #include "layouthandler.h"
 #include "homescreencontrolinterface.h"
-#include "../src2/applicationlauncher.h"
-#include "../src2/statusbarmodel.h"
-#include "../src2/applicationmodel.h"
+#include "applicationlauncher.h"
+#include "statusbarmodel.h"
+#include "applicationmodel.h"
 
 void noOutput(QtMsgType, const QMessageLogContext &, const QString &)
 {

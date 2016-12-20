@@ -23,28 +23,24 @@ include(../ivi_layermanagement_api.pri)
 SOURCES += \
     src/main.cpp \
     src/homescreencontrolinterface.cpp \
-    src/layouthandler.cpp
+    src/layouthandler.cpp \
+    src/applicationmodel.cpp \
+    src/appinfo.cpp \
+    src/statusbarmodel.cpp \
+    src/statusbarserver.cpp \
+    src/applicationlauncher.cpp
 
 HEADERS  += \
     src/homescreencontrolinterface.h \
-    src/layouthandler.h
+    src/layouthandler.h \
+    src/statusbarmodel.h \
+    src/statusbarserver.h \
+    src/applicationlauncher.h \
+    src/applicationmodel.h \
+    src/appinfo.h
 
 OTHER_FILES += \
     README.md
-
-HEADERS += \
-    src2/statusbarmodel.h \
-    src2/statusbarserver.h \
-    src2/applicationlauncher.h \
-    src2/applicationmodel.h \
-    src2/appinfo.h
-
-SOURCES += \
-    src2/applicationmodel.cpp \
-    src2/appinfo.cpp \
-    src2/statusbarmodel.cpp \
-    src2/statusbarserver.cpp \
-    src2/applicationlauncher.cpp
 
 RESOURCES += \
     qml/images/Home/home.qrc \
